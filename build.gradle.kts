@@ -28,7 +28,8 @@ kotlin {
                 implementation(compose.desktop.currentOs)
                 implementation("com.google.zxing:javase:3.3.3")
                 implementation("com.github.ltttttttttttt:load-the-image:1.0.5")
-                implementation("com.google.accompanist:accompanist-pager:0.29.1-alpha")
+                implementation("moe.tlaster:precompose:1.3.14")
+
             }
         }
         val jvmTest by getting

@@ -16,68 +16,63 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.navigation.rememberNavigator
+import router.RouterUrls
 import ui.login.QrcodeLoginDialog
 
 @Composable
-fun CpnMainLeftMenu(onMenuClick: (title: String) -> Unit) {
-
+fun CpnMainLeftMenu() {
+    val navigator = rememberNavigator()
     Column(modifier = Modifier.padding(top = 40.dp).width(200.dp).background(Color(0XFFEEEEEE))) {
         CpnUserInfo()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CpndMenuItem("image/ic_my_music.webp", "发现音乐") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.DISCOVERY)
             }
-            CpndMenuItem("image/ic_podcast.webp", "私人FM") {
-                onMenuClick(it)
+            CpndMenuItem("image/ic_podcast.webp", "播客") {
+                navigator.navigate(RouterUrls.PODCAST)
             }
             CpndMenuItem("image/ic_fm.webp", "私人FM") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.PERSONAL_FM)
             }
             CpndMenuItem("image/ic_video.webp", "视频") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.VIDEO)
             }
             CpndMenuItem("image/ic_follows.webp", "关注") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.FOLLOW)
             }
             CpnMyMusicTitle()
             CpndMenuItem("image/ic_like.webp", "我喜欢的音乐") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.FAVORITE_MUSIC)
             }
             CpndMenuItem("image/ic_download.webp", "下载管理") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.DOWNLOAD_MANAGER)
+
             }
             CpndMenuItem("image/ic_recent_play_list.webp", "最近播放") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.RECENT_PLAYLIST)
+
             }
             CpndMenuItem("image/ic_cloud.webp", "我的音乐云盘") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.MY_CLOUD_DISK)
+
             }
             CpndMenuItem("image/ic_podcast.webp", "我的播客") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.MY_PODCAST)
+
             }
             CpndMenuItem("image/ic_collect.webp", "我的收藏") {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.MY_COLLECT)
+
             }
             CpnSongSheet("创建的歌单", 8) {
-                onMenuClick(it)
+                navigator.navigate(RouterUrls.MY_CREATE_SONG_SHEET)
+
             }
             CpnSongSheet("收藏的歌单", 15) {
-                onMenuClick(it)
-            }
-//            repeat(10) {
-//                ui.main.cpn.CpndMenuItem("image/ic_song_sheet.webp", "创建的歌单--${it}") {
-//                    onMenuClick(it)
-//                }
-//            }
-//            CpnSongSheetTitle("收藏的歌单") {
-//
-//            }
-//            repeat(15) {
-//                ui.main.cpn.CpndMenuItem("image/ic_song_sheet.webp", "收藏的歌单--${it}") {
-//                    onMenuClick(it)
-//                }
-//            }
+                navigator.navigate(RouterUrls.MY_COLLECT_SONG_SHEET)
 
+            }
         }
     }
 

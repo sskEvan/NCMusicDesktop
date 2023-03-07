@@ -7,10 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import moe.tlaster.precompose.PreComposeWindow
 import ui.main.MainPage
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication,
+    PreComposeWindow(onCloseRequest = ::exitApplication,
         title = "") {
         window.rootPane.apply {
             rootPane.putClientProperty("apple.awt.fullWindowContent", true)
