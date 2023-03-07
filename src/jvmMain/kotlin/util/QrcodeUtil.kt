@@ -1,4 +1,4 @@
-package com.ssk.ncmusic.utils
+package util
 
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType

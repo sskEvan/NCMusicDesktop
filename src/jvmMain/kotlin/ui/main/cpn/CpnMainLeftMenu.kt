@@ -1,7 +1,8 @@
+package ui.main.cpn
+
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -10,12 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import ui.login.QrcodeLoginDialog
 
 @Composable
 fun CpnMainLeftMenu(onMenuClick: (title: String) -> Unit) {
@@ -64,7 +65,7 @@ fun CpnMainLeftMenu(onMenuClick: (title: String) -> Unit) {
                 onMenuClick(it)
             }
 //            repeat(10) {
-//                CpndMenuItem("image/ic_song_sheet.webp", "创建的歌单--${it}") {
+//                ui.main.cpn.CpndMenuItem("image/ic_song_sheet.webp", "创建的歌单--${it}") {
 //                    onMenuClick(it)
 //                }
 //            }
@@ -72,7 +73,7 @@ fun CpnMainLeftMenu(onMenuClick: (title: String) -> Unit) {
 //
 //            }
 //            repeat(15) {
-//                CpndMenuItem("image/ic_song_sheet.webp", "收藏的歌单--${it}") {
+//                ui.main.cpn.CpndMenuItem("image/ic_song_sheet.webp", "收藏的歌单--${it}") {
 //                    onMenuClick(it)
 //                }
 //            }
@@ -159,7 +160,7 @@ private fun ColumnScope.CpnSongSheet(title: String, count: Int, onItemClick: (ti
     Row(
         modifier = Modifier.clickable {
             expanded = !expanded
-            println("ssk-CpnSongSheet-$title:expanded=$expanded")
+            println("ssk-ui.main.cpn.CpnSongSheet-$title:expanded=$expanded")
             scope.launch {
                 animValue.animateTo(if (expanded) 1f else 0f)
             }
