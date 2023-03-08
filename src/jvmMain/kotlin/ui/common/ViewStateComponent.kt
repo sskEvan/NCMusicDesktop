@@ -1,15 +1,11 @@
 package ui.common
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.google.gson.JsonParseException
-import com.ssk.ncmusic.core.viewstate.LoadingComponent
-import com.ssk.ncmusic.core.viewstate.NoSuccessComponent
 import viewmodel.ViewState
 import viewmodel.ViewStateMutableStateFlow
 import java.net.ConnectException
@@ -31,7 +27,7 @@ import java.net.UnknownHostException
 fun <T> ViewStateComponent(
     modifier: Modifier = Modifier,
     loadDataBlock: (() -> ViewStateMutableStateFlow<T>),
-    viewStateComponentModifier: Modifier = Modifier.fillMaxSize(),
+    viewStateComponentModifier: Modifier = Modifier.fillMaxWidth().heightIn(min = 320.dp),
     viewStateContentAlignment: Alignment = Alignment.Center,
     customLoadingComponent: @Composable (() -> Unit)? = null,
     customEmptyComponent: @Composable (() -> Unit)? = null,

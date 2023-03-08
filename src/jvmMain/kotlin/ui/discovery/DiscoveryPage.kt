@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
-import ui.common.CommonTopBar
 import ui.common.theme.AppColorsProvider
 import ui.discovery.cpn.CpnPersonalRecommend
+import ui.main.cpn.CommonTopBar
 import ui.todo.TodoPage
 
 @Composable

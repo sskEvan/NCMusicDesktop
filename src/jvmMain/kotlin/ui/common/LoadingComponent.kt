@@ -1,4 +1,4 @@
-package com.ssk.ncmusic.core.viewstate
+package ui.common
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -19,7 +19,7 @@ import ui.common.theme.AppColorsProvider
  */
 @Composable
 fun LoadingComponent(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier,
     loading: Boolean = true,
     loadingWidth: Dp = 30.dp,
     loadingHeight: Dp = 25.dp,

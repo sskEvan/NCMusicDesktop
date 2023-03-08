@@ -1,4 +1,4 @@
-package com.ssk.ncmusic.core.viewstate
+package ui.common
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -15,7 +15,7 @@ import ui.common.theme.AppColorsProvider
 
 @Composable
 fun NoSuccessComponent(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    modifier: Modifier = Modifier.fillMaxWidth().heightIn(min = 320.dp),
     contentAlignment: Alignment = Alignment.Center,
     iconResId: String = "image/ic_empty.xml",
     message: String = "加载失败",

@@ -8,14 +8,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import ui.common.CommonTopBar
 import ui.common.theme.AppColorsProvider
+import ui.main.cpn.CommonTopBar
 
 @Composable
 fun TodoPage(tag: String) {
     Column {
-        CommonTopBar(tag)
         Box(Modifier.fillMaxSize().background(AppColorsProvider.current.pure),
             contentAlignment = Alignment.Center
         ) {
