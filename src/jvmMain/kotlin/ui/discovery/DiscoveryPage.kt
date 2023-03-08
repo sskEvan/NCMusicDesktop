@@ -7,6 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
+import ui.common.CommonTopBar
+import ui.common.theme.AppColorsProvider
+import ui.discovery.cpn.CpnPersonalRecommend
 import ui.todo.TodoPage
 
 @Composable
@@ -14,17 +17,24 @@ fun DiscoveryPage() {
     val tabs = remember {
         listOf("个性推荐", "歌单", "排行榜", "歌手", "最新音乐")
     }
-    var selectedIndex by remember { mutableStateOf(0) }
+    val selectedIndex = remember { mutableStateOf(0) }
 
     Column {
-        CommonTabLayout(
-            selectedIndex = selectedIndex,
-            tabTexts = tabs,
-            style = CommonTabLayoutStyle(modifier = Modifier.height(56.dp))
-        ) {
-            selectedIndex = it
+        CommonTopBar {
+            CommonTabLayout(
+                selectedIndex = selectedIndex.value,
+                tabTexts = tabs,
+                backgroundColor = AppColorsProvider.current.topBarColor,
+                style = CommonTabLayoutStyle(modifier = Modifier.height(50.dp))
+            ) {
+                selectedIndex.value = it
+            }
         }
-        TodoPage(tabs[selectedIndex])
+
+        when (selectedIndex.value) {
+            0 -> CpnPersonalRecommend(selectedIndex)
+            else -> TodoPage(tabs[selectedIndex.value])
+        }
     }
 
 }

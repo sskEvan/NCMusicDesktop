@@ -27,6 +27,7 @@ import androidx.compose.ui.window.rememberDialogState
 import com.lt.load_the_image.rememberImagePainter
 import util.QrcodeUtil
 import kotlinx.coroutines.launch
+import ui.common.theme.AppColorsProvider
 
 @Composable
 fun QrcodeLoginDialog(show: MutableState<Boolean>) {
@@ -58,7 +59,7 @@ private fun QrcodeLoginDialogContent() {
     val offsetAnim = remember { Animatable(0f) }
 
     Column(
-        modifier = Modifier.height(480.dp).background(Color.White).padding(top = 60.dp),
+        modifier = Modifier.height(480.dp).background(AppColorsProvider.current.pure).padding(top = 60.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -66,7 +67,8 @@ private fun QrcodeLoginDialogContent() {
             "扫码登录",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
-            fontSize = 24.sp
+            fontSize = 24.sp,
+            color = AppColorsProvider.current.firstText
         )
 
         Box(modifier = Modifier.width(totalWidth)
@@ -130,6 +132,7 @@ private fun CpnScanQrcode(modifier: Modifier, qrcodeSize: Dp) {
             "请使用网易云音乐APP\n扫码登录",
             textAlign = TextAlign.Center,
             fontSize = 14.sp,
+            color = AppColorsProvider.current.firstText,
             modifier = Modifier.padding(top = 14.dp)
         )
     }

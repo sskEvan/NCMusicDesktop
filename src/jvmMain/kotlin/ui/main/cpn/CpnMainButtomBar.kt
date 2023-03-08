@@ -15,10 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ui.common.theme.AppColorsProvider
 
 @Composable
 fun CpnMainButtomBar() {
-    Column(modifier = Modifier.background(Color.White).fillMaxWidth().height(80.dp)) {
+    Column(modifier = Modifier.background(color = AppColorsProvider.current.pure).fillMaxWidth().height(80.dp)) {
         CpnSeekBar()
         Row(
             modifier = Modifier.padding(horizontal = 20.dp).fillMaxSize(),
@@ -41,9 +42,6 @@ private fun CpnSeekBar() {
         seekTo = {
 
         },
-        progressHeight = 2f,
-        progressColor = Color.LightGray.copy(0.5f),
-        circleColor = Color.LightGray,
         modifier = Modifier
             .fillMaxWidth()
             .height(10.dp)
@@ -66,10 +64,15 @@ private fun RowScope.CpnMusicInfo() {
 
         Column {
             Row {
-                Text("曾经的你", fontSize = 14.sp)
-                Text(" - 许巍", fontSize = 14.sp)
+                Text("曾经的你", fontSize = 14.sp, color = AppColorsProvider.current.firstText)
+                Text(" - 许巍", fontSize = 14.sp, color = AppColorsProvider.current.firstText)
             }
-            Text("02:04 / 04:17", fontSize = 12.sp, color = Color(0xFF666666), modifier=  Modifier.padding(top = 6.dp))
+            Text(
+                "02:04 / 04:17",
+                fontSize = 12.sp,
+                color = AppColorsProvider.current.secondText,
+                modifier = Modifier.padding(top = 6.dp)
+            )
         }
     }
 }
@@ -83,23 +86,25 @@ private fun RowScope.CpnMiddleActionButtons() {
     ) {
         Icon(
             painterResource("image/ic_like.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 30.dp).size(20.dp).padding(2.dp)
+            modifier = Modifier.padding(end = 30.dp).size(20.dp).padding(2.dp),
+            tint = AppColorsProvider.current.firstIcon
         )
         Icon(
             painterResource("image/ic_action_pre.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 20.dp).size(20.dp).padding(2.dp), tint = Color(0xFFF0484E)
+            modifier = Modifier.padding(end = 20.dp).size(20.dp).padding(2.dp), tint = AppColorsProvider.current.primary
         )
         Icon(
             painterResource("image/ic_action_play.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 20.dp).size(40.dp).padding(2.dp), tint = Color(0xFFF0484E)
+            modifier = Modifier.padding(end = 20.dp).size(40.dp).padding(2.dp), tint = AppColorsProvider.current.primary
         )
         Icon(
             painterResource("image/ic_action_next.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 30.dp).size(20.dp).padding(2.dp), tint = Color(0xFFF0484E)
+            modifier = Modifier.padding(end = 30.dp).size(20.dp).padding(2.dp), tint = AppColorsProvider.current.primary
         )
         Icon(
             painterResource("image/ic_share.webp"), contentDescription = null,
-            modifier = Modifier.size(20.dp).padding(2.dp)
+            modifier = Modifier.size(20.dp).padding(2.dp),
+            tint = AppColorsProvider.current.firstIcon
         )
     }
 }
@@ -109,23 +114,29 @@ private fun RowScope.CpnRightActionButtons() {
     Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.End) {
         Icon(
             painterResource("image/ic_sound_effect.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp)
+            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp),
+            tint = AppColorsProvider.current.firstIcon
         )
         Icon(
-            painterResource("image/ic_play_mode_loop.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp), tint = Color(0xFF000000)
+            painterResource("image/ic_play_mode_loop.webp"),
+            contentDescription = null,
+            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp),
+            tint = AppColorsProvider.current.firstIcon
         )
         Icon(
-            painterResource("image/ic_play_list.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp), tint = Color(0xFF000000)
+            painterResource("image/ic_play_list.webp"),
+            contentDescription = null,
+            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp),
+            tint = AppColorsProvider.current.firstIcon
         )
         Icon(
             painterResource("image/ic_song_words.webp"), contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp), tint = Color(0xFFF0484E)
+            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp), tint = AppColorsProvider.current.primary
         )
         Icon(
             painterResource("image/ic_volumn.webp"), contentDescription = null,
-            modifier = Modifier.size(20.dp).padding(2.dp)
+            modifier = Modifier.size(20.dp).padding(2.dp),
+            tint = AppColorsProvider.current.firstIcon
         )
     }
 }

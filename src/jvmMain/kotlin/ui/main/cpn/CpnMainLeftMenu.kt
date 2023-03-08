@@ -18,12 +18,14 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.rememberNavigator
 import router.RouterUrls
+import ui.common.theme.AppColorsProvider
 import ui.login.QrcodeLoginDialog
 
 @Composable
 fun CpnMainLeftMenu() {
     val navigator = rememberNavigator()
-    Column(modifier = Modifier.padding(top = 40.dp).width(200.dp).background(Color(0XFFEEEEEE))) {
+    Column(modifier = Modifier.width(200.dp).background(AppColorsProvider.current.background)) {
+        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp).background(AppColorsProvider.current.topBarColor))
         CpnUserInfo()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CpndMenuItem("image/ic_my_music.webp", "发现音乐") {
@@ -98,6 +100,7 @@ private fun CpnUserInfo() {
             modifier = Modifier.padding(horizontal = 10.dp),
             fontSize = 14.sp,
             maxLines = 1,
+            color = AppColorsProvider.current.firstText,
             overflow = TextOverflow.Ellipsis
         )
         Icon(painterResource("image/ic_triangle_right.webp"), contentDescription = "", modifier = Modifier.size(8.dp))
@@ -126,6 +129,7 @@ private fun CpndMenuItem(
             modifier = Modifier.weight(1f).padding(horizontal = 6.dp),
             fontSize = 12.sp,
             maxLines = 1,
+            color = AppColorsProvider.current.firstText,
             overflow = TextOverflow.Ellipsis
         )
         markLogoPath?.let {
@@ -142,7 +146,7 @@ private fun CpnMyMusicTitle() {
         modifier = Modifier.padding(top = 10.dp, bottom = 4.dp).fillMaxWidth().padding(horizontal = 16.dp),
         fontSize = 12.sp,
         maxLines = 1,
-        color = Color(0xFF666666),
+        color = AppColorsProvider.current.secondText,
         overflow = TextOverflow.Ellipsis
     )
 }
@@ -168,14 +172,13 @@ private fun ColumnScope.CpnSongSheet(title: String, count: Int, onItemClick: (ti
             modifier = Modifier.padding(start = 8.dp).size(8.dp).rotate(
                 90 * animValue.value
             ),
-            tint = Color(0xFF000000)
         )
         Text(
             text = title,
             modifier = Modifier.weight(1f).padding(horizontal = 6.dp),
             fontSize = 12.sp,
             maxLines = 1,
-            color = Color(0xFF666666),
+            color = AppColorsProvider.current.secondText,
             overflow = TextOverflow.Ellipsis
         )
     }

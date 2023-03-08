@@ -38,11 +38,11 @@ fun SeekBar(
     progress: Int = 0,
     seeking: (Int) -> Unit = {},
     seekTo: (Int) -> Unit = {},
-    smallRadius: Float = 6.dp.value,
+    smallRadius: Float = 8.dp.value,
     largeRadius: Float = 12.dp.value,
     progressHeight: Float = 4.dp.value,
-    progressColor: Color = Color.LightGray,
-    circleColor: Color = Color.White,
+    progressColor: Color = Color.LightGray.copy(0.3f),
+    circleColor: Color = Color.LightGray,
     modifier: Modifier = Modifier
 ) {
 

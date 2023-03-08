@@ -22,15 +22,16 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import ui.common.theme.AppColorsProvider
 
 @Composable
 fun CommonTabLayout(
     selectedIndex: Int = 0,
     tabTexts: List<String>,
-    backgroundColor: Color = Color.White,  // 背景颜色
-    selectedTextColor: Color = Color.Black,  // 选中tab字体颜色
-    unselectedTextColor: Color = Color.Gray,  // 未选中tab字体颜色
-    indicatorColor: Brush = Brush.horizontalGradient(listOf(Color(0xFFF0484E), Color(0xFFF0888C))),  // 指示器颜色
+    backgroundColor: Color = AppColorsProvider.current.background,  // 背景颜色
+    selectedTextColor: Color = AppColorsProvider.current.firstText,  // 选中tab字体颜色
+    unselectedTextColor: Color = AppColorsProvider.current.secondText,  // 未选中tab字体颜色
+    indicatorColor: Brush = Brush.horizontalGradient(listOf(AppColorsProvider.current.primary, AppColorsProvider.current.secondary)),  // 指示器颜色
     style: CommonTabLayoutStyle = CommonTabLayoutStyle(),
     onTabSelected: ((index: Int) -> Unit)? = null
 ) {
@@ -187,7 +188,7 @@ data class CommonTabLayoutStyle(
     val selectedTextBold: Boolean = true,  // 选中tab字体加粗
     val unselectedTextBold: Boolean = false, // 未选中tab字体加粗
     val showIndicator: Boolean = false, // 是否显示指示器
-    val indicatorWidth: Dp = 60.dp,  // 指示器宽度
+    val indicatorWidth: Dp = 50.dp,  // 指示器宽度
     val indicatorHeight: Dp = 5.dp,  // 指示器高度
     val indicatorPaddingBottom: Dp = 0.dp,  // 指示器高度
     val isScrollable: Boolean = true,  // 是否可滑动
