@@ -20,13 +20,21 @@ import ui.common.theme.AppColorsProvider
 fun CpnPersonalRecommend(recommendTagIndex: MutableState<Int>) {
     Column(modifier = Modifier.background(AppColorsProvider.current.pure).verticalScroll(rememberScrollState())) {
         // 推荐歌单
-        CpnRecommandPlayList {
+        CpnRecommandPlayListEntrance {
             recommendTagIndex.value = 1
         }
-        CpnTodo("独家放送")
-        CpnTodo("最新音乐")
-        CpnTodo("推荐MV")
-        CpnTodo("播客")
+        // 独家放送
+        CpnPrivateContentEntrance {
+
+        }
+        // 最新音乐
+        CpnNewSongEntrance {
+
+        }
+        // 推荐MV
+        CpnRecommendMVEntrance {
+
+        }
     }
 }
 

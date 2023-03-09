@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.navigation.rememberNavigator
 import router.RouterUrls
 import ui.common.theme.AppColorsProvider
@@ -29,7 +30,7 @@ fun CpnMainLeftMenu() {
         CpnUserInfo()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CpndMenuItem("image/ic_my_music.webp", "发现音乐") {
-                navigator.navigate(RouterUrls.DISCOVERY)
+                navigator.navigate(RouterUrls.DISCOVERY, NavOptions(launchSingleTop = true))
             }
             CpndMenuItem("image/ic_podcast.webp", "播客") {
                 navigator.navigate(RouterUrls.PODCAST)

@@ -35,7 +35,6 @@ kotlin {
                 implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
                 implementation("androidx.datastore:datastore-preferences-core:1.1.0-dev01")
-
             }
         }
         val jvmTest by getting

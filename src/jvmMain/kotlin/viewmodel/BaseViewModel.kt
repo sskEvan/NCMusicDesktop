@@ -1,30 +1,28 @@
 package viewmodel
 
+import androidx.compose.runtime.Composable
 import com.ssk.ncmusic.model.BaseResult
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import model.RecommendPlayListBean
-import moe.tlaster.precompose.livedata.LiveData
 import moe.tlaster.precompose.viewmodel.ViewModel
 import moe.tlaster.precompose.viewmodel.viewModelScope
 
 
 typealias ViewStateMutableStateFlow<T> = MutableStateFlow<ViewState<T>>
+
 open class BaseViewModel : ViewModel() {
     protected fun <T : BaseResult> launch(
         handleSuccessBlock: ((T) -> Unit)? = null,
         handleFailBlock: ((code: Int?, message: String?) -> Unit)? = null,
         judgeEmpty: ((T) -> Boolean)? = null,
         call: suspend () -> T
-    ) : ViewStateMutableStateFlow<T> {
+    ): ViewStateMutableStateFlow<T> {
         val flow = MutableStateFlow<ViewState<T>>(ViewState.Loading)
 
         viewModelScope.launch {
             runCatching {
                 call()
             }.onSuccess { result ->
-                print("result=$result")
                 if (result.resultOk()) {
                     if (judgeEmpty?.invoke(result) == true) {
                         flow.emit(ViewState.Empty)

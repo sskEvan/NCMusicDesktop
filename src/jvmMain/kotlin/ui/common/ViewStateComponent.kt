@@ -6,15 +6,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.gson.JsonParseException
+import moe.tlaster.precompose.ui.viewModel
+import moe.tlaster.precompose.viewmodel.ViewModel
+import moe.tlaster.precompose.viewmodel.compose.viewModel
+import viewmodel.BaseViewModel
 import viewmodel.ViewState
 import viewmodel.ViewStateMutableStateFlow
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.util.UUID
 
 /**
  * Description->页面状态切换组件, 根据viewStateLiveData，自动切换各种状态页面
  * @param modifier：页面布局修饰
+ * @param key: 用于维护ViewStateComponentViewModel中的flow,避免页面重建后，数据重新加载
  * @param loadDataBlock：数据加载块
  * @param viewStateComponentModifier: 状态页面修饰
  * @param viewStateContentAlignment：状态页面居中方式
@@ -26,6 +32,8 @@ import java.net.UnknownHostException
 @Composable
 fun <T> ViewStateComponent(
     modifier: Modifier = Modifier,
+    key: String = UUID.randomUUID().toString(),
+    initFlow: ViewStateMutableStateFlow<T>? = null,
     loadDataBlock: (() -> ViewStateMutableStateFlow<T>),
     viewStateComponentModifier: Modifier = Modifier.fillMaxWidth().heightIn(min = 320.dp),
     viewStateContentAlignment: Alignment = Alignment.Center,
@@ -37,8 +45,19 @@ fun <T> ViewStateComponent(
 ) {
 
     val successData = remember { mutableStateOf<T?>(null) }
-    var retryFlag = remember { mutableStateOf(0) }
-    val flow = remember(retryFlag.value) { loadDataBlock.invoke() }
+    val retryFlag = remember { mutableStateOf(0) }
+    val vm = viewModel(listOf(key)) { ViewStateComponentViewModel<T>() }
+
+    val flow = remember(retryFlag.value) {
+        if (retryFlag.value == 0) {
+            if (vm.flow == null) {
+                vm.flow = initFlow ?: loadDataBlock.invoke()
+            }
+         } else {
+            vm.flow = loadDataBlock.invoke()
+        }
+        vm.flow!!
+    }
     val viewState by flow.collectAsState()
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -112,6 +131,10 @@ fun <T> ViewStateComponent(
     }
 }
 
+class ViewStateComponentViewModel<T> : ViewModel() {
+    var flow : ViewStateMutableStateFlow<T>? = null
+}
+
 
 fun getErrorMessagePair(exception: Throwable): Pair<String, String> {
     return when (exception) {
@@ -131,5 +154,13 @@ fun getErrorMessagePair(exception: Throwable): Pair<String, String> {
         else -> {
             Pair("未知错误", "image/ic_network_error.xml")
         }
+    }
+}
+
+
+@Composable
+fun <T> ViewState<T>.handleSuccess(callback: @Composable (data: T) -> Unit) {
+    if (this is ViewState.Success) {
+        callback.invoke(this.data)
     }
 }

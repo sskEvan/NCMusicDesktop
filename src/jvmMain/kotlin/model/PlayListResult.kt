@@ -7,7 +7,7 @@ import java.io.Serializable
 /**
  * 推荐歌单结果
  */
-data class RecommendPlayListBean(
+data class RecommendPlayListResult(
     val result: List<RecommendPlayListItem>
 ) : BaseResult()
 
@@ -24,6 +24,15 @@ data class RecommendPlayListItem(
     val trackCount: Int
 ) : Serializable
 
+/**
+ * 歌单结果
+ */
+data class PlayListResult(
+    val playlists: List<PlaylistBean>,
+    val total: Int,
+    val more: Boolean
+) : BaseResult()
+
 @Keep
 data class PlaylistBean(
     val tracks: List<Track>?,
@@ -38,6 +47,7 @@ data class PlaylistBean(
     val shareCount: Int,
     val commentCount: Int
 ) : Serializable
+
 
 @Keep
 data class Subscribers(
@@ -70,3 +80,30 @@ data class Al(
     val name: String,
     val picUrl: String,
 )
+
+
+
+/**
+ * 热门歌单分类
+ *
+ */
+data class HotPlayListTabResult(val tags: List<PlayListTab>) : BaseResult()
+
+
+data class PlayListTab(
+    val id: Int,
+    val name: String,
+    val category: Int,
+    val hot: Boolean,
+)
+
+
+/**
+ * 歌单分类
+ */
+data class PlayListTabResult(
+    val all: PlayListTab,
+    val sub: List<PlayListTab>,
+    val categories: Map<Int, String>) : BaseResult()
+
+

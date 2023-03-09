@@ -13,41 +13,45 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lt.load_the_image.rememberImagePainter
 import com.ssk.ncmusic.ui.common.TableLayout
 import http.NCRetrofitClient
-import model.RecommendPlayListItem
+import model.PrivateContentItem
 import moe.tlaster.precompose.ui.viewModel
 import ui.common.CpnActionMore
 import ui.common.ViewStateComponent
 import ui.common.theme.AppColorsProvider
-import util.StringUtil
 import viewmodel.BaseViewModel
 
+/**
+ * 独家放送入口
+ */
 @Composable
-fun CpnRecommandPlayList(onClickMore: () -> Unit) {
-    val viewModel = viewModel { CpnRecommendPlayListViewModel() }
+fun CpnPrivateContentEntrance(onClickMore: () -> Unit) {
+    val viewModel = viewModel { CpnPrivateContentViewModel() }
 
     Column {
-        CpnActionMore("推荐歌单") {
+        CpnActionMore("独家放送") {
             onClickMore.invoke()
         }
 
         ViewStateComponent(
-            loadDataBlock = { viewModel.getRecommendPlayList() }) { data ->
+            key = "CpnPrivateContentEntrance",
+            loadDataBlock = { viewModel.getPrivateContent() }) { data ->
             Content(data.result)
         }
     }
 }
 
 @Composable
-private fun Content(list: List<RecommendPlayListItem>) {
-    TableLayout(modifier = Modifier.padding(horizontal = 10.dp), cellsCount = 5) {
+private fun Content(list: List<PrivateContentItem>) {
+    TableLayout(modifier = Modifier.padding(horizontal = 10.dp), cellsCount = 4) {
         list.forEach {
-            RecommendPlayListItem(it)
+            PrivateContentItem(it)
         }
     }
 }
@@ -55,7 +59,7 @@ private fun Content(list: List<RecommendPlayListItem>) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun RecommendPlayListItem(item: RecommendPlayListItem) {
+private fun PrivateContentItem(item: PrivateContentItem) {
     var focusState by remember { mutableStateOf(false) }
 
     Column(
@@ -70,7 +74,8 @@ private fun RecommendPlayListItem(item: RecommendPlayListItem) {
             Image(
                 rememberImagePainter(item.picUrl),
                 contentDescription = "",
-                modifier = Modifier.size(140.dp).clip(RoundedCornerShape(6.dp))
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.width(180.dp).height(100.dp).clip(RoundedCornerShape(6.dp))
             )
 
             Row(modifier = Modifier.padding(top = 6.dp, end = 6.dp).align(Alignment.TopEnd), verticalAlignment = Alignment.CenterVertically) {
@@ -79,18 +84,13 @@ private fun RecommendPlayListItem(item: RecommendPlayListItem) {
                     contentDescription = "",
                     modifier = Modifier.padding(end = 6.dp).size(12.dp)
                 )
-                Text(
-                    StringUtil.friendlyNumber(item.playCount),
-                    color = Color.White,
-                    fontSize = 12.sp,
-                )
             }
 
             if (focusState) {
                 Icon(
                     painter = painterResource("image/ic_logo_play.webp"),
                     contentDescription = "",
-                    modifier = Modifier.padding(bottom = 6.dp, end = 6.dp).size(32.dp).align(Alignment.BottomEnd),
+                    modifier = Modifier.padding(top = 6.dp, start = 6.dp).size(32.dp),
                     tint = Color.White
                 )
             }
@@ -106,11 +106,11 @@ private fun RecommendPlayListItem(item: RecommendPlayListItem) {
     }
 }
 
-class CpnRecommendPlayListViewModel : BaseViewModel() {
+class CpnPrivateContentViewModel : BaseViewModel() {
 
-    fun getRecommendPlayList() = launch {
-        println("获取推荐歌单...")
-        NCRetrofitClient.getNCApi().getRecommendPlayList(25)
+    fun getPrivateContent() = launch {
+        println("获取独家放送...")
+        NCRetrofitClient.getNCApi().getPrivateContent()
     }
 
 }
