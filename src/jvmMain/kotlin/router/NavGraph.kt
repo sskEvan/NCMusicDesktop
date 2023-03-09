@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import moe.tlaster.precompose.navigation.NavHost
 import moe.tlaster.precompose.navigation.rememberNavigator
 import moe.tlaster.precompose.navigation.transition.NavTransition
+import ui.discovery.DiscoveryPage
 import ui.discovery.cpn.CpnRecommendPlayList
 import ui.todo.TodoPage
 
@@ -26,8 +27,7 @@ fun NavGraph() {
         }, initialRoute = RouterUrls.DISCOVERY
     ) {
         scene(RouterUrls.DISCOVERY) {
-            CpnRecommendPlayList()
-//            DiscoveryPage()
+            DiscoveryPage()
         }
         scene(RouterUrls.PODCAST) {
             TodoPage("播客")

@@ -34,7 +34,7 @@ interface NCApi {
      * 精品歌单
      */
     @GET("/top/playlist/highquality")
-    suspend fun getHighQualityPlayList(@Query("limit") limit: Int = 20): PlayListResult
+    suspend fun getHighQualityPlayList(@Query("limit") limit: Int = 20, @Query("cat") cat: String?): PlayListResult
 
     /**
      * 热门歌单分类

@@ -9,6 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -23,18 +24,21 @@ import com.lt.load_the_image.rememberImagePainter
 import http.NCRetrofitClient
 import model.PlaylistBean
 import moe.tlaster.precompose.ui.viewModel
+import ui.common.handleSuccess
 import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
-import ui.common.handleSuccess
 
 /**
  * 精品歌单-入口
  */
 @Composable
 fun CpnHighQualityPlayListEntrance() {
-    val viewModel = viewModel { CpnHighQualityPlayListEntranceViewModel() }
-
-    viewModel.flow.collectAsState().value.handleSuccess {
+    val highQualityPlayListEntranceViewModel = viewModel { CpnHighQualityPlayListEntranceViewModel() }
+    val playListTabSelectedBarViewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
+    val flow = remember(playListTabSelectedBarViewModel.selectedHotTab?.name ?: "全部歌单") {
+        highQualityPlayListEntranceViewModel.getHighQualityPlayList(playListTabSelectedBarViewModel.selectedHotTab?.name)
+    }
+    flow.collectAsState().value.handleSuccess {
         Content(it.playlists[0])
     }
 }
@@ -44,7 +48,7 @@ private fun Content(playlistBean: PlaylistBean) {
     Box(Modifier.padding(start = 20.dp, end = 20.dp, top = 15.dp).fillMaxWidth().clip(RoundedCornerShape(6.dp))) {
         // 高斯模糊
         Image(
-            rememberImagePainter(playlistBean.coverImgUrl),
+            rememberImagePainter(playlistBean.coverImgUrl, placeholderResource = "image/ic_disk_place_holder.webp"),
             modifier = Modifier.fillMaxWidth().height(160.dp).blur(80.dp),
             contentScale = ContentScale.FillBounds,
             contentDescription = ""
@@ -55,7 +59,7 @@ private fun Content(playlistBean: PlaylistBean) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                rememberImagePainter(playlistBean.coverImgUrl),
+                rememberImagePainter(playlistBean.coverImgUrl, placeholderResource = "image/ic_disk_place_holder.webp"),
                 modifier = Modifier.padding(end = 20.dp).size(130.dp).clip(RoundedCornerShape(6.dp)),
                 contentDescription = ""
             )
@@ -96,10 +100,7 @@ private fun Content(playlistBean: PlaylistBean) {
 }
 
 class CpnHighQualityPlayListEntranceViewModel : BaseViewModel() {
-
-    val flow by lazy {
-        launch {
-            NCRetrofitClient.getNCApi().getHighQualityPlayList(1)
-        }
+    fun getHighQualityPlayList(tag: String?) = launch {
+        NCRetrofitClient.getNCApi().getHighQualityPlayList(1, tag)
     }
 }

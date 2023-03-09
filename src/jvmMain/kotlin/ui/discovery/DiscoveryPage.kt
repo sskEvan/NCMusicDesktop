@@ -11,6 +11,7 @@ import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
 import ui.common.theme.AppColorsProvider
 import ui.discovery.cpn.CpnPersonalRecommend
+import ui.discovery.cpn.CpnRecommendPlayList
 import ui.main.cpn.CommonTopBar
 import ui.todo.TodoPage
 
@@ -19,7 +20,6 @@ fun DiscoveryPage() {
     val tabs = remember {
         listOf("个性推荐", "歌单", "排行榜", "歌手", "最新音乐")
     }
-//    val selectedIndex = remember { mutableStateOf(0) }
     val viewModel = viewModel { DiscoveryPageViewModel() }
     Column {
         CommonTopBar {
@@ -35,13 +35,14 @@ fun DiscoveryPage() {
 
         when (viewModel.selectedIndex.value) {
             0 -> CpnPersonalRecommend(viewModel.selectedIndex)
+            1 -> CpnRecommendPlayList()
             else -> TodoPage(tabs[viewModel.selectedIndex.value])
         }
     }
 
 }
 
-class DiscoveryPageViewModel :ViewModel() {
+class DiscoveryPageViewModel : ViewModel() {
     val selectedIndex = mutableStateOf(0)
 }
 

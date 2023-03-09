@@ -21,6 +21,7 @@ import java.util.UUID
  * Description->页面状态切换组件, 根据viewStateLiveData，自动切换各种状态页面
  * @param modifier：页面布局修饰
  * @param key: 用于维护ViewStateComponentViewModel中的flow,避免页面重建后，数据重新加载
+ * @param initFlow: 初始化数据流，使用场景：某页面有需要显示popup，popup的内容来自网络，而且进入页面后可以预加载数据，等到用户点击显示popup时，数据以及加载完成
  * @param loadDataBlock：数据加载块
  * @param viewStateComponentModifier: 状态页面修饰
  * @param viewStateContentAlignment：状态页面居中方式
