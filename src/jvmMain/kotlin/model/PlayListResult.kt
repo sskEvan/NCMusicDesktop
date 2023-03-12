@@ -8,33 +8,26 @@ import java.io.Serializable
  * 推荐歌单结果
  */
 data class RecommendPlayListResult(
-    val result: List<RecommendPlayListItem>
+    val result: List<SimplePlayListItem>
 ) : BaseResult()
 
 /**
  * 推荐歌单列表item
  */
-data class RecommendPlayListItem(
+data class SimplePlayListItem(
     val id: Long,
-    val type: Int,
     val name: String,
     val picUrl: String,
+    val copywriter: String?,
     val trackNumberUpdateTime: Long,
     val playCount: Long,
-    val trackCount: Int
+    val trackCount: Int,
+    val subscribedCount: Int,
+    val shareCount: Int
 ) : Serializable
 
-/**
- * 歌单结果
- */
-data class PlayListResult(
-    val playlists: List<PlaylistBean>,
-    val total: Int,
-    val more: Boolean
-) : BaseResult()
-
 @Keep
-data class PlaylistBean(
+data class PlaylistDetail(
     val tracks: List<Track>?,
     val trackIds: List<TrackId>?,
     val creator: Subscribers,
@@ -45,13 +38,32 @@ data class PlaylistBean(
     val playCount: Long = 0,
     val description: String?,
     val shareCount: Int,
-    val commentCount: Int
-) : Serializable
+    val commentCount: Int,
+    val trackUpdateTime: Long,
+    val subscribedCount: Int,
+    val subscribers: List<Subscribers>,
+    val tags: List<String>,
+) : Serializable {
+    fun convertToSimple()  = SimplePlayListItem(id, name, coverImgUrl, description, trackUpdateTime, playCount, trackCount, subscribedCount, shareCount)
+}
+
+/**
+ * 歌单结果
+ */
+data class PlayListResult(
+    val playlists: List<PlaylistDetail>,
+    val total: Int,
+    val more: Boolean
+) : BaseResult(), IBasePagingBean {
+    override fun getTotalCount() = total
+}
+
+
 
 
 @Keep
 data class Subscribers(
-    val userId: Long, val avatarUrl: String, val nickname: String
+    val userId: Long, val avatarUrl: String, val nickname: String, val description: String?
 ) : Serializable
 
 @Keep
@@ -105,5 +117,10 @@ data class PlayListTabResult(
     val all: PlayListTab,
     val sub: List<PlayListTab>,
     val categories: Map<Int, String>) : BaseResult()
+
+@Keep
+data class PlaylistDetailResult(
+    val playlist: PlaylistDetail,
+) : BaseResult()
 
 

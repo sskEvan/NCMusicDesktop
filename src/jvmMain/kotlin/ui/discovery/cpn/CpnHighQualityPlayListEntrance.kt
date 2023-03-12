@@ -2,6 +2,7 @@ package ui.discovery.cpn
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,85 +23,107 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lt.load_the_image.rememberImagePainter
 import http.NCRetrofitClient
-import model.PlaylistBean
+import model.PlayListResult
+import model.PlaylistDetail
 import moe.tlaster.precompose.ui.viewModel
 import ui.common.handleSuccess
 import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
+import viewmodel.ViewStateMutableStateFlow
 
 /**
  * 精品歌单-入口
  */
 @Composable
-fun CpnHighQualityPlayListEntrance() {
+fun CpnHighQualityPlayListEntrance(tag: String) {
     val highQualityPlayListEntranceViewModel = viewModel { CpnHighQualityPlayListEntranceViewModel() }
-    val playListTabSelectedBarViewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
-    val flow = remember(playListTabSelectedBarViewModel.selectedHotTab?.name ?: "全部歌单") {
-        highQualityPlayListEntranceViewModel.getHighQualityPlayList(playListTabSelectedBarViewModel.selectedHotTab?.name)
+    val flow = remember(tag) {
+        highQualityPlayListEntranceViewModel.getHighQualityPlayList(tag)
     }
-    flow.collectAsState().value.handleSuccess {
-        Content(it.playlists[0])
+    Box(
+        modifier = Modifier.fillMaxWidth().height(200.dp)
+            .border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(6.dp))
+            .background(AppColorsProvider.current.divider.copy(0.2f), RoundedCornerShape(6.dp))
+    ) {
+        flow?.collectAsState()?.value?.handleSuccess {
+            Content(it.playlists.getOrNull(0))
+        }
     }
+
 }
 
 @Composable
-private fun Content(playlistBean: PlaylistBean) {
-    Box(Modifier.padding(start = 20.dp, end = 20.dp, top = 15.dp).fillMaxWidth().clip(RoundedCornerShape(6.dp))) {
-        // 高斯模糊
-        Image(
-            rememberImagePainter(playlistBean.coverImgUrl, placeholderResource = "image/ic_disk_place_holder.webp"),
-            modifier = Modifier.fillMaxWidth().height(160.dp).blur(80.dp),
-            contentScale = ContentScale.FillBounds,
-            contentDescription = ""
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth().height(160.dp).padding(15.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+private fun Content(playlistBean: PlaylistDetail?) {
+    playlistBean?.let {
+        Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp))) {
+            // 高斯模糊
             Image(
                 rememberImagePainter(playlistBean.coverImgUrl, placeholderResource = "image/ic_disk_place_holder.webp"),
-                modifier = Modifier.padding(end = 20.dp).size(130.dp).clip(RoundedCornerShape(6.dp)),
+                modifier = Modifier.fillMaxSize().blur(80.dp),
+                contentScale = ContentScale.FillBounds,
                 contentDescription = ""
             )
 
-            Column {
-                Row(
-                    modifier = Modifier.width(100.dp).height(30.dp)
-                        .border(BorderStroke(1.dp, color = Color(0xFFD8B839)), RoundedCornerShape(50)),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painterResource("image/ic_queue.webp"),
-                        modifier = Modifier.padding(end = 6.dp).size(16.dp),
-                        contentDescription = "",
-                        tint = Color(0xFFD8B839)
+            Row(
+                modifier = Modifier.fillMaxSize().padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    rememberImagePainter(
+                        playlistBean.coverImgUrl,
+                        placeholderResource = "image/ic_disk_place_holder.webp"
+                    ),
+                    modifier = Modifier.padding(end = 20.dp).size(130.dp).clip(RoundedCornerShape(6.dp)),
+                    contentDescription = ""
+                )
+
+                Column {
+                    Row(
+                        modifier = Modifier.width(100.dp).height(30.dp)
+                            .border(BorderStroke(1.dp, color = Color(0xFFD8B839)), RoundedCornerShape(50)),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painterResource("image/ic_queue.webp"),
+                            modifier = Modifier.padding(end = 6.dp).size(16.dp),
+                            contentDescription = "",
+                            tint = Color(0xFFD8B839)
+                        )
+                        Text("精品歌单", color = Color(0xFFD8B839), fontSize = 12.sp)
+                    }
+
+                    Text(
+                        playlistBean.name,
+                        color = AppColorsProvider.current.pure,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(top = 16.dp)
                     )
-                    Text("精品歌单", color = Color(0xFFD8B839), fontSize = 12.sp)
+                    Text(
+                        playlistBean.description ?: "", color = AppColorsProvider.current.pure,
+                        fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
                 }
-
-                Text(
-                    playlistBean.name,
-                    color = AppColorsProvider.current.pure,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-                Text(
-                    playlistBean.description ?: "", color = AppColorsProvider.current.pure,
-                    fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
             }
         }
-
     }
 }
 
 class CpnHighQualityPlayListEntranceViewModel : BaseViewModel() {
-    fun getHighQualityPlayList(tag: String?) = launch {
-        NCRetrofitClient.getNCApi().getHighQualityPlayList(1, tag)
+    var flow: ViewStateMutableStateFlow<PlayListResult>? = null
+    var lastTag = ""
+    fun getHighQualityPlayList(tag: String?): ViewStateMutableStateFlow<PlayListResult>? {
+        if (lastTag != tag) {
+            lastTag = tag ?: ""
+            flow = launch {
+                println("----getHighQualityPlayList done, lastTag=${lastTag}")
+                NCRetrofitClient.getNCApi().getHighQualityPlayList(1, tag)
+            }
+        }
+        return flow
     }
+
 }

@@ -189,7 +189,7 @@ data class CommonTabLayoutStyle(
     val unselectedTextBold: Boolean = false, // 未选中tab字体加粗
     val showIndicator: Boolean = false, // 是否显示指示器
     val indicatorWidth: Dp = 50.dp,  // 指示器宽度
-    val indicatorHeight: Dp = 5.dp,  // 指示器高度
+    val indicatorHeight: Dp = 3.dp,  // 指示器高度
     val indicatorPaddingBottom: Dp = 0.dp,  // 指示器高度
     val isScrollable: Boolean = true,  // 是否可滑动
     val customIndicator: @Composable ((selectedTabPosition: TabPosition, selectedPosition: Int) -> Unit)? = null  // 自定义指示器

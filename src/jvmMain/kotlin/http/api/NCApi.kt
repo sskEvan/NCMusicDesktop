@@ -1,5 +1,6 @@
 package http.api
 
+import com.ssk.ncmusic.model.CommentResult
 import model.*
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -54,6 +55,25 @@ interface NCApi {
      * 歌单列表
      */
     @GET("/top/playlist")
-    suspend fun getPlayList(@Query("limit") limit: Int = 20): PlayListResult
+    suspend fun getPlayList(
+        @Query("limit") limit: Int = 20,
+        @Query("tag") tag: String,
+        @Query("offset") offset: Int
+    ): PlayListResult
+
+    @GET("playlist/detail")
+    suspend fun getPlaylistDetail(@Query("id") id: Long): PlaylistDetailResult
+
+
+    @GET("song/detail")
+    suspend fun getSongDetail(@Query("ids") ids: String): SongDetailResult
+
+    @GET("comment/playlist")
+    suspend fun getPlayListComment(
+        @Query("id") id: Long,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int,
+//        @Query("before") before: Long, // 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
+    ): CommentResult
 
 }

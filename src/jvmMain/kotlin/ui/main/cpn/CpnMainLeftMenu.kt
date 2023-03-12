@@ -17,14 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import moe.tlaster.precompose.navigation.NavOptions
-import moe.tlaster.precompose.navigation.rememberNavigator
+import router.NCNavigatorManager
 import router.RouterUrls
 import ui.common.theme.AppColorsProvider
 import ui.login.QrcodeLoginDialog
 
 @Composable
 fun CpnMainLeftMenu() {
-    val navigator = rememberNavigator()
+//    val navigator = rememberNavigator()
+    val navigator = NCNavigatorManager.navigator
     Column(modifier = Modifier.width(200.dp).background(AppColorsProvider.current.background)) {
         Spacer(modifier = Modifier.fillMaxWidth().height(50.dp).background(AppColorsProvider.current.topBarColor))
         CpnUserInfo()
@@ -104,7 +105,10 @@ private fun CpnUserInfo() {
             color = AppColorsProvider.current.firstText,
             overflow = TextOverflow.Ellipsis
         )
-        Icon(painterResource("image/ic_triangle_right.webp"), contentDescription = "", modifier = Modifier.size(8.dp))
+        Icon(
+            painterResource("image/ic_triangle_right.webp"), contentDescription = "", modifier = Modifier.size(8.dp),
+            tint = AppColorsProvider.current.firstIcon
+        )
     }
     QrcodeLoginDialog(showLoginDialog)
 }
@@ -123,7 +127,7 @@ private fun CpndMenuItem(
             painterResource(logoPath),
             contentDescription = title,
             modifier = Modifier.size(18.dp),
-            tint = Color(0xFF000000)
+            tint = AppColorsProvider.current.firstIcon
         )
         Text(
             text = title,
@@ -173,6 +177,7 @@ private fun ColumnScope.CpnSongSheet(title: String, count: Int, onItemClick: (ti
             modifier = Modifier.padding(start = 8.dp).size(8.dp).rotate(
                 90 * animValue.value
             ),
+            tint = AppColorsProvider.current.firstIcon
         )
         Text(
             text = title,

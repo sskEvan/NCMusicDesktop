@@ -45,16 +45,15 @@ fun <T> ViewStateComponent(
     contentView: @Composable BoxScope.(data: T) -> Unit
 ) {
 
-    val successData = remember { mutableStateOf<T?>(null) }
-    val retryFlag = remember { mutableStateOf(0) }
     val vm = viewModel(listOf(key)) { ViewStateComponentViewModel<T>() }
+    val retryFlag = vm.reloadFlag
 
-    val flow = remember(retryFlag.value) {
-        if (retryFlag.value == 0) {
+    val flow = remember(retryFlag.value, key) {
+        if (retryFlag.value == 0) {  // first load data
             if (vm.flow == null) {
                 vm.flow = initFlow ?: loadDataBlock.invoke()
             }
-         } else {
+        } else {  // retry load data when user trigger loadDataBlock
             vm.flow = loadDataBlock.invoke()
         }
         vm.flow!!
@@ -77,8 +76,9 @@ fun <T> ViewStateComponent(
             }
 
             is ViewState.Success -> {
-                successData.value = (viewState as ViewState.Success<T>).data!!
-                contentView(successData.value!!)
+//                successData.value = (viewState as ViewState.Success<T>).data!!
+//                contentView(successData.value!!)
+                contentView((viewState as ViewState.Success<T>).data!!)
             }
 
             is ViewState.Empty -> {
@@ -97,9 +97,11 @@ fun <T> ViewStateComponent(
 
             is ViewState.Fail -> {
                 if (customFailComponent != null) {
-                    customFailComponent.invoke("错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
+                    customFailComponent.invoke(
+                        "错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
                         retryFlag,
-                        loadDataBlock)
+                        loadDataBlock
+                    )
                 } else {
                     NoSuccessComponent(
                         modifier = viewStateComponentModifier,
@@ -114,7 +116,11 @@ fun <T> ViewStateComponent(
 
             is ViewState.Error -> {
                 if (customErrorComponent != null) {
-                    customErrorComponent.invoke(getErrorMessagePair((viewState as ViewState.Error).exception), retryFlag, loadDataBlock)
+                    customErrorComponent.invoke(
+                        getErrorMessagePair((viewState as ViewState.Error).exception),
+                        retryFlag,
+                        loadDataBlock
+                    )
                 } else {
                     val errorMessagePair = getErrorMessagePair((viewState as ViewState.Error).exception)
                     NoSuccessComponent(
@@ -133,7 +139,8 @@ fun <T> ViewStateComponent(
 }
 
 class ViewStateComponentViewModel<T> : ViewModel() {
-    var flow : ViewStateMutableStateFlow<T>? = null
+    var flow: ViewStateMutableStateFlow<T>? = null
+    var reloadFlag = mutableStateOf(0)
 }
 
 

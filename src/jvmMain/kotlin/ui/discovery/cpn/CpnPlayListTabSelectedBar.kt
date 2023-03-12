@@ -32,30 +32,32 @@ import viewmodel.BaseViewModel
 @Composable
 fun CpnPlayListTabSelectedBar() {
     val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
-    Row(modifier = Modifier.padding(horizontal = 20.dp).padding(top = 15.dp).fillMaxWidth()) {
-        PlayListTabToggle(viewModel)
+    val showTabsPopup = remember { mutableStateOf(false) }
+    Row(modifier = Modifier.background(AppColorsProvider.current.pure).padding(vertical = 16.dp).fillMaxWidth()) {
+        PlayListTabToggle(showTabsPopup)
         HotPlayListTabs(viewModel)
     }
-    TabsPopup(viewModel)
+    TabsPopup(showTabsPopup)
 }
 
 
 @Composable
-private fun TabsPopup(viewModel: CpnPlayListTabSelectedBarViewModel) {
+private fun TabsPopup(showTabsPopup: MutableState<Boolean>) {
     DropdownMenu(
-        expanded = viewModel.showTabsPopup,
+        expanded = showTabsPopup.value,
         onDismissRequest = {
-            viewModel.showTabsPopup = false
+            showTabsPopup.value = false
         },
         offset = DpOffset(20.dp, 10.dp),
     ) {
-        TabsPopupContent(viewModel)
+        TabsPopupContent(showTabsPopup)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun TabsPopupContent(viewModel: CpnPlayListTabSelectedBarViewModel) {
+private fun TabsPopupContent(showTabsPopup: MutableState<Boolean>) {
+    val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
 
     ViewStateComponent(modifier = Modifier.width(660.dp).height(320.dp),
         initFlow = viewModel.playListTabFlow,
@@ -67,6 +69,7 @@ private fun TabsPopupContent(viewModel: CpnPlayListTabSelectedBarViewModel) {
             stickyHeader {
                 PlayListTabItem(
                     modifier = Modifier.padding(start = 20.dp, bottom = 15.dp, top = 6.dp).height(32.dp),
+                    showTabsPopup,
                     viewModel = viewModel,
                     textSize = 13.sp,
                     tag = data.all
@@ -75,7 +78,7 @@ private fun TabsPopupContent(viewModel: CpnPlayListTabSelectedBarViewModel) {
             }
             item {
                 groupTabsMap.forEach {
-                    TabsPopupGroupTabsItem(viewModel, it.key, it.value)
+                    TabsPopupGroupTabsItem(showTabsPopup, viewModel, it.key, it.value)
                 }
             }
         }
@@ -84,7 +87,7 @@ private fun TabsPopupContent(viewModel: CpnPlayListTabSelectedBarViewModel) {
 
 @Composable
 private fun TabsPopupGroupTabsItem(
-    viewModel: CpnPlayListTabSelectedBarViewModel, category: String, tabs: List<PlayListTab>
+    showTabsPopup: MutableState<Boolean>, viewModel: CpnPlayListTabSelectedBarViewModel, category: String, tabs: List<PlayListTab>
 ) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(bottom = 10.dp)) {
         Text(
@@ -97,6 +100,7 @@ private fun TabsPopupGroupTabsItem(
             tabs.forEach {
                 PlayListTabItem(
                     modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp).height(30.dp),
+                    showTabsPopup,
                     viewModel = viewModel,
                     tag = it
                 )
@@ -106,17 +110,19 @@ private fun TabsPopupGroupTabsItem(
 }
 
 @Composable
-private fun PlayListTabToggle(viewModel: CpnPlayListTabSelectedBarViewModel) {
+private fun PlayListTabToggle(showTabsPopup: MutableState<Boolean>) {
+    val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
+
     Row(
         modifier = Modifier.padding(end = 20.dp).width(110.dp).height(30.dp).clip(RoundedCornerShape(50)).clickable {
-            viewModel.showTabsPopup = true
+            showTabsPopup.value = true
         }.border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(50)),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         Text(
-            viewModel.selectedHotTab?.name ?: "选择标签", color = AppColorsProvider.current.firstIcon, fontSize = 14.sp
+            viewModel.selectedTab?.name ?: "选择标签", color = AppColorsProvider.current.firstIcon, fontSize = 14.sp
         )
 
         Icon(
@@ -131,16 +137,17 @@ private fun PlayListTabToggle(viewModel: CpnPlayListTabSelectedBarViewModel) {
 @Composable
 private fun PlayListTabItem(
     modifier: Modifier,
+    showTabsPopup: MutableState<Boolean>,
     textSize: TextUnit = 12.sp,
     viewModel: CpnPlayListTabSelectedBarViewModel,
     tag: PlayListTab
 ) {
 
     Box(modifier = modifier.clip(RoundedCornerShape(50)).clickable {
-        viewModel.selectedHotTab = tag
-        viewModel.showTabsPopup = false
+        viewModel.selectedTab = tag
+        showTabsPopup.value = false
     }.let {
-        if (tag.name == viewModel.selectedHotTab?.name) {
+        if (tag.name == viewModel.selectedTab?.name) {
             it.background(AppColorsProvider.current.primary.copy(0.2f))
         } else {
             it
@@ -150,7 +157,7 @@ private fun PlayListTabItem(
         Row {
             Text(
                 tag.name,
-                color = if (tag.name == viewModel.selectedHotTab?.name) AppColorsProvider.current.primary else AppColorsProvider.current.firstText,
+                color = if (tag.name == viewModel.selectedTab?.name) AppColorsProvider.current.primary else AppColorsProvider.current.firstText,
                 fontSize = textSize,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -189,9 +196,9 @@ private fun HotPlayListTabItem(viewModel: CpnPlayListTabSelectedBarViewModel, ta
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(modifier = Modifier.clip(RoundedCornerShape(50)).clickable {
-            viewModel.selectedHotTab = tag
+            viewModel.selectedTab = tag
         }.let {
-            if (tag.name == viewModel.selectedHotTab?.name) {
+            if (tag.name == viewModel.selectedTab?.name) {
                 it.background(AppColorsProvider.current.primary.copy(0.2f))
             } else {
                 it
@@ -199,7 +206,7 @@ private fun HotPlayListTabItem(viewModel: CpnPlayListTabSelectedBarViewModel, ta
         }) {
             Text(
                 tag.name,
-                color = if (tag.name == viewModel.selectedHotTab?.name) AppColorsProvider.current.primary else AppColorsProvider.current.secondText,
+                color = if (tag.name == viewModel.selectedTab?.name) AppColorsProvider.current.primary else AppColorsProvider.current.secondText,
                 fontSize = 12.sp
             )
         }
@@ -215,11 +222,11 @@ private fun HotPlayListTabItem(viewModel: CpnPlayListTabSelectedBarViewModel, ta
 
 
 class CpnPlayListTabSelectedBarViewModel : BaseViewModel() {
-    var selectedHotTab by mutableStateOf<PlayListTab?>(null)
-    var showTabsPopup by mutableStateOf(false)
+    var selectedTab by mutableStateOf<PlayListTab?>(null)
 
     val hotTabFlow by lazy {
         launch {
+            println("hotTabFlow done")
             NCRetrofitClient.getNCApi().getHotPlayListCategories()
         }
     }
@@ -227,10 +234,11 @@ class CpnPlayListTabSelectedBarViewModel : BaseViewModel() {
     val playListTabFlow = getPlayListCategories()
 
     fun getPlayListCategories() = launch(handleSuccessBlock = {
-        if (selectedHotTab == null) {
-            selectedHotTab = it.all
+        if (selectedTab == null) {
+            selectedTab = it.all
         }
     }) {
+        println("getPlayListCategories done")
         NCRetrofitClient.getNCApi().getPlayListCategories()
     }
 

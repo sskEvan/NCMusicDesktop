@@ -5,9 +5,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import moe.tlaster.precompose.PreComposeWindow
+import moe.tlaster.precompose.navigation.rememberNavigator
+import router.NCNavigatorManager
 import ui.common.theme.AppTheme
 import ui.common.theme.themeTypeState
 import ui.main.MainPage
+import ui.todo.TestPage
 import java.awt.Dimension
 
 fun main() = application {
@@ -30,6 +33,8 @@ fun main() = application {
 @Preview
 private fun App() {
     AppTheme(themeTypeState.value) {
+        NCNavigatorManager.navigator = rememberNavigator()
+//        TestPage()
         MainPage()
     }
 }

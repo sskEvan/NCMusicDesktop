@@ -4,17 +4,24 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.google.gson.Gson
+import model.SimplePlayListItem
 import moe.tlaster.precompose.navigation.NavHost
-import moe.tlaster.precompose.navigation.rememberNavigator
+import moe.tlaster.precompose.navigation.Navigator
+import moe.tlaster.precompose.navigation.query
 import moe.tlaster.precompose.navigation.transition.NavTransition
 import ui.discovery.DiscoveryPage
-import ui.discovery.cpn.CpnRecommendPlayList
+import ui.playlist.PlayListDetailPage
 import ui.todo.TodoPage
+
+
+object NCNavigatorManager {
+    lateinit var navigator: Navigator
+}
 
 @Composable
 fun NavGraph() {
-    val navigator = rememberNavigator()
-
+    val navigator = NCNavigatorManager.navigator
     NavHost(
         navigator = navigator,
         navTransition = remember {
@@ -64,6 +71,12 @@ fun NavGraph() {
         }
         scene(RouterUrls.MY_COLLECT_SONG_SHEET) {
             TodoPage("收藏的歌单")
+        }
+        scene(RouterUrls.PLAY_LIST_DETAIL) {backStackEntry ->
+            val simplePlayListInfo = backStackEntry.query<String>("simplePlayListInfo")
+            println("navigate to PLAY_LIST_DETAIL, extra info=$simplePlayListInfo")
+            val simplePlayListItem = Gson().fromJson(simplePlayListInfo, SimplePlayListItem::class.java)
+            PlayListDetailPage(simplePlayListItem)
         }
     }
 

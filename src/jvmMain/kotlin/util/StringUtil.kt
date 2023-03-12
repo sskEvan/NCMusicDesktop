@@ -7,17 +7,21 @@ import java.util.*
  */
 object StringUtil {
 
-    fun friendlyNumber(num: Number): String {
-        if(num.toLong() < 10000) {
+    fun friendlyNumber(num: Number?): String {
+        if (num != null) {
+            if(num.toLong() < 10000) {
+                return num.toString()
+            }else if(num.toLong() < 100000000) {
+                val result = num.toLong() / 10000
+                return result.toString() + "万"
+            }else if(num.toLong() >= 100000000) {
+                val result = num.toLong() / 100000000
+                return result.toString() + "亿"
+            }
             return num.toString()
-        }else if(num.toLong() < 100000000) {
-            val result = num.toLong() / 10000
-            return result.toString() + "万"
-        }else if(num.toLong() >= 100000000) {
-            val result = num.toLong() / 100000000
-            return result.toString() + "亿"
+        } else {
+           return "0"
         }
-        return num.toString()
     }
 
     fun formatMilliseconds(milliseconds: Int): String {
@@ -45,4 +49,6 @@ object StringUtil {
         }
         return standardTime
     }
+
+    fun isEmpty(str: String?) = (str == null || str == "")
 }

@@ -40,4 +40,7 @@ object RouterUrls {
     // 收藏的歌单
     const val MY_COLLECT_SONG_SHEET = "myCollectSongSheet"
 
+    // 歌单详情
+    const val PLAY_LIST_DETAIL = "playListDetail"
+
 }
