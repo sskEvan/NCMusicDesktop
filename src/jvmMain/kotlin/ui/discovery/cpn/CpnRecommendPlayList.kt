@@ -1,6 +1,5 @@
 package ui.discovery.cpn
 
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.BiasAlignment
@@ -50,7 +49,7 @@ fun CpnRecommendPlayList() {
 
 class CpnRecommendPlayListViewModel : BaseViewModel() {
 
-    fun getPlayList(tag: String, pageSize: Int, curPage: Int) = launch {
+    fun getPlayList(tag: String, pageSize: Int, curPage: Int) = launchFlow {
         val offset = (curPage - 1) * pageSize
         println("CpnRecommendPlayListViewModel getPlayList tag=$tag,pageSize=$pageSize,offset=$offset")
         NCRetrofitClient.getNCApi().getPlayList(pageSize, tag, offset)

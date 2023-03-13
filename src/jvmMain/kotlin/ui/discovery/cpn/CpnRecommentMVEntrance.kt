@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import com.lt.load_the_image.rememberImagePainter
 import com.ssk.ncmusic.ui.common.TableLayout
 import http.NCRetrofitClient
-import model.PrivateContentItem
 import model.RecommendMVItem
 import moe.tlaster.precompose.ui.viewModel
 import ui.common.CpnActionMore
@@ -141,7 +140,7 @@ private fun PrivateContentItem(item: RecommendMVItem) {
 
 class CpnRecommendMVEntranceViewModel : BaseViewModel() {
 
-    fun getRecommendMV() = launch {
+    fun getRecommendMV() = launchFlow {
         println("获取推荐MV...")
         NCRetrofitClient.getNCApi().getRecommendMV()
     }

@@ -225,7 +225,7 @@ class CpnPlayListTabSelectedBarViewModel : BaseViewModel() {
     var selectedTab by mutableStateOf<PlayListTab?>(null)
 
     val hotTabFlow by lazy {
-        launch {
+        launchFlow {
             println("hotTabFlow done")
             NCRetrofitClient.getNCApi().getHotPlayListCategories()
         }
@@ -233,7 +233,7 @@ class CpnPlayListTabSelectedBarViewModel : BaseViewModel() {
 
     val playListTabFlow = getPlayListCategories()
 
-    fun getPlayListCategories() = launch(handleSuccessBlock = {
+    fun getPlayListCategories() = launchFlow(handleSuccessBlock = {
         if (selectedTab == null) {
             selectedTab = it.all
         }

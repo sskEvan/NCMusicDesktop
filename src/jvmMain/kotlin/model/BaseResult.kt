@@ -1,4 +1,4 @@
-package com.ssk.ncmusic.model
+package model
 
 import androidx.annotation.Keep
 import java.io.Serializable

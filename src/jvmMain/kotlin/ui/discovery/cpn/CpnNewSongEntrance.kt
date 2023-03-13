@@ -120,7 +120,7 @@ private fun NewSongItem(index: Int, item: NewSongBean) {
 
 class CpnNewSongEntranceViewModel : BaseViewModel() {
 
-    fun getNewSong() = launch(handleSuccessBlock = {
+    fun getNewSong() = launchFlow(handleSuccessBlock = {
         it.data = it.data.take(10)
     }) {
         println("获取新歌速递...")

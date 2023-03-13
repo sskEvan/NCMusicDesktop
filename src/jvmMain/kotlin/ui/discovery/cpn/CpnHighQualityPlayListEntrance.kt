@@ -118,7 +118,7 @@ class CpnHighQualityPlayListEntranceViewModel : BaseViewModel() {
     fun getHighQualityPlayList(tag: String?): ViewStateMutableStateFlow<PlayListResult>? {
         if (lastTag != tag) {
             lastTag = tag ?: ""
-            flow = launch {
+            flow = launchFlow {
                 println("----getHighQualityPlayList done, lastTag=${lastTag}")
                 NCRetrofitClient.getNCApi().getHighQualityPlayList(1, tag)
             }

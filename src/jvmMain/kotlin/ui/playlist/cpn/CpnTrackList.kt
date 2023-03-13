@@ -151,7 +151,7 @@ class TrackListViewModel : BaseViewModel() {
     var playlistDetailResult by mutableStateOf<PlaylistDetailResult?>(null)
     fun fetchData(id: Long, firstLoad: Boolean = false) {
         if (!firstLoad || flow == null) {
-            flow = launch {
+            flow = launchFlow {
                 val playlistDetailResult = NCRetrofitClient.getNCApi().getPlaylistDetail(id)
                 this.playlistDetailResult = playlistDetailResult
                 val trackIdBeans = playlistDetailResult.playlist.trackIds

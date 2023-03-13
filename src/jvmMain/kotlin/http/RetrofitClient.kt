@@ -1,6 +1,7 @@
 package http
 
 import http.api.NCApi
+import http.interceptor.CookieIntercept
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,6 +29,7 @@ object RetrofitClient {
         val okHttpClientBuilder = OkHttpClient().newBuilder().apply {
             connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            addInterceptor(CookieIntercept())
         }
 
         return RetrofitBuild(

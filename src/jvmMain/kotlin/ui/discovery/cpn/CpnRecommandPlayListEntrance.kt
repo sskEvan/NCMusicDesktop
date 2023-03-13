@@ -123,7 +123,7 @@ private fun CpnPlayListItem(item: SimplePlayListItem) {
 
 class CpnRecommendPlayListEntranceViewModel : BaseViewModel() {
 
-    fun getRecommendPlayList() = launch {
+    fun getRecommendPlayList() = launchFlow {
         println("获取推荐歌单...")
         NCRetrofitClient.getNCApi().getRecommendPlayList(15)
     }

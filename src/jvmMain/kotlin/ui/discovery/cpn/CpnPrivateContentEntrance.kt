@@ -108,7 +108,7 @@ private fun PrivateContentItem(item: PrivateContentItem) {
 
 class CpnPrivateContentViewModel : BaseViewModel() {
 
-    fun getPrivateContent() = launch {
+    fun getPrivateContent() = launchFlow {
         println("获取独家放送...")
         NCRetrofitClient.getNCApi().getPrivateContent()
     }

@@ -1,7 +1,5 @@
 package model
 
-import com.ssk.ncmusic.model.BaseResult
-
 /**
  * 新歌速递
  */

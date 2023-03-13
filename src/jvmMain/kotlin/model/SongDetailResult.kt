@@ -1,7 +1,6 @@
 package model
 
 import androidx.annotation.Keep
-import com.ssk.ncmusic.model.BaseResult
 
 @Keep
 data class SongDetailResult(val songs: List<SongBean>) : BaseResult()

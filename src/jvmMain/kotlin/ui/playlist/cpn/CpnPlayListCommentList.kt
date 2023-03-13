@@ -22,8 +22,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lt.load_the_image.rememberImagePainter
-import com.ssk.ncmusic.model.CommentBean
-import com.ssk.ncmusic.model.CommentResult
+import model.CommentBean
+import model.CommentResult
 import http.NCRetrofitClient
 import ui.common.PaingFooterNumBar
 import ui.common.handleListContent
@@ -140,7 +140,7 @@ class CpnPlayListCommentListViewModel : BaseViewModel() {
     fun initFetchData(id: Long) {
         if (flow == null) {
             cutPage = 1
-            flow = launch {
+            flow = launchFlow {
                 NCRetrofitClient.getNCApi().getPlayListComment(id, pageSize, 0)
             }
         }
@@ -150,7 +150,7 @@ class CpnPlayListCommentListViewModel : BaseViewModel() {
         if (!firstLoad || flow == null) {
             cutPage = curPage
             val offset = (curPage - 1) * pageSize
-            flow = launch {
+            flow = launchFlow {
                 NCRetrofitClient.getNCApi().getPlayListComment(id, pageSize, offset)
             }
         }

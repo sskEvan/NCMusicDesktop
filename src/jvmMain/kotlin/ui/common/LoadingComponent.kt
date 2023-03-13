@@ -19,7 +19,7 @@ import ui.common.theme.AppColorsProvider
  */
 @Composable
 fun LoadingComponent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     loading: Boolean = true,
     loadingWidth: Dp = 30.dp,
     loadingHeight: Dp = 25.dp,

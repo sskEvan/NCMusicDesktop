@@ -1,9 +1,9 @@
 package http.api
 
-import com.ssk.ncmusic.model.CommentResult
 import model.*
 import retrofit2.http.GET
 import retrofit2.http.Query
+import java.util.*
 
 interface NCApi {
 
@@ -75,5 +75,29 @@ interface NCApi {
         @Query("offset") offset: Int,
 //        @Query("before") before: Long, // 分页参数,取上一页最后一项的 time 获取下一页数据(获取超过 5000 条评论的时候需要用到)
     ): CommentResult
+
+
+    @GET("/login/qr/key")
+    suspend fun getLoginQrcodeKey(@Query("timeStamp") timeStamp: Long = Date().time): QrcodeKeyResult
+
+    @GET("/login/qr/create")
+    suspend fun getLoginQrcodeValue(
+        @Query("key") key: String,
+        @Query("timeStamp") timeStamp: Long = Date().time
+    ): QrcodeValueResult
+
+    @GET("/login/qr/check")
+    suspend fun checkQrcodeAuthStatus(
+        @Query("key") key: String,
+        @Query("timeStamp") timeStamp: Long = Date().time
+    ): QrcodeAuthResult
+
+    @GET("/user/account")
+    suspend fun getAccountInfo(
+        @Query("cookie") cookie: String,
+    ): AccountInfoResult
+
+    @GET("user/playlist")
+    suspend fun getUserPlayList(@Query("uid") uid: String): UserPlaylistResult
 
 }

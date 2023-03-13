@@ -1,7 +1,6 @@
 package model
 
 import androidx.annotation.Keep
-import com.ssk.ncmusic.model.BaseResult
 import java.io.Serializable
 
 /**
@@ -124,3 +123,10 @@ data class PlaylistDetailResult(
 ) : BaseResult()
 
 
+/**
+ * 个人歌单
+ */
+@Keep
+data class UserPlaylistResult(
+    val playlist: List<PlaylistDetail>,
+) : BaseResult()
