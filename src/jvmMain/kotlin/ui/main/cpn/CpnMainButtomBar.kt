@@ -1,8 +1,9 @@
 package ui.main.cpn
 
-import SeekBar
+import ui.common.SeekBar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import moe.tlaster.precompose.ui.viewModel
 import ui.common.theme.AppColorsProvider
 
 @Composable
@@ -50,8 +52,13 @@ private fun CpnSeekBar() {
 
 @Composable
 private fun RowScope.CpnMusicInfo() {
+    val viewModel = viewModel { CpnMainMusicPlayContainerViewModel() }
+
     Row(
-        modifier = Modifier.weight(1f),
+        modifier = Modifier.weight(1f).clickable {
+            viewModel.show = !viewModel.show
+            println("--------handle CpnMainMusicPlayContainer show state -》 ${viewModel.show}")
+        },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(

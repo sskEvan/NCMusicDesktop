@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lt.load_the_image.rememberImagePainter
-import com.ssk.ncmusic.ui.common.TableLayout
+import ui.common.TableLayout
 import http.NCRetrofitClient
 import model.PrivateContentItem
 import moe.tlaster.precompose.ui.viewModel

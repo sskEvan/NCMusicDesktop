@@ -21,6 +21,7 @@ fun DiscoveryPage() {
         listOf("个性推荐", "歌单", "排行榜", "歌手", "最新音乐")
     }
     val viewModel = viewModel { DiscoveryPageViewModel() }
+
     Column {
         CommonTopBar {
             CommonTabLayout(

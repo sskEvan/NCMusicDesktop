@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import base.AppConfig
 import moe.tlaster.precompose.PreComposeWindow
 import moe.tlaster.precompose.navigation.rememberNavigator
 import router.NCNavigatorManager
@@ -14,17 +15,20 @@ import ui.todo.TestPage
 import java.awt.Dimension
 
 fun main() = application {
+    val windowState = rememberWindowState(size = DpSize(AppConfig.windowMinWidth, AppConfig.windowMinHeight))
+    AppConfig.windowState = windowState
     PreComposeWindow(
-        state = rememberWindowState(size = DpSize(1000.dp, 660.dp)),
+        state = windowState,
         onCloseRequest = ::exitApplication,
         title = ""
     ) {
-        window.minimumSize = Dimension(1000.dp.value.toInt(), 660.dp.value.toInt())
+        window.minimumSize = Dimension(AppConfig.windowMinWidth.value.toInt(), AppConfig.windowMinHeight.value.toInt())
         window.rootPane.apply {
             rootPane.putClientProperty("apple.awt.fullWindowContent", true)
             rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
             rootPane.putClientProperty("apple.awt.windowTitleVisible", false)
         }
+        window.size
         App()
     }
 }
@@ -34,7 +38,6 @@ fun main() = application {
 private fun App() {
     AppTheme(themeTypeState.value) {
         NCNavigatorManager.navigator = rememberNavigator()
-//        TestPage()
         MainPage()
     }
 }

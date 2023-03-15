@@ -1,3 +1,4 @@
+package ui.common
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.forEachGesture

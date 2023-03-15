@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import com.lt.load_the_image.rememberImagePainter
-import com.ssk.ncmusic.ui.common.TableLayout
+import ui.common.TableLayout
 import http.NCRetrofitClient
 import model.SimplePlayListItem
 import moe.tlaster.precompose.ui.viewModel

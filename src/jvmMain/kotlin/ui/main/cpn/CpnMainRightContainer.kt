@@ -16,7 +16,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import moe.tlaster.precompose.navigation.rememberNavigator
+import base.AppConfig
+import moe.tlaster.precompose.ui.viewModel
 import router.NCNavigatorManager
 import router.NavGraph
 import ui.common.theme.AppColorsProvider
@@ -32,41 +33,49 @@ fun CpnMainRightContainer() {
 }
 
 @Composable
-fun CommonTopBar(title: String = "", showBackButton: Boolean = false, customerContent: (@Composable () -> Unit)? = null) {
+fun CommonTopBar(
+    title: String = "",
+    showBackButton: Boolean = false,
+    customerContent: (@Composable () -> Unit)? = null
+) {
     Box(
-        modifier = Modifier.padding(end = 320.dp).fillMaxWidth().height(50.dp)
+        modifier = Modifier.padding(end = 320.dp).fillMaxWidth().height(AppConfig.topBarHeight)
             .background(AppColorsProvider.current.topBarColor), contentAlignment = Alignment.CenterStart
     ) {
-        if (customerContent != null) {
-            customerContent.invoke()
-        } else {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (showBackButton) {
+        val viewModel = viewModel { CpnMainMusicPlayContainerViewModel() }
+        println("--------CommonTopBar CpnMainMusicPlayContainer show = ${viewModel.show}")
+        if (!viewModel.show) {
+            if (customerContent != null) {
+                customerContent.invoke()
+            } else {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (showBackButton) {
 //                    val navigator = rememberNavigator()
-                    val navigator = NCNavigatorManager.navigator
+                        val navigator = NCNavigatorManager.navigator
 
-                    Icon(
-                        painterResource("image/ic_back.webp"),
-                        modifier = Modifier.padding(start = 20.dp).clip(RoundedCornerShape(50)).clickable {
-                            navigator.popBackStack()
-                        }.padding(4.dp).size(18.dp),
-                        contentDescription = "返回上一页",
-                        tint = AppColorsProvider.current.firstIcon
+                        Icon(
+                            painterResource("image/ic_back.webp"),
+                            modifier = Modifier.padding(start = 20.dp).clip(RoundedCornerShape(50)).clickable {
+                                navigator.popBackStack()
+                            }.padding(4.dp).size(18.dp),
+                            contentDescription = "返回上一页",
+                            tint = AppColorsProvider.current.firstIcon
 
+                        )
+
+                    }
+
+                    Text(
+                        title!!,
+                        color = AppColorsProvider.current.firstText,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(start = 20.dp)
                     )
-
                 }
-
-                Text(
-                    title!!,
-                    color = AppColorsProvider.current.firstText,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 20.dp)
-                )
             }
-
         }
+
     }
 }
 

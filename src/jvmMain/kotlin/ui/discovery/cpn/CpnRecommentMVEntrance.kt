@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.lt.load_the_image.rememberImagePainter
-import com.ssk.ncmusic.ui.common.TableLayout
+import ui.common.TableLayout
 import http.NCRetrofitClient
 import model.RecommendMVItem
 import moe.tlaster.precompose.ui.viewModel

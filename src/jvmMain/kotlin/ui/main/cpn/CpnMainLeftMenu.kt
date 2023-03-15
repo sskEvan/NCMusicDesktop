@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import base.AppConfig
 import base.UserManager
 import com.google.gson.Gson
 import com.lt.load_the_image.rememberImagePainter
@@ -43,7 +44,7 @@ fun CpnMainLeftMenu() {
     }
 
     Column(modifier = Modifier.width(200.dp).background(AppColorsProvider.current.background)) {
-        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp).background(AppColorsProvider.current.topBarColor))
+        Spacer(modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight).background(AppColorsProvider.current.topBarColor))
         CpnUserInfo()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CpnMenuItem("image/ic_my_music.webp", "发现音乐") {

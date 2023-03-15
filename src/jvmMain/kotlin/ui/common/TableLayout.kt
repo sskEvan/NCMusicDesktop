@@ -1,4 +1,4 @@
-package com.ssk.ncmusic.ui.common
+package ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
