@@ -21,10 +21,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
 import model.CommentBean
 import model.CommentResult
 import http.NCRetrofitClient
+import ui.common.AsyncImage
 import ui.common.PaingFooterNumBar
 import ui.common.handleListContent
 import ui.common.theme.AppColorsProvider
@@ -61,12 +61,11 @@ fun LazyListScope.CpnPlayListCommentList(
 @Composable
 private fun CommentItem(commentBean: CommentBean) {
     Row(modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)) {
-        Image(
-            rememberImagePainter(commentBean.user.avatarUrl ?: "", "image/ic_default_avator.webp"),
+        AsyncImage(
             modifier = Modifier.padding(end = 10.dp).size(48.dp).clip(RoundedCornerShape(50)),
-            contentDescription = null
+            url = commentBean.user.avatarUrl,
+            "image/ic_default_avator.webp"
         )
-
         Column {
             Text(
                 text = buildAnnotatedString {

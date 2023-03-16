@@ -18,10 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
-import com.lt.load_the_image.rememberImagePainter
 import model.PlaylistDetail
 import router.NCNavigatorManager
 import router.RouterUrls
+import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 import util.StringUtil
 
@@ -32,7 +32,6 @@ import util.StringUtil
 @Composable
 fun CpnPlayListItem(item: PlaylistDetail) {
     var focusState by remember { mutableStateOf(false) }
-//    val navigator = rememberNavigator()
     val navigator = NCNavigatorManager.navigator
 
     Column(
@@ -47,11 +46,7 @@ fun CpnPlayListItem(item: PlaylistDetail) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
-            Image(
-                rememberImagePainter(item.coverImgUrl),
-                contentDescription = "",
-                modifier = Modifier.size(172.dp).clip(RoundedCornerShape(6.dp))
-            )
+            AsyncImage(modifier = Modifier.size(172.dp).clip(RoundedCornerShape(6.dp)), item.coverImgUrl)
 
             Row(
                 modifier = Modifier.padding(top = 6.dp, end = 6.dp).align(Alignment.TopEnd),

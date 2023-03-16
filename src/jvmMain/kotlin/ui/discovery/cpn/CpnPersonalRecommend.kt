@@ -1,19 +1,13 @@
 package ui.discovery.cpn
 
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.collectAsState
 import moe.tlaster.precompose.ui.viewModel
-import ui.common.CpnActionMore
-import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
 
 /**
@@ -21,40 +15,50 @@ import viewmodel.BaseViewModel
  */
 @Composable
 fun CpnPersonalRecommend(recommendTagIndex: MutableState<Int>) {
-    val viewModel = viewModel { CpnPersonalRecommend() }
-    Column(
-        modifier = Modifier.background(AppColorsProvider.current.pure).verticalScroll(
-            viewModel.getCacheScrollState(rememberScrollState())
-        )
-    ) {
+    val personalRecommendViewModel = viewModel { CpnPersonalRecommendViewModel() }
+    val playListEntranceViewModel = viewModel { CpnRecommendPlayListEntranceViewModel() }
+    val privateContentViewModel = viewModel { CpnPrivateContentViewModel() }
+    val newSongViewModel = viewModel { CpnNewSongEntranceViewModel() }
+    val recommendMVEntranceViewModel = viewModel { CpnRecommendMVEntranceViewModel() }
+
+    LaunchedEffect(Unit) {
+        playListEntranceViewModel.getRecommendPlayList(true)
+        privateContentViewModel.getPrivateContent(true)
+        newSongViewModel.getNewSong(true)
+        recommendMVEntranceViewModel.getRecommendMV(true)
+    }
+    val playListEntranceViewState = playListEntranceViewModel.flow?.collectAsState()?.value
+    val privateContentViewState = privateContentViewModel.flow?.collectAsState()?.value
+    val newSongViewState = newSongViewModel.flow?.collectAsState()?.value
+    val recommendMVViewState = recommendMVEntranceViewModel.flow?.collectAsState()?.value
+
+    LazyColumn(state = personalRecommendViewModel.getLazyListStateState(rememberLazyListState())) {
         // 推荐歌单
-        CpnRecommandPlayListEntrance {
+        CpnRecommandPlayListEntrance(playListEntranceViewModel, playListEntranceViewState) {
             recommendTagIndex.value = 1
         }
+
         // 独家放送
-        CpnPrivateContentEntrance {
+        CpnPrivateContentEntrance(privateContentViewModel, privateContentViewState)
 
-        }
+
         // 最新音乐
-        CpnNewSongEntrance {
+        CpnNewSongEntrance(newSongViewModel, newSongViewState)
 
-        }
         // 推荐MV
-        CpnRecommendMVEntrance {
-
-        }
+        CpnRecommendMVEntrance(recommendMVEntranceViewModel, recommendMVViewState)
     }
 }
 
 
-class CpnPersonalRecommend : BaseViewModel() {
-    private var cacheScrollState: ScrollState? = null
+class CpnPersonalRecommendViewModel : BaseViewModel() {
+    private var lazyListState: LazyListState? = null
 
-    fun getCacheScrollState(scrollState: ScrollState): ScrollState {
-        if (cacheScrollState == null) {
-            cacheScrollState = scrollState
+    fun getLazyListStateState(state: LazyListState): LazyListState {
+        if (lazyListState == null) {
+            lazyListState = state
         }
-        return cacheScrollState!!
+        return lazyListState!!
     }
 }
 

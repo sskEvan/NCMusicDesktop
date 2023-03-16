@@ -3,6 +3,7 @@ package ui.discovery.cpn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -18,47 +19,40 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
-import com.lt.load_the_image.rememberImagePainter
-import ui.common.TableLayout
 import http.NCRetrofitClient
+import model.RecommendPlayListResult
 import model.SimplePlayListItem
-import moe.tlaster.precompose.ui.viewModel
 import router.NCNavigatorManager
 import router.RouterUrls
-import ui.common.CpnActionMore
-import ui.common.ViewStateComponent
+import ui.common.*
 import ui.common.theme.AppColorsProvider
 import util.StringUtil
 import viewmodel.BaseViewModel
+import viewmodel.ViewState
+import viewmodel.ViewStateMutableStateFlow
 
 /**
  * 推荐歌单入口
  */
-@Composable
-fun CpnRecommandPlayListEntrance(onClickMore: () -> Unit) {
-    val viewModel = viewModel { CpnRecommendPlayListEntranceViewModel() }
+fun LazyListScope.CpnRecommandPlayListEntrance(viewModel: CpnRecommendPlayListEntranceViewModel,
+                                               viewState: ViewState<RecommendPlayListResult>?,
+                                               onClickMore: () -> Unit) {
 
-    Column {
+    item {
         CpnActionMore("推荐歌单") {
             onClickMore.invoke()
         }
+    }
 
-        ViewStateComponent(
-            key = "CpnRecommandPlayListEntrance",
-            loadDataBlock = { viewModel.getRecommendPlayList() }) { data ->
-            Content(data.result)
+    handleListContent(viewState, reloadDataBlock = {
+        viewModel.getRecommendPlayList(false)
+    }) { data ->
+        ListToGridItems(data.result, 5) { _, item ->
+            CpnPlayListItem(item)
         }
     }
 }
 
-@Composable
-private fun Content(list: List<SimplePlayListItem>) {
-    TableLayout(modifier = Modifier.padding(horizontal = 10.dp), cellsCount = 5) {
-        list.forEach {
-            CpnPlayListItem(it)
-        }
-    }
-}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -78,10 +72,9 @@ private fun CpnPlayListItem(item: SimplePlayListItem) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
-            Image(
-                rememberImagePainter(item.picUrl),
-                contentDescription = "",
-                modifier = Modifier.size(140.dp).clip(RoundedCornerShape(6.dp))
+            AsyncImage(
+                modifier = Modifier.size(140.dp).clip(RoundedCornerShape(6.dp)),
+                item.picUrl
             )
 
             Row(
@@ -122,10 +115,14 @@ private fun CpnPlayListItem(item: SimplePlayListItem) {
 
 
 class CpnRecommendPlayListEntranceViewModel : BaseViewModel() {
-
-    fun getRecommendPlayList() = launchFlow {
-        println("获取推荐歌单...")
-        NCRetrofitClient.getNCApi().getRecommendPlayList(15)
+    var flow by mutableStateOf<ViewStateMutableStateFlow<RecommendPlayListResult>?>(null)
+    fun getRecommendPlayList(firstLoad: Boolean)  {
+        if (!firstLoad || flow == null) {
+            flow = launchFlow {
+                println("获取推荐歌单...")
+                NCRetrofitClient.getNCApi().getRecommendPlayList(15)
+            }
+        }
     }
 
 }

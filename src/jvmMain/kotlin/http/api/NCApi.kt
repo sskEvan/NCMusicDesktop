@@ -100,4 +100,10 @@ interface NCApi {
     @GET("user/playlist")
     suspend fun getUserPlayList(@Query("uid") uid: String): UserPlaylistResult
 
+    @GET("/song/url")
+    suspend fun getSongUrl(
+        @Query("id") id: Long,
+        @Query("br") br: Int = 128000
+    ): SongUrlBean
+
 }

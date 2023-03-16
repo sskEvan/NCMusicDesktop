@@ -17,7 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import base.AppConfig
-import moe.tlaster.precompose.ui.viewModel
+import base.MusicPlayController
 import router.NCNavigatorManager
 import router.NavGraph
 import ui.common.theme.AppColorsProvider
@@ -26,7 +26,7 @@ import ui.common.theme.AppColorsProvider
 @Composable
 fun CpnMainRightContainer() {
     Box(modifier = Modifier.fillMaxSize().background(color = AppColorsProvider.current.pure)) {
-        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp).background(AppColorsProvider.current.topBarColor))
+        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp).background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor))
         NavGraph()
         CpnRightTopActionButtons()
     }
@@ -40,11 +40,9 @@ fun CommonTopBar(
 ) {
     Box(
         modifier = Modifier.padding(end = 320.dp).fillMaxWidth().height(AppConfig.topBarHeight)
-            .background(AppColorsProvider.current.topBarColor), contentAlignment = Alignment.CenterStart
+            .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor), contentAlignment = Alignment.CenterStart
     ) {
-        val viewModel = viewModel { CpnMainMusicPlayContainerViewModel() }
-        println("--------CommonTopBar CpnMainMusicPlayContainer show = ${viewModel.show}")
-        if (!viewModel.show) {
+        if (!MusicPlayController.showMusicPlayDrawer) {
             if (customerContent != null) {
                 customerContent.invoke()
             } else {

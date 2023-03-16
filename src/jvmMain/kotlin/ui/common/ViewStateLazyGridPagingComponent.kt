@@ -274,7 +274,7 @@ fun <T> LazyListScope.handleListContent(
             item {
                 NoSuccessComponent(
                     modifier = viewStateComponentModifier,
-                    message = "错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
+                    message = "错误码：${viewState.errorCode}；${viewState.errorMsg}，点我重试",
                 ) {
                    reloadDataBlock.invoke()
                 }
@@ -283,7 +283,7 @@ fun <T> LazyListScope.handleListContent(
 
         is ViewState.Error -> {
             item {
-                val errorMessagePair = getErrorMessagePair((viewState as ViewState.Error).exception)
+                val errorMessagePair = getErrorMessagePair(viewState.exception)
                 NoSuccessComponent(
                     modifier = viewStateComponentModifier,
                     message = errorMessagePair.first,
@@ -296,7 +296,7 @@ fun <T> LazyListScope.handleListContent(
         }
 
         is ViewState.Success -> {
-            val data = (viewState as ViewState.Success<T>).data
+            val data = viewState.data
             callback(data)
         }
          else -> {

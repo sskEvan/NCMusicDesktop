@@ -2,6 +2,7 @@ package ui.discovery.cpn
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -13,47 +14,36 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
-import ui.common.TableLayout
 import http.NCRetrofitClient
 import model.PrivateContentItem
-import moe.tlaster.precompose.ui.viewModel
-import ui.common.CpnActionMore
-import ui.common.ViewStateComponent
+import model.PrivateContentResult
+import ui.common.*
 import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
+import viewmodel.ViewState
+import viewmodel.ViewStateMutableStateFlow
 
 /**
  * 独家放送入口
  */
-@Composable
-fun CpnPrivateContentEntrance(onClickMore: () -> Unit) {
-    val viewModel = viewModel { CpnPrivateContentViewModel() }
+fun LazyListScope.CpnPrivateContentEntrance(viewModel: CpnPrivateContentViewModel,
+                                            viewState: ViewState<PrivateContentResult>?) {
 
-    Column {
-        CpnActionMore("独家放送") {
-            onClickMore.invoke()
-        }
+    item {
+        CpnActionMore("独家放送")
+    }
 
-        ViewStateComponent(
-            key = "CpnPrivateContentEntrance",
-            loadDataBlock = { viewModel.getPrivateContent() }) { data ->
-            Content(data.result)
+    handleListContent(viewState, reloadDataBlock = {
+        viewModel.getPrivateContent(false)
+    }) { data ->
+        ListToGridItems(data.result, 4) { _, item ->
+            PrivateContentItem(item)
         }
     }
-}
 
-@Composable
-private fun Content(list: List<PrivateContentItem>) {
-    TableLayout(modifier = Modifier.padding(horizontal = 10.dp), cellsCount = 4) {
-        list.forEach {
-            PrivateContentItem(it)
-        }
-    }
 }
 
 
@@ -66,18 +56,16 @@ private fun PrivateContentItem(item: PrivateContentItem) {
         modifier = Modifier.onPointerEvent(PointerEventType.Enter) {
             focusState = true
         }.onPointerEvent(PointerEventType.Exit) {
-            focusState = false
+           focusState = false
         },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
-            Image(
-                rememberImagePainter(item.picUrl),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.width(180.dp).height(100.dp).clip(RoundedCornerShape(6.dp))
-            )
 
+            AsyncImage(
+                modifier = Modifier.width(180.dp).height(100.dp).clip(RoundedCornerShape(6.dp)),
+                item.picUrl
+            )
             Row(modifier = Modifier.padding(top = 6.dp, end = 6.dp).align(Alignment.TopEnd), verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource("image/ic_play_count.webp"),
@@ -108,9 +96,14 @@ private fun PrivateContentItem(item: PrivateContentItem) {
 
 class CpnPrivateContentViewModel : BaseViewModel() {
 
-    fun getPrivateContent() = launchFlow {
-        println("获取独家放送...")
-        NCRetrofitClient.getNCApi().getPrivateContent()
+    var flow by mutableStateOf<ViewStateMutableStateFlow<PrivateContentResult>?>(null)
+    fun getPrivateContent(firstLoad: Boolean)  {
+        if (!firstLoad || flow == null) {
+            flow = launchFlow {
+                println("获取独家放送...")
+                NCRetrofitClient.getNCApi().getPrivateContent()
+            }
+        }
     }
 
 }

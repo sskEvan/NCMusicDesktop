@@ -1,60 +1,50 @@
 package ui.discovery.cpn
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
-import ui.common.TableLayout
 import http.NCRetrofitClient
 import model.NewSongBean
-import moe.tlaster.precompose.ui.viewModel
-import ui.common.CpnActionMore
-import ui.common.ViewStateComponent
+import model.NewSongResult
+import ui.common.*
 import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
+import viewmodel.ViewState
+import viewmodel.ViewStateMutableStateFlow
 
 /**
  * 最新音乐入口
  */
-@Composable
-fun CpnNewSongEntrance(onClickMore: () -> Unit) {
-    val viewModel = viewModel { CpnNewSongEntranceViewModel() }
+fun LazyListScope.CpnNewSongEntrance(viewModel: CpnNewSongEntranceViewModel,
+                                     viewState: ViewState<NewSongResult>?) {
 
-    Column {
-        CpnActionMore("最新音乐") {
-            onClickMore.invoke()
-        }
+    item {
+        CpnActionMore("最新音乐")
+    }
 
-        ViewStateComponent(
-            key = "CpnNewSongEntrance",
-            loadDataBlock = { viewModel.getNewSong() }) { data ->
-            Content(data.data)
+    handleListContent(viewState, reloadDataBlock = {
+        viewModel.getNewSong(false)
+    }) { data ->
+        ListToGridItems(data.data, 2) { index, item ->
+            NewSongItem(index, item)
         }
     }
 }
-
-@Composable
-private fun Content(list: List<NewSongBean>) {
-    TableLayout(modifier = Modifier.padding(horizontal = 10.dp), cellsCount = 2) {
-        list.forEachIndexed { index, item ->
-            NewSongItem(index + 1, item)
-        }
-    }
-}
-
 
 @Composable
 private fun NewSongItem(index: Int, item: NewSongBean) {
@@ -72,12 +62,8 @@ private fun NewSongItem(index: Int, item: NewSongBean) {
             modifier = Modifier.padding(horizontal = 6.dp), verticalAlignment = Alignment.CenterVertically
         ) {
             Box {
-                Image(
-                    rememberImagePainter(item.album.picUrl),
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(72.dp).clip(RoundedCornerShape(6.dp))
-                )
+
+                AsyncImage(modifier = Modifier.padding(vertical = 10.dp).size(72.dp).clip(RoundedCornerShape(6.dp)), item.album.picUrl)
 
                 Icon(
                     painter = painterResource("image/ic_logo_play.webp"),
@@ -120,11 +106,17 @@ private fun NewSongItem(index: Int, item: NewSongBean) {
 
 class CpnNewSongEntranceViewModel : BaseViewModel() {
 
-    fun getNewSong() = launchFlow(handleSuccessBlock = {
-        it.data = it.data.take(10)
-    }) {
-        println("获取新歌速递...")
-        NCRetrofitClient.getNCApi().getNewSong()
+    var flow by mutableStateOf<ViewStateMutableStateFlow<NewSongResult>?>(null)
+    fun getNewSong(firstLoad: Boolean)  {
+        if (!firstLoad || flow == null) {
+            flow = launchFlow(handleSuccessBlock = {
+                it.data = it.data.take(10)
+            }) {
+                println("获取新歌速递...")
+                NCRetrofitClient.getNCApi().getNewSong()
+            }
+        }
     }
+
 
 }

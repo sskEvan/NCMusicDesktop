@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
 import model.Subscribers
+import ui.common.AsyncImage
 import ui.common.ListToGridItems
 import ui.common.NoSuccessComponent
 import ui.common.theme.AppColorsProvider
@@ -39,10 +39,11 @@ private fun SubscribersItem(item: Subscribers) {
         modifier = Modifier.padding(start = 20.dp).fillMaxWidth().height(120.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            rememberImagePainter(item.avatarUrl, "image/ic_default_avator.webp"),
+        AsyncImage(
             modifier = Modifier.padding(end = 10.dp).size(90.dp).clip(RoundedCornerShape(50)),
-            contentDescription = null,
+            item.avatarUrl,
+            "image/ic_default_avator.webp",
+            "image/ic_default_avator.webp"
         )
         Column {
             Text(

@@ -5,12 +5,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -25,7 +27,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.rememberDialogState
 import base.UserManager
 import com.google.gson.Gson
-import com.lt.load_the_image.rememberImagePainter
 import http.NCRetrofitClient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -33,6 +34,7 @@ import util.QrcodeUtil
 import kotlinx.coroutines.launch
 import model.LoginResult
 import moe.tlaster.precompose.ui.viewModel
+import ui.common.AsyncImage
 import ui.common.LoadingComponent
 import ui.common.NoSuccessComponent
 import ui.common.theme.AppColorsProvider
@@ -156,10 +158,11 @@ private fun CpnScanQrcode(modifier: Modifier, qrcodeSize: Dp) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (viewModel.qrcodeAuthStatus == 801 || viewModel.qrcodeAuthStatus == 802) {
-            Image(
-                rememberImagePainter(viewModel.qrcodeFile!!),
-                contentDescription = "",
-                modifier = Modifier.size(qrcodeSize)
+            AsyncImage(
+                modifier = Modifier.size(qrcodeSize),
+                viewModel.qrcodeFile?.absolutePath ?: "",
+                placeHolderUrl = null,
+                errorUrl = null
             )
         } else {
             Box(

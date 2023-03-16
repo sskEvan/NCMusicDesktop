@@ -1,6 +1,7 @@
 package ui.playlist.cpn
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Icon
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import base.MusicPlayController
 import http.NCRetrofitClient
 import model.PlaylistDetailResult
 import model.SongBean
@@ -36,14 +38,17 @@ fun LazyListScope.CpnTrackList(
             TrackHeaderBar()
         }
         items(data.songs.size) {
-            TrackItem(data.songs[it], it + 1)
+            TrackItem(data.songs, it)
         }
     }
 }
 
 @Composable
 private fun TrackHeaderBar() {
-    Row(modifier = Modifier.height(36.dp).fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.height(36.dp).fillMaxWidth().padding(horizontal = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             modifier = Modifier.weight(4f),
             text = "音乐标题",
@@ -77,16 +82,22 @@ private fun TrackHeaderBar() {
 
 
 @Composable
-private fun TrackItem(songBean: SongBean, index: Int) {
+private fun TrackItem(songList: List<SongBean>,  index: Int) {
+    val curSongBean = songList[index]
     Row(
-        modifier = Modifier.background(
-            if (index % 2 == 0) Color.Transparent else AppColorsProvider.current.divider.copy(
+        modifier = Modifier
+            .clickable {
+                MusicPlayController.setDataSource(songList, index)
+            }
+            .background(
+            if ((index + 1) % 2 == 0) Color.Transparent else AppColorsProvider.current.divider.copy(
                 0.25f
             )
-        ).height(36.dp).fillMaxWidth().padding(horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically
+        ).height(36.dp).fillMaxWidth().padding(horizontal = 20.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(modifier = Modifier.weight(4f)) {
-            val num = if (index < 10) "0$index" else index.toString()
+            val num = if (index + 1 < 10) "0${index + 1}" else (index + 1).toString()
             Text(
                 text = num,
                 color = AppColorsProvider.current.thirdText,
@@ -110,7 +121,7 @@ private fun TrackItem(songBean: SongBean, index: Int) {
             )
 
             Text(
-                text = songBean.name,
+                text = curSongBean.name,
                 color = AppColorsProvider.current.firstText,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -120,7 +131,7 @@ private fun TrackItem(songBean: SongBean, index: Int) {
         }
         Text(
             modifier = Modifier.weight(2f),
-            text = songBean.ar.getOrNull(0)?.name ?: "未知歌手",
+            text = curSongBean.ar.getOrNull(0)?.name ?: "未知歌手",
             color = AppColorsProvider.current.secondText,
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
@@ -129,7 +140,7 @@ private fun TrackItem(songBean: SongBean, index: Int) {
         )
         Text(
             modifier = Modifier.weight(2f),
-            text = songBean.al.name,
+            text = curSongBean.al.name,
             color = AppColorsProvider.current.secondText,
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
@@ -138,7 +149,7 @@ private fun TrackItem(songBean: SongBean, index: Int) {
         )
         Text(
             modifier = Modifier.weight(1f),
-            text = songBean.getSongTimeLength(),
+            text = curSongBean.getSongTimeLength(),
             color = AppColorsProvider.current.secondText,
             fontSize = 12.sp,
             textAlign = TextAlign.Center

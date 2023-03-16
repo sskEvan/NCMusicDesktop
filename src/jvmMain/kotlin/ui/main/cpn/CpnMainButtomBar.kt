@@ -12,11 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import moe.tlaster.precompose.ui.viewModel
+import base.MusicPlayController
+import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 
 @Composable
@@ -52,36 +52,37 @@ private fun CpnSeekBar() {
 
 @Composable
 private fun RowScope.CpnMusicInfo() {
-    val viewModel = viewModel { CpnMainMusicPlayContainerViewModel() }
-
     Row(
         modifier = Modifier.weight(1f).clickable {
-            viewModel.show = !viewModel.show
-            println("--------handle CpnMainMusicPlayContainer show state -》 ${viewModel.show}")
+            MusicPlayController.showMusicPlayDrawer = !MusicPlayController.showMusicPlayDrawer
         },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painterResource("image/ic_scan_code_tip.webp"),
-            contentDescription = null,
-            modifier = Modifier.padding(end = 10.dp).size(40.dp).clip(
-                RoundedCornerShape(4.dp)
+        MusicPlayController.curSongBean?.let { curSong ->
+            AsyncImage(
+                Modifier.padding(end = 10.dp).size(48.dp).clip(RoundedCornerShape(4.dp)),
+                url = curSong.al.picUrl
             )
-        )
 
-        Column {
-            Row {
-                Text("曾经的你", fontSize = 14.sp, color = AppColorsProvider.current.firstText)
-                Text(" - 许巍", fontSize = 14.sp, color = AppColorsProvider.current.firstText)
+            Column {
+                Row {
+                    Text(curSong.name, fontSize = 14.sp, color = AppColorsProvider.current.firstText)
+                    Text(
+                        " - ${curSong.ar.getOrNull(0)?.name ?: "未知歌手"}",
+                        fontSize = 14.sp,
+                        color = AppColorsProvider.current.secondText
+                    )
+                }
+                Text(
+                    "00:00 / ${curSong.getSongTimeLength()}",
+                    fontSize = 12.sp,
+                    color = AppColorsProvider.current.secondText,
+                    modifier = Modifier.padding(top = 6.dp)
+                )
             }
-            Text(
-                "02:04 / 04:17",
-                fontSize = 12.sp,
-                color = AppColorsProvider.current.secondText,
-                modifier = Modifier.padding(top = 6.dp)
-            )
         }
     }
+
 }
 
 @Composable

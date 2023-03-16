@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -15,55 +16,42 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
-import ui.common.TableLayout
 import http.NCRetrofitClient
 import model.RecommendMVItem
+import model.RecommendMVResult
 import moe.tlaster.precompose.ui.viewModel
-import ui.common.CpnActionMore
-import ui.common.ViewStateComponent
+import ui.common.*
 import ui.common.theme.AppColorsProvider
 import util.StringUtil
 import viewmodel.BaseViewModel
+import viewmodel.ViewState
+import viewmodel.ViewStateMutableStateFlow
 
 /**
  * 推荐MV入口
  */
-@Composable
-fun CpnRecommendMVEntrance(onClickMore: () -> Unit) {
-    val viewModel = viewModel { CpnRecommendMVEntranceViewModel() }
+fun LazyListScope.CpnRecommendMVEntrance(viewModel: CpnRecommendMVEntranceViewModel,
+                                         viewState: ViewState<RecommendMVResult>?) {
+    item {
+        CpnActionMore("推荐MV")
+    }
 
-    Column {
-        CpnActionMore("推荐MV") {
-            onClickMore.invoke()
-        }
-
-        ViewStateComponent(
-            key = "CpnRecommendMVEntrance",
-            loadDataBlock = { viewModel.getRecommendMV() }) { data ->
-            Content(data.result)
+    handleListContent(viewState, reloadDataBlock = {
+        viewModel.getRecommendMV(false)
+    }) { data ->
+        ListToGridItems(data.result, 4) { _, item ->
+            RecommendMVItem(item)
         }
     }
 }
-
-@Composable
-private fun Content(list: List<RecommendMVItem>) {
-    TableLayout(modifier = Modifier.padding(horizontal = 10.dp), cellsCount = 4) {
-        list.forEach {
-            PrivateContentItem(it)
-        }
-    }
-}
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun PrivateContentItem(item: RecommendMVItem) {
+private fun RecommendMVItem(item: RecommendMVItem) {
     var focusState by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.onPointerEvent(PointerEventType.Enter) {
@@ -73,11 +61,9 @@ private fun PrivateContentItem(item: RecommendMVItem) {
     }, horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box {
-            Image(
-                rememberImagePainter(item.picUrl),
-                contentDescription = "",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.width(180.dp).height(100.dp).clip(RoundedCornerShape(6.dp))
+            AsyncImage(
+                modifier = Modifier.width(180.dp).height(100.dp).clip(RoundedCornerShape(6.dp)),
+                item.picUrl
             )
 
             Row(
@@ -140,9 +126,14 @@ private fun PrivateContentItem(item: RecommendMVItem) {
 
 class CpnRecommendMVEntranceViewModel : BaseViewModel() {
 
-    fun getRecommendMV() = launchFlow {
-        println("获取推荐MV...")
-        NCRetrofitClient.getNCApi().getRecommendMV()
+    var flow by mutableStateOf<ViewStateMutableStateFlow<RecommendMVResult>?>(null)
+    fun getRecommendMV(firstLoad: Boolean)  {
+        if (!firstLoad || flow == null) {
+            flow = launchFlow {
+                println("获取推荐MV...")
+                NCRetrofitClient.getNCApi().getRecommendMV()
+            }
+        }
     }
 
 }

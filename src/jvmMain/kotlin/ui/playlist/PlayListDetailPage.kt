@@ -17,9 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
 import model.SimplePlayListItem
 import moe.tlaster.precompose.ui.viewModel
+import ui.common.AsyncImage
 import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
 import ui.common.ExpandableText
@@ -109,10 +109,9 @@ private fun HeadInfo(simplePlayListItem: SimplePlayListItem) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Image(
-            rememberImagePainter(simplePlayListItem.picUrl, placeholderResource = "image/ic_disk_place_holder.webp"),
+        AsyncImage(
             modifier = Modifier.padding(end = 20.dp).size(216.dp).clip(RoundedCornerShape(6.dp)),
-            contentDescription = ""
+            simplePlayListItem.picUrl
         )
 
         Column(modifier = Modifier.weight(1f)) {
@@ -143,11 +142,9 @@ private fun HeadInfo(simplePlayListItem: SimplePlayListItem) {
             ) {
 
                 playlistDetailResult?.playlist?.creator?.let { creator ->
-                    Image(
-                        rememberImagePainter(creator.avatarUrl),
-                        contentDescription = null,
-                        modifier = Modifier.clip(RoundedCornerShape(50)).size(20.dp)
-                    )
+                    AsyncImage(modifier = Modifier.clip(RoundedCornerShape(50)).size(20.dp), creator.avatarUrl,
+                        "image/ic_default_avator.webp",
+                        "image/ic_default_avator.webp")
                     Text(
                         creator.nickname,
                         color = AppColorsProvider.current.firstText,

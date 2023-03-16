@@ -17,9 +17,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import base.AppConfig
+import base.MusicPlayController
 import base.UserManager
 import com.google.gson.Gson
-import com.lt.load_the_image.rememberImagePainter
 import http.NCRetrofitClient
 import kotlinx.coroutines.launch
 import model.PlaylistDetail
@@ -27,13 +27,13 @@ import moe.tlaster.precompose.navigation.NavOptions
 import moe.tlaster.precompose.ui.viewModel
 import router.NCNavigatorManager
 import router.RouterUrls
+import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 import ui.login.QrcodeLoginDialog
 import viewmodel.BaseViewModel
 
 @Composable
 fun CpnMainLeftMenu() {
-//    val navigator = rememberNavigator()
     val navigator = NCNavigatorManager.navigator
     val loginResult = UserManager.getLoginResultFlow().collectAsState(null).value
     val viewModel: CpnMainLeftMenuViewModel = viewModel { CpnMainLeftMenuViewModel() }
@@ -44,7 +44,10 @@ fun CpnMainLeftMenu() {
     }
 
     Column(modifier = Modifier.width(200.dp).background(AppColorsProvider.current.background)) {
-        Spacer(modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight).background(AppColorsProvider.current.topBarColor))
+        Spacer(
+            modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight)
+                .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor)
+        )
         CpnUserInfo()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CpnMenuItem("image/ic_my_music.webp", "发现音乐") {
@@ -111,12 +114,13 @@ private fun CpnUserInfo() {
         }.padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            rememberImagePainter(loginResult?.profile?.avatarUrl ?: "image/ic_default_avator.webp", "image/ic_default_avator.webp"),
-            contentDescription = "头像",
-            modifier = Modifier.clip(RoundedCornerShape(50)).size(36.dp)
-        )
 
+        AsyncImage(
+            modifier = Modifier.clip(RoundedCornerShape(50)).size(36.dp),
+            loginResult?.profile?.avatarUrl ?: "image/ic_default_avator.webp",
+            "image/ic_default_avator.webp",
+            "image/ic_default_avator.webp"
+        )
 
         Text(
             text = loginResult?.profile?.nickname ?: "未登录",

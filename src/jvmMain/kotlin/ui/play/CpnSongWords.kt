@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun CpnSongWords(modifier : Modifier) {
     LazyColumn(modifier) {
         items(50) {
-            Box(modifier = Modifier.height(50.dp).fillMaxWidth().background(Color.Red),
+            Box(modifier = Modifier.height(50.dp).fillMaxWidth(),
                 contentAlignment = Alignment.Center) {
                 Text("歌词-$it")
             }

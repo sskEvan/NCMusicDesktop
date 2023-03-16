@@ -16,16 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.lt.load_the_image.rememberImagePainter
 import http.NCRetrofitClient
 import model.PlayListResult
 import model.PlaylistDetail
 import moe.tlaster.precompose.ui.viewModel
+import ui.common.AsyncImage
 import ui.common.handleSuccess
 import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
@@ -56,25 +55,19 @@ fun CpnHighQualityPlayListEntrance(tag: String) {
 private fun Content(playlistBean: PlaylistDetail?) {
     playlistBean?.let {
         Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp))) {
-            // 高斯模糊
-            Image(
-                rememberImagePainter(playlistBean.coverImgUrl, placeholderResource = "image/ic_disk_place_holder.webp"),
+            AsyncImage(
                 modifier = Modifier.fillMaxSize().blur(80.dp),
-                contentScale = ContentScale.FillBounds,
-                contentDescription = ""
+                playlistBean.coverImgUrl,
             )
 
             Row(
                 modifier = Modifier.fillMaxSize().padding(15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    rememberImagePainter(
-                        playlistBean.coverImgUrl,
-                        placeholderResource = "image/ic_disk_place_holder.webp"
-                    ),
+
+                AsyncImage(
                     modifier = Modifier.padding(end = 20.dp).size(130.dp).clip(RoundedCornerShape(6.dp)),
-                    contentDescription = ""
+                    playlistBean.coverImgUrl
                 )
 
                 Column {

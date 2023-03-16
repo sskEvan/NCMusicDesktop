@@ -17,6 +17,10 @@ repositories {
 
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
+}
+
 kotlin {
     jvm {
         jvmToolchain(11)
@@ -27,7 +31,6 @@ kotlin {
             dependencies {
                 implementation(compose.desktop.currentOs)
                 implementation("com.google.zxing:javase:3.3.3")
-                implementation("com.github.ltttttttttttt:load-the-image:1.0.5")
                 implementation("moe.tlaster:precompose:1.3.14")
                 implementation("moe.tlaster:precompose-molecule:1.3.14")
                 implementation("androidx.datastore:datastore-preferences-core:1.1.0-dev01")
@@ -36,6 +39,7 @@ kotlin {
                 implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
                 implementation("androidx.datastore:datastore-preferences-core:1.1.0-dev01")
+                implementation("io.github.succlz123:compose-imageloader-desktop:0.0.2")
             }
         }
         val jvmTest by getting
