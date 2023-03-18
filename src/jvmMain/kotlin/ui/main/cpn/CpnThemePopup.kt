@@ -1,7 +1,7 @@
 package ui.main.cpn
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CursorDropdownMenu
@@ -44,7 +44,7 @@ fun CpnThemePopup(showPopupWindow: MutableState<Boolean>) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(36.dp)
-                    .clickable {
+                    .onClick  {
                         themeTypeState.value = themeModel.value.themeType
                         themeModels[lastSelectedThemeIndex].value = themeModels[lastSelectedThemeIndex].value.copy(selected = false)
                         lastSelectedThemeIndex = index

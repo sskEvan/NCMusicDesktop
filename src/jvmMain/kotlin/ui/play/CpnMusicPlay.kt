@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -13,19 +15,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import base.MusicPlayController
 import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 
 @Composable
 fun CpnMusicPlay(modifier: Modifier) {
-    Box(modifier, contentAlignment = Alignment.TopCenter) {
-        Box(modifier = Modifier.padding(top = 80.dp)) {
-            DiskRoundBackground()
-            Disk()
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(contentAlignment = Alignment.TopCenter) {
+            Box(modifier = Modifier.padding(top = 80.dp)) {
+                DiskRoundBackground()
+                Disk()
+            }
+            DiskNeedle()
         }
-        DiskNeedle()
+        ActionIconRow()
+        Spacer(modifier = Modifier.weight(1f))
+        CommentTitle()
     }
 
 }
@@ -83,5 +92,43 @@ private fun DiskNeedle() {
             ),
         contentDescription = ""
     )
+}
 
+@Composable
+private fun ActionIconRow() {
+    Row(modifier = Modifier.padding(top = 20.dp)) {
+        ActionIcon("image/ic_like.webp")
+        ActionIcon("image/ic_collect.webp")
+        ActionIcon("image/ic_download.webp")
+        ActionIcon("image/ic_share.webp")
+
+    }
+}
+
+@Composable
+private fun ActionIcon(icon: String) {
+    Box(
+        modifier = Modifier.padding(horizontal = 20.dp).background(AppColorsProvider.current.background, CircleShape)
+            .size(44.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(icon),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp),
+            tint = AppColorsProvider.current.firstIcon
+        )
+    }
+
+}
+
+@Composable
+private fun CommentTitle() {
+    Text(
+        text = "听友评论",
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold,
+        color = AppColorsProvider.current.firstText,
+        modifier = Modifier.padding(start = 50.dp, bottom = 10.dp).fillMaxWidth()
+    )
 }

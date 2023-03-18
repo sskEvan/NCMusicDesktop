@@ -7,6 +7,7 @@ object AppConfig {
 
     val topBarHeight = 50.dp
     val windowMinWidth = 1000.dp
-    val windowMinHeight = 700.dp
+    val windowMinHeight = 680.dp
     lateinit var windowState: WindowState
+
 }

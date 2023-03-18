@@ -2,7 +2,7 @@ package ui.common
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -95,7 +95,7 @@ fun ExpandableText(
             Icon(
                 painter = painterResource("image/ic_triangle_up.webp"),
                 contentDescription = null,
-                modifier = Modifier.clip(RoundedCornerShape(50)).clickable {
+                modifier = Modifier.clip(RoundedCornerShape(50)).onClick  {
                     expand = !expand
                     scope.launch {
                         anim.animateTo(if (expand) 1f else 0f)

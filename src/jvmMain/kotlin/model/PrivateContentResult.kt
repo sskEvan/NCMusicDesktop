@@ -6,7 +6,9 @@ package model
  */
 data class PrivateContentResult(
     val result: List<PrivateContentItem>
-) : BaseResult()
+) : BaseResult() {
+    override fun isEmpty() = result.isEmpty()
+}
 
 data class PrivateContentItem(
     val id: Long,

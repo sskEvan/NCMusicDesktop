@@ -2,6 +2,7 @@ package http.api
 
 import model.*
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.*
 
@@ -68,8 +69,9 @@ interface NCApi {
     @GET("song/detail")
     suspend fun getSongDetail(@Query("ids") ids: String): SongDetailResult
 
-    @GET("comment/playlist")
+    @GET("comment/{commentType}")
     suspend fun getPlayListComment(
+        @Path("commentType") commentType: String,
         @Query("id") id: Long,
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int,
@@ -105,5 +107,9 @@ interface NCApi {
         @Query("id") id: Long,
         @Query("br") br: Int = 128000
     ): SongUrlBean
+
+    @GET("/lyric")
+    suspend fun getLyric(@Query("id") id: Long): LyricResult
+
 
 }

@@ -11,7 +11,10 @@ data class CommentResult(
     val comments: List<CommentBean> = emptyList(),
     val topComments: List<CommentBean> = emptyList(),
     val hotComments: List<CommentBean> = emptyList(),
-) : BaseResult()
+) : BaseResult() {
+    override fun isEmpty() = comments.isEmpty()
+}
+
 @Keep
 data class CommentBean(
     val user: CommentUser,

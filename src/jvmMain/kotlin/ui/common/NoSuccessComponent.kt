@@ -1,11 +1,9 @@
 package ui.common
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,7 +23,7 @@ fun NoSuccessComponent(
         modifier = modifier
             .let {
                 if (retryBlock != null)
-                    it.clickable { retryBlock.invoke() }
+                    it.onClick { retryBlock.invoke() }
                 else it
             },
         contentAlignment = contentAlignment
@@ -64,7 +62,7 @@ fun NoSuccessComponent(
 //) {
 //    Box(
 //        modifier = modifier
-//            .clickable {
+//            .onClick  {
 //                retryBlock?.invoke()
 //            },
 //        contentAlignment = contentAlignment

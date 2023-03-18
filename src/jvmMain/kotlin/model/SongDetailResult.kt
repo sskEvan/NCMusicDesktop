@@ -3,7 +3,9 @@ package model
 import androidx.annotation.Keep
 
 @Keep
-data class SongDetailResult(val songs: List<SongBean>) : BaseResult()
+data class SongDetailResult(val songs: List<SongBean>) : BaseResult() {
+    override fun isEmpty() = songs.isEmpty()
+}
 
 @Keep
 data class SongBean(
@@ -13,7 +15,7 @@ data class SongBean(
     val name: String,
     val al: Al,
     val ar: List<Ar>,
-    val dt: Int
+    val dt: Int,
 ) {
     fun getSongTimeLength() : String {
         val dtSecond = dt / 1000

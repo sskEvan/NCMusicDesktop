@@ -50,9 +50,7 @@ fun LazyListScope.CpnNewSongEntrance(viewModel: CpnNewSongEntranceViewModel,
 private fun NewSongItem(index: Int, item: NewSongBean) {
 
 
-    Column(
-        modifier = Modifier.padding(horizontal = 10.dp), verticalArrangement = Arrangement.Center
-    ) {
+    Column(verticalArrangement = Arrangement.Center) {
         Divider(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 6.dp),
             thickness = 0.5.dp,

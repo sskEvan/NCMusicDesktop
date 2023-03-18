@@ -8,7 +8,9 @@ import java.io.Serializable
  */
 data class RecommendPlayListResult(
     val result: List<SimplePlayListItem>
-) : BaseResult()
+) : BaseResult() {
+    override fun isEmpty() = result.isEmpty()
+}
 
 /**
  * 推荐歌单列表item

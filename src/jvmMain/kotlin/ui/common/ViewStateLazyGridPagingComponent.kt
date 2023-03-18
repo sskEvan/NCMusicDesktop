@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import model.IBasePagingBean
 import moe.tlaster.precompose.ui.viewModel
 import moe.tlaster.precompose.viewmodel.ViewModel
-import ui.playlist.cpn.CpnPlayListCommentListViewModel
+import ui.playlist.cpn.CpnCommentListViewModel
 import viewmodel.ViewState
 import viewmodel.ViewStateMutableStateFlow
 import java.util.*
@@ -184,7 +184,7 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                         gridContent(data)
 
                         // 底部分页组件
-                        if (data.getTotalCount() > CpnPlayListCommentListViewModel.pageSize) {
+                        if (data.getTotalCount() > CpnCommentListViewModel.pageSize) {
                             item(span = { GridItemSpan(columns) }) {
                                 PaingFooterNumBar(data.getTotalCount(), pageSize, vm.curPage.value) {
                                     vm.curPage.value = it

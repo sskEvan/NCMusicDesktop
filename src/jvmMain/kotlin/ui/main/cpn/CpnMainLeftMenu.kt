@@ -31,6 +31,7 @@ import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 import ui.login.QrcodeLoginDialog
 import viewmodel.BaseViewModel
+import ui.common.onClick
 
 @Composable
 fun CpnMainLeftMenu() {
@@ -107,7 +108,7 @@ private fun CpnUserInfo() {
     val loginResult = UserManager.getLoginResultFlow().collectAsState(null).value
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(56.dp).clickable {
+        modifier = Modifier.fillMaxWidth().height(56.dp).onClick  {
             if (loginResult == null) {
                 showLoginDialog.value = true
             }
@@ -152,7 +153,7 @@ private fun CpnMenuItem(
     logoPath: String, title: String, markLogoPath: String? = null, onClick: (title: Any) -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(40.dp).clickable {
+        modifier = Modifier.fillMaxWidth().height(40.dp).onClick  {
             onClick(title)
         }.padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -195,7 +196,7 @@ private fun ColumnScope.CpnSongSheet(title: String, list: List<PlaylistDetail>) 
     val animValue = remember { Animatable(1f) }
     val scope = rememberCoroutineScope()
     Row(
-        modifier = Modifier.clickable {
+        modifier = Modifier.onClick  {
             expanded = !expanded
             scope.launch {
                 animValue.animateTo(if (expanded) 1f else 0f)

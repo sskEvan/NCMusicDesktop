@@ -11,4 +11,6 @@ open class BaseResult(val code: Int? = 0, val message: String? = null) : Seriali
     open fun resultOk(): Boolean {
         return code == 200
     }
+
+    open fun isEmpty() = false
 }

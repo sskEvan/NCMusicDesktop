@@ -13,6 +13,8 @@ object MusicPlayController {
     // 是否显示音乐播放抽屉组件
     var showMusicPlayDrawer by mutableStateOf(false)
 
+    var showPlayListSheet by mutableStateOf(false)
+
     // 原始歌曲列表
     var originSongList = mutableStateListOf<SongBean>()
     // 当前播放模式下的实际歌曲列表
@@ -43,7 +45,6 @@ object MusicPlayController {
 
 
     fun setDataSource(songBeans: List<SongBean>, originIndex: Int) {
-        curSongBean = songBeans[originIndex]
         originSongList.clear()
         originSongList.addAll(songBeans)
         println("MusicPlayController setDataSource curOriginIndex=${originIndex}")
@@ -88,8 +89,32 @@ object MusicPlayController {
     }
 
     private fun innerPlay(songBean: SongBean) {
+        curSongBean = songBean
         NCPlayer.setDataSource(songBean)
         NCPlayer.start()
     }
+
+    /**
+     * 根据原始歌曲列表索引播放音乐
+     */
+    fun playByOriginIndex(originIndex: Int) {
+        if (originSongList.size > originIndex) {
+            curOriginIndex = originIndex
+            curRealIndex = realSongList.indexOfFirst { it.id == originSongList[originIndex].id }
+            innerPlay(originSongList[curOriginIndex])
+        }
+    }
+
+    /**
+     * 根据实际播放模式中的歌曲列表索引播放音乐
+     */
+    fun playByRealIndex(realIndex: Int) {
+        if (originSongList.size > realIndex) {
+            curRealIndex = realIndex
+            curOriginIndex = originSongList.indexOfFirst { it.id == realSongList[realIndex].id }
+            innerPlay(realSongList[curRealIndex])
+        }
+    }
+
 
 }

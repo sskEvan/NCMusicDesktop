@@ -1,7 +1,7 @@
 package ui.playlist.cpn
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material.Icon
@@ -86,7 +86,7 @@ private fun TrackItem(songList: List<SongBean>,  index: Int) {
     val curSongBean = songList[index]
     Row(
         modifier = Modifier
-            .clickable {
+            .onClick  {
                 MusicPlayController.setDataSource(songList, index)
             }
             .background(
@@ -96,15 +96,24 @@ private fun TrackItem(songList: List<SongBean>,  index: Int) {
         ).height(36.dp).fillMaxWidth().padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(modifier = Modifier.weight(4f)) {
+        Row(modifier = Modifier.weight(4f).fillMaxHeight(), verticalAlignment = Alignment.CenterVertically) {
             val num = if (index + 1 < 10) "0${index + 1}" else (index + 1).toString()
-            Text(
-                text = num,
-                color = AppColorsProvider.current.thirdText,
-                fontSize = 12.sp,
-                modifier = Modifier.width(40.dp),
-                textAlign = TextAlign.Center
-            )
+            if (MusicPlayController.curSongBean?.id != curSongBean.id) {
+                Text(
+                    text = num,
+                    color = AppColorsProvider.current.thirdText,
+                    fontSize = 12.sp,
+                    modifier = Modifier.width(40.dp),
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                Icon(
+                    painterResource("image/ic_playing.webp"),
+                    contentDescription = null,
+                    modifier = Modifier.width(40.dp).height(36.dp).padding(horizontal = 14.dp, vertical = 12.dp),
+                    tint = AppColorsProvider.current.primary
+                )
+            }
 
             Icon(
                 painter = painterResource("image/ic_like.webp"),

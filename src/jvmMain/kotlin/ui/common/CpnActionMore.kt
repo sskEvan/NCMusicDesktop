@@ -1,6 +1,6 @@
 package ui.common
 
-import androidx.compose.foundation.clickable
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -16,11 +16,10 @@ import ui.common.theme.AppColorsProvider
 @Composable
 fun CpnActionMore(title: String, onClickMore: (() -> Unit) ?= null) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(50.dp)
-            .clickable {
+        modifier = Modifier.fillMaxWidth().height(60.dp)
+            .onClick {
                 onClickMore?.invoke()
-            }
-            .padding(start = 24.dp),
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = AppColorsProvider.current.firstText)

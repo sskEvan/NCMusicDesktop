@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +24,7 @@ import ui.common.ViewStateComponent
 import ui.common.handleSuccess
 import ui.common.theme.AppColorsProvider
 import viewmodel.BaseViewModel
+import ui.common.onClick
 
 @Composable
 fun CpnPlayListTabSelectedBar() {
@@ -111,7 +111,7 @@ private fun PlayListTabToggle(showTabsPopup: MutableState<Boolean>) {
     val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
 
     Row(
-        modifier = Modifier.padding(end = 20.dp).width(110.dp).height(30.dp).clip(RoundedCornerShape(50)).clickable {
+        modifier = Modifier.padding(end = 20.dp).width(110.dp).height(30.dp).clip(RoundedCornerShape(50)).onClick  {
             showTabsPopup.value = true
         }.border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(50)),
         horizontalArrangement = Arrangement.Center,
@@ -140,7 +140,7 @@ private fun PlayListTabItem(
     tag: PlayListTab
 ) {
 
-    Box(modifier = modifier.clip(RoundedCornerShape(50)).clickable {
+    Box(modifier = modifier.clip(RoundedCornerShape(50)).onClick  {
         viewModel.selectedTab = tag
         showTabsPopup.value = false
     }.let {
@@ -192,7 +192,7 @@ private fun HotPlayListTabItem(viewModel: CpnPlayListTabSelectedBarViewModel, ta
         modifier = Modifier.height(30.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(modifier = Modifier.clip(RoundedCornerShape(50)).clickable {
+        Box(modifier = Modifier.clip(RoundedCornerShape(50)).onClick  {
             viewModel.selectedTab = tag
         }.let {
             if (tag.name == viewModel.selectedTab?.name) {

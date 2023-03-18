@@ -1,7 +1,7 @@
 package ui.main.cpn
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -48,12 +48,11 @@ fun CommonTopBar(
             } else {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (showBackButton) {
-//                    val navigator = rememberNavigator()
                         val navigator = NCNavigatorManager.navigator
 
                         Icon(
                             painterResource("image/ic_back.webp"),
-                            modifier = Modifier.padding(start = 20.dp).clip(RoundedCornerShape(50)).clickable {
+                            modifier = Modifier.padding(start = 20.dp).clip(RoundedCornerShape(50)).onClick  {
                                 navigator.popBackStack()
                             }.padding(4.dp).size(18.dp),
                             contentDescription = "返回上一页",
@@ -64,7 +63,7 @@ fun CommonTopBar(
                     }
 
                     Text(
-                        title!!,
+                        title,
                         color = AppColorsProvider.current.firstText,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
@@ -102,7 +101,7 @@ private fun BoxScope.CpnRightTopActionButtons() {
         Icon(
             painterResource("image/ic_theme.webp"),
             contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(24.dp).padding(3.dp).clickable {
+            modifier = Modifier.padding(end = 14.dp).size(24.dp).padding(3.dp).onClick  {
                 showPopupWindow.value = true
             },
             tint = AppColorsProvider.current.firstIcon

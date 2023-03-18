@@ -1,7 +1,7 @@
 package ui.discovery.cpn
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -64,7 +64,7 @@ private fun CpnPlayListItem(item: SimplePlayListItem) {
             focusState = true
         }.onPointerEvent(PointerEventType.Exit) {
             focusState = false
-        }.clickable {
+        }.onClick  {
             val url = "${RouterUrls.PLAY_LIST_DETAIL}?simplePlayListInfo=${Gson().toJson(item)}"
             println("navigate to PLAY_LIST_DETAIL, url=$url")
             NCNavigatorManager.navigator.navigate(url)

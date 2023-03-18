@@ -5,7 +5,9 @@ package model
  */
 data class NewSongResult(
     var data: List<NewSongBean>
-) : BaseResult()
+) : BaseResult() {
+    override fun isEmpty() = data.isEmpty()
+}
 
 data class NewSongBean(
     val name: String,

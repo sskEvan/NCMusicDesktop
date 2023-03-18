@@ -37,7 +37,7 @@ fun PlayListDetailPage(simplePlayListItem: SimplePlayListItem) {
     var showStickyHeader by remember { mutableStateOf(false) }
     val detailPageViewModel = viewModel { PlayListDetailPageViewModel() }
     val trackListViewModel = viewModel { TrackListViewModel() }
-    val commentViewModel = viewModel { CpnPlayListCommentListViewModel() }
+    val commentViewModel = viewModel { CpnCommentListViewModel() }
 
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     LaunchedEffect(Unit) {
@@ -55,7 +55,7 @@ fun PlayListDetailPage(simplePlayListItem: SimplePlayListItem) {
             }
 
             1 -> {  // 评论
-                commentViewModel.fetchDataPaging(simplePlayListItem.id, 1, true)
+                commentViewModel.fetchDataPaging("playlist", simplePlayListItem.id, 1, true)
             }
 
         }
@@ -81,9 +81,8 @@ fun PlayListDetailPage(simplePlayListItem: SimplePlayListItem) {
                     }
 
                     1 -> {  // 评论
-                        CpnPlayListCommentList(commentViewState?.value, commentViewModel) {curPage ->
-                            println("commentViewModel.fetchDataPaging 2")
-                            commentViewModel.fetchDataPaging(simplePlayListItem.id, curPage)
+                        CpnCommentList(commentViewState?.value, commentViewModel) { curPage ->
+                            commentViewModel.fetchDataPaging("playlist", simplePlayListItem.id, curPage)
                         }
                     }
 

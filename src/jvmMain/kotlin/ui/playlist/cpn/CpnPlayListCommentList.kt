@@ -1,6 +1,5 @@
 package ui.playlist.cpn
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,9 +33,9 @@ import viewmodel.ViewState
 import viewmodel.ViewStateMutableStateFlow
 
 
-fun LazyListScope.CpnPlayListCommentList(
+fun LazyListScope.CpnCommentList(
     viewState: ViewState<CommentResult>?,
-    viewModel: CpnPlayListCommentListViewModel,
+    viewModel: CpnCommentListViewModel,
     reloadCallback: (curPage: Int) -> Unit
 ) {
     handleListContent(viewState,
@@ -48,9 +47,9 @@ fun LazyListScope.CpnPlayListCommentList(
         }
 
         // 底部分页组件
-        if (data.total > CpnPlayListCommentListViewModel.pageSize) {
+        if (data.total > CpnCommentListViewModel.pageSize) {
             item {
-                PaingFooterNumBar(data.total, CpnPlayListCommentListViewModel.pageSize, viewModel.cutPage) {
+                PaingFooterNumBar(data.total, CpnCommentListViewModel.pageSize, viewModel.cutPage) {
                     reloadCallback.invoke(it)
                 }
             }
@@ -128,7 +127,7 @@ private fun CommentItem(commentBean: CommentBean) {
     }
 }
 
-class CpnPlayListCommentListViewModel : BaseViewModel() {
+class CpnCommentListViewModel : BaseViewModel() {
     companion object {
         const val pageSize = 20
     }
@@ -136,21 +135,13 @@ class CpnPlayListCommentListViewModel : BaseViewModel() {
     var cutPage by mutableStateOf(1)
     var flow by mutableStateOf<ViewStateMutableStateFlow<CommentResult>?>(null)
 
-    fun initFetchData(id: Long) {
-        if (flow == null) {
-            cutPage = 1
-            flow = launchFlow {
-                NCRetrofitClient.getNCApi().getPlayListComment(id, pageSize, 0)
-            }
-        }
-    }
-
-    fun fetchDataPaging(id: Long, curPage: Int, firstLoad: Boolean = false) {
+    fun fetchDataPaging(commentType: String, id: Long, curPage: Int, firstLoad: Boolean = false) {
         if (!firstLoad || flow == null) {
             cutPage = curPage
             val offset = (curPage - 1) * pageSize
             flow = launchFlow {
-                NCRetrofitClient.getNCApi().getPlayListComment(id, pageSize, offset)
+                println("获取${commentType}评论.  curPage=${curPage}")
+                NCRetrofitClient.getNCApi().getPlayListComment(commentType, id, pageSize, offset)
             }
         }
     }

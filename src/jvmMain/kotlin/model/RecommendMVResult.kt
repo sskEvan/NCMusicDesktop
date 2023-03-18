@@ -4,8 +4,10 @@ package model
  * 推荐MV
  */
 data class RecommendMVResult(
-val result: List<RecommendMVItem>
-): BaseResult()
+    val result: List<RecommendMVItem>
+) : BaseResult() {
+    override fun isEmpty() = result.isEmpty()
+}
 
 data class RecommendMVItem(
     val id: Long,

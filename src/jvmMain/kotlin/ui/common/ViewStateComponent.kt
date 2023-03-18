@@ -8,8 +8,6 @@ import androidx.compose.ui.unit.dp
 import com.google.gson.JsonParseException
 import moe.tlaster.precompose.ui.viewModel
 import moe.tlaster.precompose.viewmodel.ViewModel
-import moe.tlaster.precompose.viewmodel.compose.viewModel
-import viewmodel.BaseViewModel
 import viewmodel.ViewState
 import viewmodel.ViewStateMutableStateFlow
 import java.net.ConnectException
@@ -40,16 +38,16 @@ fun <T> ViewStateComponent(
     viewStateContentAlignment: Alignment = Alignment.Center,
     customLoadingComponent: @Composable (() -> Unit)? = null,
     customEmptyComponent: @Composable (() -> Unit)? = null,
-    customFailComponent: @Composable ((errorMessage: String?, retryFlag: MutableState<Int>, loadDataBlock: (() -> ViewStateMutableStateFlow<T>)) -> Unit)? = null,
-    customErrorComponent: @Composable ((errorMessage: Pair<String, String>, retryFlag: MutableState<Int>, loadDataBlock: (() -> ViewStateMutableStateFlow<T>)) -> Unit)? = null,
+    customFailComponent: @Composable ((errorMessage: String?, loadDataBlock: () -> Unit) -> Unit)? = null,
+    customErrorComponent: @Composable ((errorMessage: Pair<String, String>, loadDataBlock: () -> Unit) -> Unit)? = null,
     contentView: @Composable BoxScope.(data: T) -> Unit
 ) {
 
     val vm = viewModel(listOf(key)) { ViewStateComponentViewModel<T>() }
-    val retryFlag = vm.reloadFlag
+    val reloadFlag = vm.reloadFlag
 
-    val flow = remember(retryFlag.value, key) {
-        if (retryFlag.value == 0) {  // first load data
+    val flow = remember(reloadFlag, key) {
+        if (reloadFlag == 0) {  // first load data
             if (vm.flow == null) {
                 vm.flow = initFlow ?: loadDataBlock.invoke()
             }
@@ -76,8 +74,6 @@ fun <T> ViewStateComponent(
             }
 
             is ViewState.Success -> {
-//                successData.value = (viewState as ViewState.Success<T>).data!!
-//                contentView(successData.value!!)
                 contentView((viewState as ViewState.Success<T>).data!!)
             }
 
@@ -89,8 +85,7 @@ fun <T> ViewStateComponent(
                         contentAlignment = viewStateContentAlignment,
                         modifier = viewStateComponentModifier,
                     ) {
-                        retryFlag.value++
-                        loadDataBlock.invoke()
+                        vm.reload()
                     }
                 }
             }
@@ -99,17 +94,16 @@ fun <T> ViewStateComponent(
                 if (customFailComponent != null) {
                     customFailComponent.invoke(
                         "错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
-                        retryFlag,
-                        loadDataBlock
-                    )
+                    ) {
+                        vm.reload()
+                    }
                 } else {
                     NoSuccessComponent(
                         modifier = viewStateComponentModifier,
                         message = "错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
                         contentAlignment = viewStateContentAlignment
                     ) {
-                        retryFlag.value++
-                        loadDataBlock.invoke()
+                        vm.reload()
                     }
                 }
             }
@@ -118,9 +112,9 @@ fun <T> ViewStateComponent(
                 if (customErrorComponent != null) {
                     customErrorComponent.invoke(
                         getErrorMessagePair((viewState as ViewState.Error).exception),
-                        retryFlag,
-                        loadDataBlock
-                    )
+                    )  {
+                        vm.reload()
+                    }
                 } else {
                     val errorMessagePair = getErrorMessagePair((viewState as ViewState.Error).exception)
                     NoSuccessComponent(
@@ -129,8 +123,7 @@ fun <T> ViewStateComponent(
                         iconResId = errorMessagePair.second,
                         contentAlignment = viewStateContentAlignment,
                     ) {
-                        retryFlag.value++
-                        loadDataBlock.invoke()
+                        vm.reload()
                     }
                 }
             }
@@ -140,8 +133,14 @@ fun <T> ViewStateComponent(
 
 class ViewStateComponentViewModel<T> : ViewModel() {
     var flow: ViewStateMutableStateFlow<T>? = null
-    var reloadFlag = mutableStateOf(0)
+    var reloadFlag by mutableStateOf(0)
+        private set
+
+    fun reload() {
+        reloadFlag++
+    }
 }
+
 
 
 fun getErrorMessagePair(exception: Throwable): Pair<String, String> {

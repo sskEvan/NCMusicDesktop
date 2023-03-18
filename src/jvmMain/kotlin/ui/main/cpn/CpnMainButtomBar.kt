@@ -3,7 +3,7 @@ package ui.main.cpn
 import ui.common.SeekBar
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import base.MusicPlayController
@@ -53,7 +54,7 @@ private fun CpnSeekBar() {
 @Composable
 private fun RowScope.CpnMusicInfo() {
     Row(
-        modifier = Modifier.weight(1f).clickable {
+        modifier = Modifier.weight(1.5f).onClick {
             MusicPlayController.showMusicPlayDrawer = !MusicPlayController.showMusicPlayDrawer
         },
         verticalAlignment = Alignment.CenterVertically
@@ -66,11 +67,17 @@ private fun RowScope.CpnMusicInfo() {
 
             Column {
                 Row {
-                    Text(curSong.name, fontSize = 14.sp, color = AppColorsProvider.current.firstText)
+                    Text(
+                        curSong.name, fontSize = 14.sp, color = AppColorsProvider.current.firstText,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                     Text(
                         " - ${curSong.ar.getOrNull(0)?.name ?: "未知歌手"}",
                         fontSize = 14.sp,
-                        color = AppColorsProvider.current.secondText
+                        color = AppColorsProvider.current.secondText,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
                 Text(
@@ -119,7 +126,7 @@ private fun RowScope.CpnMiddleActionButtons() {
 
 @Composable
 private fun RowScope.CpnRightActionButtons() {
-    Row(modifier = Modifier.weight(1f), horizontalArrangement = Arrangement.End) {
+    Row(modifier = Modifier.weight(1.5f), horizontalArrangement = Arrangement.End) {
         Icon(
             painterResource("image/ic_sound_effect.webp"), contentDescription = null,
             modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp),
@@ -134,7 +141,9 @@ private fun RowScope.CpnRightActionButtons() {
         Icon(
             painterResource("image/ic_play_list.webp"),
             contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp),
+            modifier = Modifier.padding(end = 14.dp).size(20.dp).padding(2.dp).onClick {
+                MusicPlayController.showPlayListSheet = !MusicPlayController.showPlayListSheet
+            },
             tint = AppColorsProvider.current.firstIcon
         )
         Icon(

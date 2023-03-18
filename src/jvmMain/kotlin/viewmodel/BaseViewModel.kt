@@ -24,7 +24,7 @@ open class BaseViewModel : ViewModel() {
                 call()
             }.onSuccess { result ->
                 if (result.resultOk()) {
-                    if (judgeEmpty?.invoke(result) == true) {
+                    if (result.isEmpty() || judgeEmpty?.invoke(result) == true) {
                         flow.emit(ViewState.Empty)
                     } else {
                         handleSuccessBlock?.invoke(result)

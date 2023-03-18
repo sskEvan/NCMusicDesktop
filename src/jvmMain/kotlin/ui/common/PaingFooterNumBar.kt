@@ -3,7 +3,7 @@ package ui.common
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -70,9 +70,9 @@ fun PaingFooterNumBar(totalNum: Int, pageSize: Int, curPage: Int, onSelectedPage
 @Composable
 private fun PaingFooterNumItem(pageIndex: Int, curPage: Int, onSelectedPage: (curPage: Int) -> Unit) {
     Box(
-        modifier = Modifier.padding(horizontal = 2.dp).size(28.dp)
+        modifier = Modifier.padding(horizontal = 2.dp).height(28.dp).widthIn(min = 28.dp)
             .clip(RoundedCornerShape(2.dp))
-            .clickable {
+            .onClick  {
                 onSelectedPage.invoke(pageIndex)
             }
             .border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(2.dp))
@@ -87,7 +87,8 @@ private fun PaingFooterNumItem(pageIndex: Int, curPage: Int, onSelectedPage: (cu
         Text(
             pageIndex.toString(),
             color = if (curPage == pageIndex) Color.White else AppColorsProvider.current.secondText,
-            fontSize = 12.sp
+            fontSize = 12.sp,
+            modifier = Modifier.padding(horizontal = 2.dp)
         )
     }
 }
@@ -114,7 +115,7 @@ private fun PaingFooterPreItem(curPage: Int, onSelectedPage: (curPage: Int) -> U
             .clip(RoundedCornerShape(2.dp))
             .border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(2.dp))
             .let {
-                if (curPage > 1) it.clickable {
+                if (curPage > 1) it.onClick  {
                     onSelectedPage.invoke(curPage - 1)
                 } else it
             },
@@ -136,7 +137,7 @@ private fun PaingFooterNextItem(totalNum: Int, curPage: Int, onSelectedPage: (cu
             .clip(RoundedCornerShape(2.dp))
             .border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(2.dp))
             .let {
-                if (curPage < totalNum) it.clickable {
+                if (curPage < totalNum) it.onClick  {
                     onSelectedPage.invoke(curPage + 1)
                 } else it
             },

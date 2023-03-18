@@ -1,7 +1,7 @@
 package ui.main.cpn
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -30,7 +30,7 @@ fun CpnNavigatorIndicator() {
             painterResource("image/ic_back.webp"),
             modifier = Modifier.padding(end = 20.dp).clip(RoundedCornerShape(50)).let {
                 if (NCNavigatorManager.navigator.canGoBack) {
-                    it.clickable {
+                    it.onClick  {
                         NCNavigatorManager.navigator.popBackStack()
                     }
                 } else {

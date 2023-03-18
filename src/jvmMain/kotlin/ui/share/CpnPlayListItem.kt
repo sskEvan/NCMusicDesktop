@@ -1,7 +1,7 @@
 package ui.share
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import ui.common.onClick
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -39,7 +39,7 @@ fun CpnPlayListItem(item: PlaylistDetail) {
             focusState = true
         }.onPointerEvent(PointerEventType.Exit) {
             focusState = false
-        }.clickable {
+        }.onClick  {
             val url = "${RouterUrls.PLAY_LIST_DETAIL}?simplePlayListInfo=${Gson().toJson(item.convertToSimple())}"
             navigator.navigate(url)
         },

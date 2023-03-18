@@ -1,5 +1,6 @@
 package ui.discovery.cpn
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -7,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.ui.viewModel
 import viewmodel.BaseViewModel
 
@@ -32,7 +35,10 @@ fun CpnPersonalRecommend(recommendTagIndex: MutableState<Int>) {
     val newSongViewState = newSongViewModel.flow?.collectAsState()?.value
     val recommendMVViewState = recommendMVEntranceViewModel.flow?.collectAsState()?.value
 
-    LazyColumn(state = personalRecommendViewModel.getLazyListStateState(rememberLazyListState())) {
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 20.dp),
+        state = personalRecommendViewModel.getLazyListStateState(rememberLazyListState())
+    ) {
         // 推荐歌单
         CpnRecommandPlayListEntrance(playListEntranceViewModel, playListEntranceViewState) {
             recommendTagIndex.value = 1
