@@ -24,8 +24,11 @@ import ui.play.CpnLyric
 import ui.play.CpnMusicPlay
 import ui.play.CpnSongInfo
 import ui.playlist.cpn.CpnCommentList
-import ui.playlist.cpn.CpnCommentListViewModel
+import ui.playlist.cpn.CommentListViewModel
 
+/**
+ * 音乐播放抽屉组件
+ */
 @Composable
 fun CpnMainMusicPlayDrawer() {
     Box {
@@ -54,7 +57,7 @@ fun CpnMainMusicPlayDrawer() {
         ) {
 
             MusicPlayController.curSongBean?.let { songBean ->
-                val commentViewModel = viewModel(keys = listOf(songBean.id)) { CpnCommentListViewModel() }
+                val commentViewModel = viewModel(keys = listOf(songBean.id)) { CommentListViewModel() }
                 LaunchedEffect(songBean.id) {
                     commentViewModel.fetchDataPaging("music", songBean.id, 1, true)
                 }

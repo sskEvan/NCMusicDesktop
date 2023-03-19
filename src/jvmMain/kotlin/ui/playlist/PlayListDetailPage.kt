@@ -28,16 +28,18 @@ import ui.main.cpn.CommonTopBar
 import ui.playlist.cpn.*
 import util.StringUtil
 import util.TimeUtil
-import viewmodel.BaseViewModel
+import base.BaseViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
+/**
+ * 歌单详情页面
+ */
 @Composable
 fun PlayListDetailPage(simplePlayListItem: SimplePlayListItem) {
     val lazyListState = rememberLazyListState()
     var showStickyHeader by remember { mutableStateOf(false) }
     val detailPageViewModel = viewModel { PlayListDetailPageViewModel() }
     val trackListViewModel = viewModel { TrackListViewModel() }
-    val commentViewModel = viewModel { CpnCommentListViewModel() }
+    val commentViewModel = viewModel { CommentListViewModel() }
 
     val firstVisibleItemIndex by remember { derivedStateOf { lazyListState.firstVisibleItemIndex } }
     LaunchedEffect(Unit) {
@@ -102,7 +104,7 @@ fun PlayListDetailPage(simplePlayListItem: SimplePlayListItem) {
 @Composable
 private fun HeadInfo(simplePlayListItem: SimplePlayListItem) {
     val viewModel = viewModel { TrackListViewModel() }
-    var playlistDetailResult = viewModel.playlistDetailResult
+    val playlistDetailResult = viewModel.playlistDetailResult
     Row(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp).fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween

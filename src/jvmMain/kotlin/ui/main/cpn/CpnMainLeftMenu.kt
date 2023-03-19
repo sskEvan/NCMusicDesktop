@@ -30,14 +30,18 @@ import router.RouterUrls
 import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 import ui.login.QrcodeLoginDialog
-import viewmodel.BaseViewModel
+import base.BaseViewModel
+import moe.tlaster.precompose.navigation.PopUpTo
 import ui.common.onClick
 
+/**
+ * 主页左边菜单栏组件
+ */
 @Composable
 fun CpnMainLeftMenu() {
     val navigator = NCNavigatorManager.navigator
     val loginResult = UserManager.getLoginResultFlow().collectAsState(null).value
-    val viewModel: CpnMainLeftMenuViewModel = viewModel { CpnMainLeftMenuViewModel() }
+    val viewModel: MainLeftMenuViewModel = viewModel { MainLeftMenuViewModel() }
     LaunchedEffect(loginResult) {
         if (loginResult != null) {
             viewModel.getUserPlayList(loginResult.account.id)
@@ -231,7 +235,7 @@ private fun ColumnScope.CpnSongSheet(title: String, list: List<PlaylistDetail>) 
 
 }
 
-class CpnMainLeftMenuViewModel : BaseViewModel() {
+class MainLeftMenuViewModel : BaseViewModel() {
     var favoritePlayList: PlaylistDetail? by mutableStateOf(null)
     var selfCreatePlayList: List<PlaylistDetail>? by mutableStateOf(null)
     var collectPlayList: List<PlaylistDetail>? by mutableStateOf(null)

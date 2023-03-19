@@ -22,10 +22,13 @@ import model.SongBean
 import model.SongDetailResult
 import ui.common.handleListContent
 import ui.common.theme.AppColorsProvider
-import viewmodel.BaseViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
 
+/**
+ * 歌曲列表组件
+ */
 fun LazyListScope.CpnTrackList(
     viewState: ViewState<SongDetailResult>?,
     reloadCallback: () -> Unit
@@ -87,7 +90,7 @@ private fun TrackItem(songList: List<SongBean>,  index: Int) {
     Row(
         modifier = Modifier
             .onClick  {
-                MusicPlayController.setDataSource(songList, index)
+                MusicPlayController.playMusicList(songList, index)
             }
             .background(
             if ((index + 1) % 2 == 0) Color.Transparent else AppColorsProvider.current.divider.copy(

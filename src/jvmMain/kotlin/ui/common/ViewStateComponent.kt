@@ -8,8 +8,8 @@ import androidx.compose.ui.unit.dp
 import com.google.gson.JsonParseException
 import moe.tlaster.precompose.ui.viewModel
 import moe.tlaster.precompose.viewmodel.ViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.ViewState
+import base.ViewStateMutableStateFlow
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -23,6 +23,7 @@ import java.util.UUID
  * @param loadDataBlock：数据加载块
  * @param viewStateComponentModifier: 状态页面修饰
  * @param viewStateContentAlignment：状态页面居中方式
+ * @param customEmptyComponent：自定义加载中布局,没设置则使用默认加载中布局
  * @param customEmptyComponent：自定义空布局,没设置则使用默认空布局
  * @param customFailComponent：自定义失败布局,没设置则使用默认失败布局
  * @param customErrorComponent：自定义错误布局,没设置则使用默认错误布局

@@ -1,7 +1,6 @@
 package ui.discovery.cpn
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -27,15 +26,15 @@ import moe.tlaster.precompose.ui.viewModel
 import ui.common.AsyncImage
 import ui.common.handleSuccess
 import ui.common.theme.AppColorsProvider
-import viewmodel.BaseViewModel
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewStateMutableStateFlow
 
 /**
- * 精品歌单-入口
+ * 个性推荐-精品歌单-入口
  */
 @Composable
 fun CpnHighQualityPlayListEntrance(tag: String) {
-    val highQualityPlayListEntranceViewModel = viewModel { CpnHighQualityPlayListEntranceViewModel() }
+    val highQualityPlayListEntranceViewModel = viewModel { HighQualityPlayListEntranceViewModel() }
     val flow = remember(tag) {
         highQualityPlayListEntranceViewModel.getHighQualityPlayList(tag)
     }
@@ -105,7 +104,7 @@ private fun Content(playlistBean: PlaylistDetail?) {
     }
 }
 
-class CpnHighQualityPlayListEntranceViewModel : BaseViewModel() {
+class HighQualityPlayListEntranceViewModel : BaseViewModel() {
     var flow: ViewStateMutableStateFlow<PlayListResult>? = null
     var lastTag = ""
     fun getHighQualityPlayList(tag: String?): ViewStateMutableStateFlow<PlayListResult>? {

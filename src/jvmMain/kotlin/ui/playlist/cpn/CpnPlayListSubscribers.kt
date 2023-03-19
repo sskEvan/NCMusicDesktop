@@ -1,6 +1,5 @@
 package ui.playlist.cpn
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +18,9 @@ import ui.common.NoSuccessComponent
 import ui.common.theme.AppColorsProvider
 import util.StringUtil
 
+/**
+ * 订阅者组件
+ */
 fun LazyListScope.CpnPlayListSubscribers(subscribes: List<Subscribers>?) {  //subscribes: List<Subscribers>
 
     if (subscribes.isNullOrEmpty()) {

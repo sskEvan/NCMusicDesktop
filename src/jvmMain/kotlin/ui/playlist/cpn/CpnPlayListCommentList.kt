@@ -28,14 +28,16 @@ import ui.common.PaingFooterNumBar
 import ui.common.handleListContent
 import ui.common.theme.AppColorsProvider
 import util.TimeUtil
-import viewmodel.BaseViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
 
-
+/**
+ * 评论组件
+ */
 fun LazyListScope.CpnCommentList(
     viewState: ViewState<CommentResult>?,
-    viewModel: CpnCommentListViewModel,
+    viewModel: CommentListViewModel,
     reloadCallback: (curPage: Int) -> Unit
 ) {
     handleListContent(viewState,
@@ -47,9 +49,9 @@ fun LazyListScope.CpnCommentList(
         }
 
         // 底部分页组件
-        if (data.total > CpnCommentListViewModel.pageSize) {
+        if (data.total > CommentListViewModel.pageSize) {
             item {
-                PaingFooterNumBar(data.total, CpnCommentListViewModel.pageSize, viewModel.cutPage) {
+                PaingFooterNumBar(data.total, CommentListViewModel.pageSize, viewModel.cutPage) {
                     reloadCallback.invoke(it)
                 }
             }
@@ -127,7 +129,7 @@ private fun CommentItem(commentBean: CommentBean) {
     }
 }
 
-class CpnCommentListViewModel : BaseViewModel() {
+class CommentListViewModel : BaseViewModel() {
     companion object {
         const val pageSize = 20
     }
@@ -141,7 +143,7 @@ class CpnCommentListViewModel : BaseViewModel() {
             val offset = (curPage - 1) * pageSize
             flow = launchFlow {
                 println("获取${commentType}评论.  curPage=${curPage}")
-                NCRetrofitClient.getNCApi().getPlayListComment(commentType, id, pageSize, offset)
+                NCRetrofitClient.getNCApi().getCommentList(commentType, id, pageSize, offset)
             }
         }
     }

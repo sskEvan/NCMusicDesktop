@@ -2,7 +2,6 @@ package ui.common
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
-import ui.common.onClick
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size

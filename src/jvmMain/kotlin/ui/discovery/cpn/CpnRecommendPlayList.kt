@@ -8,16 +8,15 @@ import androidx.compose.ui.unit.dp
 import http.NCRetrofitClient
 import moe.tlaster.precompose.ui.viewModel
 import ui.common.ViewStateLazyGridPagingComponent
-import ui.share.CpnPlayListItem
-import viewmodel.BaseViewModel
+import base.BaseViewModel
 
 /**
- *  推荐歌单-更多
+ *  推荐歌单-更多列表组件
  */
 @Composable
 fun CpnRecommendPlayList() {
-    val playListTabSelectedBarViewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
-    val cpnRecommendPlayListViewModel = viewModel { CpnRecommendPlayListViewModel() }
+    val playListTabSelectedBarViewModel = viewModel { PlayListTabSelectedBarViewModel() }
+    val cpnRecommendPlayListViewModel = viewModel { RecommendPlayListViewModel() }
 
     val requestTag = playListTabSelectedBarViewModel.selectedTab?.name ?: "全部歌单"
 
@@ -47,7 +46,7 @@ fun CpnRecommendPlayList() {
 
 
 
-class CpnRecommendPlayListViewModel : BaseViewModel() {
+class RecommendPlayListViewModel : BaseViewModel() {
 
     fun getPlayList(tag: String, pageSize: Int, curPage: Int) = launchFlow {
         val offset = (curPage - 1) * pageSize

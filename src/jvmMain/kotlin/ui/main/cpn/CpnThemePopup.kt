@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.sp
 import ui.common.theme.*
 import ui.common.theme.color.light.*
 
+/**
+ * app主题色切换popup
+ */
 @Composable
 fun CpnThemePopup(showPopupWindow: MutableState<Boolean>) {
 

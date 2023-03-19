@@ -12,5 +12,8 @@ interface IPlayer {
     fun pause()
     fun resume()
     fun stop()
-    fun seekTo(position: Int)
+    fun seekTo(position: Float)
+
+    fun addListener(listener: IPlayerListener)
+    fun removeListener(listener: IPlayerListener)
 }

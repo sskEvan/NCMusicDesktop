@@ -9,7 +9,6 @@ import org.succlz123.lib.imageloader.ImageAsyncImageFile
 import org.succlz123.lib.imageloader.ImageAsyncImageUrl
 import org.succlz123.lib.imageloader.ImageRes
 import org.succlz123.lib.imageloader.core.ImageCallback
-import util.StringUtil
 
 
 @Composable
@@ -20,13 +19,13 @@ fun AsyncImage(
     errorUrl: String? = "image/ic_disk_place_holder.webp",
     contentScale: ContentScale = ContentScale.Crop
 ) {
-    val url = url ?: "image/ic_disk_place_holder.webp"
-    if (url.startsWith("http")) {
-        ImageAsyncImageUrl(url = url, imageCallback = ImageCallback(placeHolderView = {
+    val imgUrl = url ?: "image/ic_disk_place_holder.webp"
+    if (imgUrl.startsWith("http")) {
+        ImageAsyncImageUrl(url = imgUrl, imageCallback = ImageCallback(placeHolderView = {
             placeHolderUrl?.let {
                 Image(
                     painter = painterResource(placeHolderUrl),
-                    contentDescription = url,
+                    contentDescription = imgUrl,
                     modifier = modifier,
                     contentScale = ContentScale.Inside
                 )
@@ -35,22 +34,22 @@ fun AsyncImage(
             errorUrl?.let {
                 Image(
                     painter = painterResource(errorUrl),
-                    contentDescription = url,
+                    contentDescription = imgUrl,
                     modifier = modifier,
                     contentScale = contentScale
                 )
             }
         }) {
             Image(
-                painter = it, contentDescription = url, modifier = modifier, contentScale = contentScale
+                painter = it, contentDescription = imgUrl, modifier = modifier, contentScale = contentScale
             )
         })
-    } else if (url.startsWith("/")) {
-        ImageAsyncImageFile(filePath = url, imageCallback = ImageCallback(placeHolderView = {
+    } else if (imgUrl.startsWith("/")) {
+        ImageAsyncImageFile(filePath = imgUrl, imageCallback = ImageCallback(placeHolderView = {
             placeHolderUrl?.let {
                 Image(
                     painter = painterResource(placeHolderUrl),
-                    contentDescription = url,
+                    contentDescription = imgUrl,
                     modifier = modifier,
                     contentScale = ContentScale.Inside
                 )
@@ -59,22 +58,22 @@ fun AsyncImage(
             errorUrl?.let {
                 Image(
                     painter = painterResource(errorUrl),
-                    contentDescription = url,
+                    contentDescription = imgUrl,
                     modifier = modifier,
                     contentScale = contentScale
                 )
             }
         }) {
             Image(
-                painter = it, contentDescription = url, modifier = modifier, contentScale = contentScale
+                painter = it, contentDescription = imgUrl, modifier = modifier, contentScale = contentScale
             )
         })
     } else {
-        ImageRes(resName = url, imageCallback = ImageCallback(placeHolderView = {
+        ImageRes(resName = imgUrl, imageCallback = ImageCallback(placeHolderView = {
             placeHolderUrl?.let {
                 Image(
                     painter = painterResource(placeHolderUrl),
-                    contentDescription = url,
+                    contentDescription = imgUrl,
                     modifier = modifier,
                     contentScale = ContentScale.Inside
                 )
@@ -83,14 +82,14 @@ fun AsyncImage(
             errorUrl?.let {
                 Image(
                     painter = painterResource(errorUrl),
-                    contentDescription = url,
+                    contentDescription = imgUrl,
                     modifier = modifier,
                     contentScale = contentScale
                 )
             }
         }) {
             Image(
-                painter = it, contentDescription = url, modifier = modifier, contentScale = contentScale
+                painter = it, contentDescription = imgUrl, modifier = modifier, contentScale = contentScale
             )
         })
     }

@@ -22,14 +22,14 @@ import model.PrivateContentItem
 import model.PrivateContentResult
 import ui.common.*
 import ui.common.theme.AppColorsProvider
-import viewmodel.BaseViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
 
 /**
- * 独家放送入口
+ * 个性推荐-独家放送入口
  */
-fun LazyListScope.CpnPrivateContentEntrance(viewModel: CpnPrivateContentViewModel,
+fun LazyListScope.CpnPrivateContentEntrance(viewModel: PrivateContentViewModel,
                                             viewState: ViewState<PrivateContentResult>?) {
 
     item {
@@ -94,7 +94,7 @@ private fun PrivateContentItem(item: PrivateContentItem) {
     }
 }
 
-class CpnPrivateContentViewModel : BaseViewModel() {
+class PrivateContentViewModel : BaseViewModel() {
 
     var flow by mutableStateOf<ViewStateMutableStateFlow<PrivateContentResult>?>(null)
     fun getPrivateContent(firstLoad: Boolean)  {

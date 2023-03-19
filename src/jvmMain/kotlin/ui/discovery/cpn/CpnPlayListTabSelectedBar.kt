@@ -23,12 +23,15 @@ import moe.tlaster.precompose.ui.viewModel
 import ui.common.ViewStateComponent
 import ui.common.handleSuccess
 import ui.common.theme.AppColorsProvider
-import viewmodel.BaseViewModel
+import base.BaseViewModel
 import ui.common.onClick
 
+/**
+ * 歌单详情-歌单标签tab组件
+ */
 @Composable
 fun CpnPlayListTabSelectedBar() {
-    val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
+    val viewModel = viewModel { PlayListTabSelectedBarViewModel() }
     val showTabsPopup = remember { mutableStateOf(false) }
     Row(modifier = Modifier.background(AppColorsProvider.current.pure).padding(vertical = 16.dp).fillMaxWidth()) {
         PlayListTabToggle(showTabsPopup)
@@ -54,7 +57,7 @@ private fun TabsPopup(showTabsPopup: MutableState<Boolean>) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TabsPopupContent(showTabsPopup: MutableState<Boolean>) {
-    val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
+    val viewModel = viewModel { PlayListTabSelectedBarViewModel() }
 
     ViewStateComponent(modifier = Modifier.width(660.dp).height(320.dp),
         initFlow = viewModel.playListTabFlow,
@@ -84,7 +87,7 @@ private fun TabsPopupContent(showTabsPopup: MutableState<Boolean>) {
 
 @Composable
 private fun TabsPopupGroupTabsItem(
-    showTabsPopup: MutableState<Boolean>, viewModel: CpnPlayListTabSelectedBarViewModel, category: String, tabs: List<PlayListTab>
+    showTabsPopup: MutableState<Boolean>, viewModel: PlayListTabSelectedBarViewModel, category: String, tabs: List<PlayListTab>
 ) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(bottom = 10.dp)) {
         Text(
@@ -108,7 +111,7 @@ private fun TabsPopupGroupTabsItem(
 
 @Composable
 private fun PlayListTabToggle(showTabsPopup: MutableState<Boolean>) {
-    val viewModel = viewModel { CpnPlayListTabSelectedBarViewModel() }
+    val viewModel = viewModel { PlayListTabSelectedBarViewModel() }
 
     Row(
         modifier = Modifier.padding(end = 20.dp).width(110.dp).height(30.dp).clip(RoundedCornerShape(50)).onClick  {
@@ -136,7 +139,7 @@ private fun PlayListTabItem(
     modifier: Modifier,
     showTabsPopup: MutableState<Boolean>,
     textSize: TextUnit = 12.sp,
-    viewModel: CpnPlayListTabSelectedBarViewModel,
+    viewModel: PlayListTabSelectedBarViewModel,
     tag: PlayListTab
 ) {
 
@@ -174,7 +177,7 @@ private fun PlayListTabItem(
 }
 
 @Composable
-private fun RowScope.HotPlayListTabs(viewModel: CpnPlayListTabSelectedBarViewModel) {
+private fun RowScope.HotPlayListTabs(viewModel: PlayListTabSelectedBarViewModel) {
     viewModel.hotTabFlow.collectAsState().value.handleSuccess { data ->
         Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) {
             LazyRow {
@@ -187,7 +190,7 @@ private fun RowScope.HotPlayListTabs(viewModel: CpnPlayListTabSelectedBarViewMod
 }
 
 @Composable
-private fun HotPlayListTabItem(viewModel: CpnPlayListTabSelectedBarViewModel, tag: PlayListTab, lastIndex: Boolean) {
+private fun HotPlayListTabItem(viewModel: PlayListTabSelectedBarViewModel, tag: PlayListTab, lastIndex: Boolean) {
     Row(
         modifier = Modifier.height(30.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -218,7 +221,7 @@ private fun HotPlayListTabItem(viewModel: CpnPlayListTabSelectedBarViewModel, ta
 }
 
 
-class CpnPlayListTabSelectedBarViewModel : BaseViewModel() {
+class PlayListTabSelectedBarViewModel : BaseViewModel() {
     var selectedTab by mutableStateOf<PlayListTab?>(null)
 
     val hotTabFlow by lazy {

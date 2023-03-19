@@ -74,7 +74,6 @@ fun NavGraph() {
         }
         scene(RouterUrls.PLAY_LIST_DETAIL) {backStackEntry ->
             val simplePlayListInfo = backStackEntry.query<String>("simplePlayListInfo")
-            println("navigate to PLAY_LIST_DETAIL, extra info=$simplePlayListInfo")
             val simplePlayListItem = Gson().fromJson(simplePlayListInfo, SimplePlayListItem::class.java)
             PlayListDetailPage(simplePlayListItem)
         }

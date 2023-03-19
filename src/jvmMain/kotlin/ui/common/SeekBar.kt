@@ -1,11 +1,11 @@
 package ui.common
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.forEachGesture
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -13,10 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.input.pointer.PointerEvent
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.unit.dp
+import ui.common.theme.AppColorsProvider
 
 /**
  * Created by ssk on 2022/4/23.
@@ -34,15 +33,18 @@ private val circlePaint = Paint().apply {
 var width = 0f
 var height = 0f
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SeekBar(
-    progress: Int = 0,
-    seeking: (Int) -> Unit = {},
-    seekTo: (Int) -> Unit = {},
+    progress: Float = 0f,
+    enableSeek: Boolean = false,
+    seeking: (Float) -> Unit = {},
+    seekTo: (Float) -> Unit = {},
     smallRadius: Float = 8.dp.value,
     largeRadius: Float = 12.dp.value,
     progressHeight: Float = 4.dp.value,
-    progressColor: Color = Color.LightGray.copy(0.3f),
+    seekBarColor: Color = Color.LightGray.copy(0.3f),
+    progressColor: Color = AppColorsProvider.current.primary,
     circleColor: Color = Color.LightGray,
     modifier: Modifier = Modifier
 ) {
@@ -55,60 +57,60 @@ fun SeekBar(
         mutableStateOf(0f)
     }
 
-    progressPaint.color = progressColor
     circlePaint.color = circleColor
 
     Box(
-        modifier = modifier,
+        modifier = modifier
+            .onPointerEvent(PointerEventType.Press) {
+                if (enableSeek) {
+                    isPressed = true
+                    val x = it.changes.first().position.x
+                    seeking.invoke(x * 100f / width)
+                }
+            }
+            .onPointerEvent(PointerEventType.Move) {
+                if (isPressed) {
+                    val x = it.changes.first().position.x
+                    circleCenterX = x
+
+                    if (x < 0f) {
+                        circleCenterX = 0f
+                    } else if (x > width) {
+                        circleCenterX = width
+                    } else {
+                        circleCenterX = x
+                    }
+                    seeking.invoke(circleCenterX * 100f / width)
+                }
+            }
+            .onPointerEvent(PointerEventType.Release) {
+                if (enableSeek) {
+                    seekTo.invoke(circleCenterX * 100f / width)
+                    isPressed = false
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
-        Canvas(modifier = Modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                forEachGesture {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event: PointerEvent = awaitPointerEvent(PointerEventPass.Main)
-                            if (event.changes.size == 1) {
-                                // 1.单指操作
-                                val pointer = event.changes[0]
-                                val x = pointer.position.x
-                                circleCenterX = pointer.position.x
-
-                                if (x < 0f) {
-                                    circleCenterX = 0f
-                                } else if (x > width) {
-                                    circleCenterX = width
-                                } else {
-                                    circleCenterX = x
-                                }
-                                seeking.invoke((circleCenterX * 100 / width + 0.5).toInt())
-
-                                if (!pointer.pressed) {
-                                    // 手指抬起,结束
-                                    isPressed = false
-                                    seekTo.invoke((circleCenterX * 100 / width + 0.5).toInt())
-                                    break
-                                } else {
-                                    if (!pointer.previousPressed) {
-                                        // 按下
-                                        isPressed = true
-                                    }
-                                }
-                                pointer.consume()
-                            }
-                        }
-                    }
-                }
-            }) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
             width = drawContext.size.width
             height = drawContext.size.height
             drawIntoCanvas {
-                val rect = Rect(
+                progressPaint.color = seekBarColor
+                val seekBarRect = Rect(
                     Offset(0f, (height - progressHeight) / 2),
                     Offset(width, (height + progressHeight) / 2)
                 )
-                it.drawRect(rect, progressPaint)
+                it.drawRect(seekBarRect, progressPaint)
+
+                progressPaint.color = progressColor
+                val progressRect = Rect(
+                    Offset(0f, (height - progressHeight) / 2),
+                    Offset(width * progress / 100, (height + progressHeight) / 2)
+                )
+                it.drawRect(progressRect, progressPaint)
 
                 var x = width * progress / 100
                 val radius = if (isPressed) largeRadius else smallRadius

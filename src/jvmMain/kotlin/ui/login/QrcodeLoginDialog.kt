@@ -5,14 +5,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.onPointerEvent
@@ -38,9 +36,12 @@ import ui.common.AsyncImage
 import ui.common.LoadingComponent
 import ui.common.NoSuccessComponent
 import ui.common.theme.AppColorsProvider
-import viewmodel.BaseViewModel
+import base.BaseViewModel
 import java.io.File
 
+/**
+ * 二维码登录对话框
+ */
 @Composable
 fun QrcodeLoginDialog(show: MutableState<Boolean>) {
     Dialog(

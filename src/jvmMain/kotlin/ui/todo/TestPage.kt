@@ -5,11 +5,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.layout.*
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TestPage() {
-
-
 
 }
 

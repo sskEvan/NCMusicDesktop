@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import base.MusicPlayController
+import base.player.IPlayerListener
+import base.player.PlayerStatus
 import http.NCRetrofitClient
 import model.LyricContributorBean
 import model.LyricResult
@@ -26,8 +28,11 @@ import ui.common.ViewStateComponent
 import ui.common.theme.AppColorsProvider
 import util.LyricUtil
 import util.convertDp
-import viewmodel.BaseViewModel
+import base.BaseViewModel
 
+/**
+ * 歌词组件
+ */
 @Composable
 fun CpnLyric(modifier: Modifier) {
 
@@ -187,9 +192,18 @@ private fun LyricItem(index: Int, lyricModel: LyricModel, viewModel: CpnLyricVie
 }
 
 
-class CpnLyricViewModel : BaseViewModel() {
+class CpnLyricViewModel : BaseViewModel(), IPlayerListener {
     var curLyricIndex by mutableStateOf(-1)
     val lyricModelList = mutableListOf<LyricModel>()
+
+    init {
+        MusicPlayController.mediaPlayer.addListener(this)
+    }
+
+    override fun onCleared() {
+        MusicPlayController.mediaPlayer.removeListener(this)
+        super.onCleared()
+    }
 
     fun getLyric(id: Long) = launchFlow(handleSuccessBlock = {
         lyricModelList.clear()
@@ -201,6 +215,17 @@ class CpnLyricViewModel : BaseViewModel() {
         NCRetrofitClient.getNCApi().getLyric(id)
     }
 
+    override fun onStatusChanged(status: PlayerStatus) {
+    }
+
+    override fun onProgress(totalDuring: Int, currentPosition: Int, percentage: Float) {
+        curLyricIndex = lyricModelList.indexOfFirst {
+            currentPosition < it.time
+        } - 1
+        if (currentPosition > (lyricModelList.lastOrNull()?.time ?: 0)) {
+            curLyricIndex = lyricModelList.size - 1
+        }
+    }
 }
 
 

@@ -23,14 +23,14 @@ import model.NewSongBean
 import model.NewSongResult
 import ui.common.*
 import ui.common.theme.AppColorsProvider
-import viewmodel.BaseViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
 
 /**
- * 最新音乐入口
+ * 个性推荐-最新音乐入口
  */
-fun LazyListScope.CpnNewSongEntrance(viewModel: CpnNewSongEntranceViewModel,
+fun LazyListScope.CpnNewSongEntrance(viewModel: NewSongEntranceViewModel,
                                      viewState: ViewState<NewSongResult>?) {
 
     item {
@@ -102,7 +102,7 @@ private fun NewSongItem(index: Int, item: NewSongBean) {
     }
 }
 
-class CpnNewSongEntranceViewModel : BaseViewModel() {
+class NewSongEntranceViewModel : BaseViewModel() {
 
     var flow by mutableStateOf<ViewStateMutableStateFlow<NewSongResult>?>(null)
     fun getNewSong(firstLoad: Boolean)  {

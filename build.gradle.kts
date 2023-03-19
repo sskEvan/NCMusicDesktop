@@ -40,6 +40,7 @@ kotlin {
 
                 implementation("androidx.datastore:datastore-preferences-core:1.1.0-dev01")
                 implementation("io.github.succlz123:compose-imageloader-desktop:0.0.2")
+                implementation("uk.co.caprica:vlcj:4.7.3")
             }
         }
         val jvmTest by getting

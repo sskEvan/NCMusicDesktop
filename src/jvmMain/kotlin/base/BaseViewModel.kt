@@ -1,4 +1,4 @@
-package viewmodel
+package base
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

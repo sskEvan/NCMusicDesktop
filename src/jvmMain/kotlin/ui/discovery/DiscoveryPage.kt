@@ -11,11 +11,14 @@ import moe.tlaster.precompose.viewmodel.ViewModel
 import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
 import ui.common.theme.AppColorsProvider
-import ui.discovery.cpn.CpnPersonalRecommend
+import ui.discovery.cpn.CpnPersonalRecommendContainer
 import ui.discovery.cpn.CpnRecommendPlayList
 import ui.main.cpn.CommonTopBar
 import ui.todo.TodoPage
 
+/**
+ * 发现音乐页面
+ */
 @Composable
 fun DiscoveryPage() {
     val tabs = remember {
@@ -35,7 +38,7 @@ fun DiscoveryPage() {
         }
 
         when (viewModel.selectedIndex.value) {
-            0 -> CpnPersonalRecommend(viewModel.selectedIndex)
+            0 -> CpnPersonalRecommendContainer(viewModel.selectedIndex)
             1 -> CpnRecommendPlayList()
             else -> TodoPage(tabs[viewModel.selectedIndex.value])
         }

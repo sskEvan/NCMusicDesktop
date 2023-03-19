@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import model.IBasePagingBean
 import moe.tlaster.precompose.ui.viewModel
 import moe.tlaster.precompose.viewmodel.ViewModel
-import ui.playlist.cpn.CpnCommentListViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import ui.playlist.cpn.CommentListViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
 import java.util.*
 
 @Composable
@@ -36,8 +36,8 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
     viewStateContentAlignment: Alignment = Alignment.Center,
     customLoadingComponent: @Composable (() -> Unit)? = null,
     customEmptyComponent: @Composable (() -> Unit)? = null,
-    customFailComponent: @Composable ((errorMessage: String?, retryFlag: MutableState<Int>, loadDataBlock: ((pageSize: Int, curPage: Int) -> ViewStateMutableStateFlow<T>)) -> Unit)? = null,
-    customErrorComponent: @Composable ((errorMessage: Pair<String, String>, retryFlag: MutableState<Int>, loadDataBlock: ((pageSize: Int, curPage: Int) -> ViewStateMutableStateFlow<T>)) -> Unit)? = null,
+    customFailComponent: @Composable ((errorMessage: String?, loadDataBlock: () -> Unit) -> Unit)? = null,
+    customErrorComponent: @Composable ((errorMessage: Pair<String, String>, loadDataBlock: () -> Unit) -> Unit)? = null,
     gridContent: LazyGridScope.(data: T) -> Unit,
 ) {
 
@@ -60,14 +60,14 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
         }
 
         val vm = viewModel(listOf(key)) { ViewStateLazyListViewModel<T>() }
-        val reloadFlagState = vm.reloadFlag
+        val reloadFlag = vm.reloadFlag
 
-        val flow = remember(reloadFlagState.value, key) {
-            if (reloadFlagState.value == 0) {
+        val flow = remember(reloadFlag, key) {
+            if (reloadFlag == 0) {  // first load data
                 if (vm.flow == null) {
                     vm.flow = loadDataBlock.invoke(pageSize, vm.curPage.value)
                 }
-            } else {
+            } else {  // retry load data when user trigger loadDataBlock
                 vm.flow = loadDataBlock.invoke(pageSize, vm.curPage.value)
             }
             vm.flow!!
@@ -84,7 +84,6 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                     if (stickyHeader != null) {
                         val minShowStickyIndex = if (scrollHeader == null) 0 else 1
                         showStickyHeader = firstVisibleItemIndex >= minShowStickyIndex
-//                    println("ViewStateLazyGridPagingComponent firstVisibleItemIndex=$firstVisibleItemIndex,showStickyHeader=$showStickyHeader")
                     }
                 }
         }
@@ -128,8 +127,7 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                                     contentAlignment = viewStateContentAlignment,
                                     modifier = viewStateComponentModifier,
                                 ) {
-                                    reloadFlagState.value++
-                                    loadDataBlock.invoke(pageSize, vm.curPage.value)
+                                    vm.reload()
                                 }
                             }
                         }
@@ -140,17 +138,16 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                             if (customFailComponent != null) {
                                 customFailComponent.invoke(
                                     "错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
-                                    reloadFlagState,
-                                    loadDataBlock
-                                )
+                                ) {
+                                    vm.reload()
+                                }
                             } else {
                                 NoSuccessComponent(
                                     modifier = viewStateComponentModifier,
                                     message = "错误码：${(viewState as ViewState.Fail).errorCode}；${(viewState as ViewState.Fail).errorMsg}，点我重试",
                                     contentAlignment = viewStateContentAlignment
                                 ) {
-                                    reloadFlagState.value++
-                                    loadDataBlock.invoke(pageSize, vm.curPage.value)
+                                   vm.reload()
                                 }
                             }
                         }
@@ -161,9 +158,9 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                             if (customErrorComponent != null) {
                                 customErrorComponent.invoke(
                                     getErrorMessagePair((viewState as ViewState.Error).exception),
-                                    reloadFlagState,
-                                    loadDataBlock
-                                )
+                                ) {
+                                    vm.reload()
+                                }
                             } else {
                                 val errorMessagePair = getErrorMessagePair((viewState as ViewState.Error).exception)
                                 NoSuccessComponent(
@@ -172,8 +169,7 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                                     iconResId = errorMessagePair.second,
                                     contentAlignment = viewStateContentAlignment,
                                 ) {
-                                    reloadFlagState.value++
-                                    loadDataBlock.invoke(pageSize, vm.curPage.value)
+                                    vm.reload()
                                 }
                             }
                         }
@@ -184,11 +180,11 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
                         gridContent(data)
 
                         // 底部分页组件
-                        if (data.getTotalCount() > CpnCommentListViewModel.pageSize) {
+                        if (data.getTotalCount() > CommentListViewModel.pageSize) {
                             item(span = { GridItemSpan(columns) }) {
                                 PaingFooterNumBar(data.getTotalCount(), pageSize, vm.curPage.value) {
                                     vm.curPage.value = it
-                                    vm.reloadFlag.value++
+                                    vm.reload()
                                 }
                             }
                         }
@@ -212,8 +208,14 @@ fun <T : IBasePagingBean> ViewStateLazyGridPagingComponent(
 
 class ViewStateLazyListViewModel<T> : ViewModel() {
     var flow: ViewStateMutableStateFlow<T>? = null
-    var reloadFlag = mutableStateOf(0)
+    var reloadFlag by mutableStateOf(0)
+        private set
+
     var curPage = mutableStateOf(1)
+
+    fun reload() {
+        reloadFlag++
+    }
 }
 
 

@@ -23,18 +23,17 @@ import androidx.compose.ui.unit.sp
 import http.NCRetrofitClient
 import model.RecommendMVItem
 import model.RecommendMVResult
-import moe.tlaster.precompose.ui.viewModel
 import ui.common.*
 import ui.common.theme.AppColorsProvider
 import util.StringUtil
-import viewmodel.BaseViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
 
 /**
- * 推荐MV入口
+ * 个性推荐-推荐MV入口
  */
-fun LazyListScope.CpnRecommendMVEntrance(viewModel: CpnRecommendMVEntranceViewModel,
+fun LazyListScope.CpnRecommendMVEntrance(viewModel: RecommendMVEntranceViewModel,
                                          viewState: ViewState<RecommendMVResult>?) {
     item {
         CpnActionMore("推荐MV")
@@ -124,7 +123,7 @@ private fun RecommendMVItem(item: RecommendMVItem) {
     }
 }
 
-class CpnRecommendMVEntranceViewModel : BaseViewModel() {
+class RecommendMVEntranceViewModel : BaseViewModel() {
 
     var flow by mutableStateOf<ViewStateMutableStateFlow<RecommendMVResult>?>(null)
     fun getRecommendMV(firstLoad: Boolean)  {

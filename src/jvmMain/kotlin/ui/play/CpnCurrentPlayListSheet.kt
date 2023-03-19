@@ -23,6 +23,9 @@ import base.MusicPlayController
 import ui.common.onClick
 import ui.common.theme.AppColorsProvider
 
+/**
+ * 当前播放列表组件
+ */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CpnCurrentPlayListSheet() {
@@ -34,8 +37,8 @@ fun CpnCurrentPlayListSheet() {
         skipHalfExpanded = true,
     )
 
-    LaunchedEffect(MusicPlayController.showPlayListSheet) {
-        if (MusicPlayController.showPlayListSheet) {
+    LaunchedEffect(MusicPlayController.showCurPlayListSheet) {
+        if (MusicPlayController.showCurPlayListSheet) {
             sheetState.show()
         } else {
             sheetState.hide()
@@ -47,10 +50,10 @@ fun CpnCurrentPlayListSheet() {
             sheetContent = {
                 Column {
                     Spacer(modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight).onClick {
-                        MusicPlayController.showPlayListSheet = false
+                        MusicPlayController.showCurPlayListSheet = false
                     })
                     CpnCurrentPlayList {
-                        MusicPlayController.showPlayListSheet = false
+                        MusicPlayController.showCurPlayListSheet = false
                     }
                 }
             },
@@ -120,7 +123,7 @@ private fun SongItem(index: Int) {
     Row(
         modifier = Modifier
             .onClick {
-                MusicPlayController.playByOriginIndex(index)
+                MusicPlayController.playByRealIndex(index)
             }
             .background(
                 if (index % 2 == 0) Color.Transparent else AppColorsProvider.current.divider.copy(

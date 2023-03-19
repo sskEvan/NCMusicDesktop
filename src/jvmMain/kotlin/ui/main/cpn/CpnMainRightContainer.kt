@@ -22,7 +22,9 @@ import router.NCNavigatorManager
 import router.NavGraph
 import ui.common.theme.AppColorsProvider
 
-
+/**
+ * 主页右边布局组件
+ */
 @Composable
 fun CpnMainRightContainer() {
     Box(modifier = Modifier.fillMaxSize().background(color = AppColorsProvider.current.pure)) {
@@ -32,6 +34,9 @@ fun CpnMainRightContainer() {
     }
 }
 
+/**
+ * 顶部bar组件
+ */
 @Composable
 fun CommonTopBar(
     title: String = "",

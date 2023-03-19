@@ -11,18 +11,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import moe.tlaster.precompose.ui.viewModel
-import viewmodel.BaseViewModel
+import base.BaseViewModel
 
 /**
  * 个性推荐
  */
 @Composable
-fun CpnPersonalRecommend(recommendTagIndex: MutableState<Int>) {
-    val personalRecommendViewModel = viewModel { CpnPersonalRecommendViewModel() }
-    val playListEntranceViewModel = viewModel { CpnRecommendPlayListEntranceViewModel() }
-    val privateContentViewModel = viewModel { CpnPrivateContentViewModel() }
-    val newSongViewModel = viewModel { CpnNewSongEntranceViewModel() }
-    val recommendMVEntranceViewModel = viewModel { CpnRecommendMVEntranceViewModel() }
+fun CpnPersonalRecommendContainer(recommendTagIndex: MutableState<Int>) {
+    val personalRecommendViewModel = viewModel { PersonalRecommendViewModel() }
+    val playListEntranceViewModel = viewModel { RecommendPlayListEntranceViewModel() }
+    val privateContentViewModel = viewModel { PrivateContentViewModel() }
+    val newSongViewModel = viewModel { NewSongEntranceViewModel() }
+    val recommendMVEntranceViewModel = viewModel { RecommendMVEntranceViewModel() }
 
     LaunchedEffect(Unit) {
         playListEntranceViewModel.getRecommendPlayList(true)
@@ -57,7 +57,7 @@ fun CpnPersonalRecommend(recommendTagIndex: MutableState<Int>) {
 }
 
 
-class CpnPersonalRecommendViewModel : BaseViewModel() {
+class PersonalRecommendViewModel : BaseViewModel() {
     private var lazyListState: LazyListState? = null
 
     fun getLazyListStateState(state: LazyListState): LazyListState {

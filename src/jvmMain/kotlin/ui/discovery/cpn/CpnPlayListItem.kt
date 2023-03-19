@@ -1,4 +1,4 @@
-package ui.share
+package ui.discovery.cpn
 
 import androidx.compose.foundation.Image
 import ui.common.onClick
@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.gson.Gson
 import model.PlaylistDetail
+import moe.tlaster.precompose.navigation.NavOptions
 import router.NCNavigatorManager
 import router.RouterUrls
 import ui.common.AsyncImage
@@ -84,54 +85,3 @@ fun CpnPlayListItem(item: PlaylistDetail) {
     }
 }
 
-//@Composable
-//fun LazyListScope.CpnPlayList(data: List<RecommendPlayListItem>, cells: Int) {
-//    val rows = remember { (data.size + cells - 1) / cells }
-//    val groupList = remember {
-//        val groupList = mutableListOf<MutableList<RecommendPlayListItem>>()
-//        for (i in 0 until   rows - 1) {
-//            val group = mutableListOf<RecommendPlayListItem>()
-//            group.addAll(data.subList(i * cells, cells))
-//            groupList.add(group)
-//        }
-//        val lastGroup = mutableListOf<RecommendPlayListItem>()
-//        lastGroup.addAll(data.subList(cells * (rows - 1), data.size))
-//        groupList.add(lastGroup)
-//        groupList
-//    }
-//    items(groupList.size) {
-//        CpnPlayListGridRow(groupList[it])
-//    }
-//}
-//
-//@Composable
-//fun CpnPlayList(data: List<PlaylistBean>, cells: Int) {
-//    val rows = remember { (data.size + cells - 1) / cells }
-//    val groupList = remember {
-//        val groupList = mutableListOf<MutableList<PlaylistBean>>()
-//        for (i in 0 until   rows - 1) {
-//            val group = mutableListOf<PlaylistBean>()
-//            group.addAll(data.subList(i * cells, (i + 1) * cells))
-//            groupList.add(group)
-//        }
-//        val lastGroup = mutableListOf<PlaylistBean>()
-//        lastGroup.addAll(data.subList(cells * (rows - 1), data.size))
-//        groupList.add(lastGroup)
-//        groupList
-//    }
-//    Column {
-//        groupList.forEach {
-//            CpnPlayListGridRow(it)
-//        }
-//    }
-//
-//}
-//
-//@Composable
-//fun CpnPlayListGridRow(data: List<PlaylistBean>) {
-//    TableLayout(modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp), cellsCount = data.size) {
-//        data.forEach {
-//            CpnPlayListItem(it)
-//        }
-//    }
-//}

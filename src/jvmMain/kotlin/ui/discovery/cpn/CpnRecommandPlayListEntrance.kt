@@ -27,14 +27,15 @@ import router.RouterUrls
 import ui.common.*
 import ui.common.theme.AppColorsProvider
 import util.StringUtil
-import viewmodel.BaseViewModel
-import viewmodel.ViewState
-import viewmodel.ViewStateMutableStateFlow
+import base.BaseViewModel
+import base.ViewState
+import base.ViewStateMutableStateFlow
+import moe.tlaster.precompose.navigation.NavOptions
 
 /**
- * 推荐歌单入口
+ * 个性推荐-推荐歌单入口
  */
-fun LazyListScope.CpnRecommandPlayListEntrance(viewModel: CpnRecommendPlayListEntranceViewModel,
+fun LazyListScope.CpnRecommandPlayListEntrance(viewModel: RecommendPlayListEntranceViewModel,
                                                viewState: ViewState<RecommendPlayListResult>?,
                                                onClickMore: () -> Unit) {
 
@@ -114,7 +115,7 @@ private fun CpnPlayListItem(item: SimplePlayListItem) {
 }
 
 
-class CpnRecommendPlayListEntranceViewModel : BaseViewModel() {
+class RecommendPlayListEntranceViewModel : BaseViewModel() {
     var flow by mutableStateOf<ViewStateMutableStateFlow<RecommendPlayListResult>?>(null)
     fun getRecommendPlayList(firstLoad: Boolean)  {
         if (!firstLoad || flow == null) {
