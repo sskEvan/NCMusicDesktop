@@ -35,10 +35,10 @@ fun CpnMainRightContainer() {
 }
 
 /**
- * 顶部bar组件
+ * 顶部TitleBar组件
  */
 @Composable
-fun CommonTopBar(
+fun CommonTitleBar(
     title: String = "",
     showBackButton: Boolean = false,
     customerContent: (@Composable () -> Unit)? = null

@@ -5,6 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +31,6 @@ import ui.common.theme.AppColorsProvider
 @Composable
 fun CpnCurrentPlayListSheet() {
 
-
     val sheetState = rememberModalBottomSheetState(
         ModalBottomSheetValue.Hidden,
         animationSpec = tween(durationMillis = 300),
@@ -45,32 +45,41 @@ fun CpnCurrentPlayListSheet() {
         }
     }
 
-
-        ModalBottomSheetLayout(
-            sheetContent = {
-                Column {
-                    Spacer(modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight).onClick {
-                        MusicPlayController.showCurPlayListSheet = false
-                    })
-                    CpnCurrentPlayList {
-                        MusicPlayController.showCurPlayListSheet = false
-                    }
+    ModalBottomSheetLayout(
+        sheetContent = {
+            Column {
+                Spacer(modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight).onClick {
+                    MusicPlayController.showCurPlayListSheet = false
+                })
+                CpnCurrentPlayList {
+                    MusicPlayController.showCurPlayListSheet = false
                 }
-            },
-            sheetState = sheetState,
-            sheetElevation = 0.dp,
-            sheetContentColor = Color.Transparent,
-            sheetBackgroundColor = Color.Transparent,
-            scrimColor = Color.Transparent
-        ) {
+            }
+        },
+        sheetState = sheetState,
+        sheetElevation = 0.dp,
+        sheetContentColor = Color.Transparent,
+        sheetBackgroundColor = Color.Transparent,
+        scrimColor = Color.Transparent
+    ) {
 
-        }
     }
+}
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun CpnCurrentPlayList(hideCallback: () -> Unit) {
+    val lazyListState = rememberLazyListState()
+
+    LaunchedEffect(MusicPlayController.showCurPlayListSheet) {
+        if (MusicPlayController.showCurPlayListSheet
+            && MusicPlayController.curRealIndex >= 0
+            && MusicPlayController.curRealIndex < MusicPlayController.realSongList.size) {
+            lazyListState.animateScrollToItem(MusicPlayController.curRealIndex, -36.dp.value.toInt())
+        }
+    }
+
     Row(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.weight(1f).fillMaxHeight().onClick {
             hideCallback.invoke()
@@ -84,11 +93,13 @@ private fun CpnCurrentPlayList(hideCallback: () -> Unit) {
                 )
         )
         LazyColumn(
-            modifier = Modifier.width(420.dp).fillMaxHeight().background(AppColorsProvider.current.pure)
+            modifier = Modifier.width(420.dp).fillMaxHeight().background(AppColorsProvider.current.pure),
+            state = lazyListState
         ) {
             stickyHeader {
                 Row(
-                    modifier = Modifier.background(AppColorsProvider.current.pure).padding(vertical = 15.dp, horizontal = 20.dp).fillMaxWidth(),
+                    modifier = Modifier.background(AppColorsProvider.current.pure)
+                        .padding(vertical = 15.dp, horizontal = 20.dp).fillMaxWidth(),
                     verticalAlignment = Alignment.Bottom
                 ) {
                     Text(

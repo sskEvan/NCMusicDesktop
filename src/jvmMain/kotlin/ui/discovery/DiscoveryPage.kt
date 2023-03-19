@@ -8,12 +8,13 @@ import androidx.compose.ui.unit.dp
 import base.MusicPlayController
 import moe.tlaster.precompose.ui.viewModel
 import moe.tlaster.precompose.viewmodel.ViewModel
+import router.NCNavigatorManager
 import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
 import ui.common.theme.AppColorsProvider
 import ui.discovery.cpn.CpnPersonalRecommendContainer
 import ui.discovery.cpn.CpnRecommendPlayList
-import ui.main.cpn.CommonTopBar
+import ui.main.cpn.CommonTitleBar
 import ui.todo.TodoPage
 
 /**
@@ -26,7 +27,7 @@ fun DiscoveryPage() {
     }
     val viewModel = viewModel { DiscoveryPageViewModel() }
     Column {
-        CommonTopBar {
+        CommonTitleBar {
             CommonTabLayout(
                 selectedIndex = viewModel.selectedIndex.value,
                 tabTexts = tabs,
@@ -40,7 +41,7 @@ fun DiscoveryPage() {
         when (viewModel.selectedIndex.value) {
             0 -> CpnPersonalRecommendContainer(viewModel.selectedIndex)
             1 -> CpnRecommendPlayList()
-            else -> TodoPage(tabs[viewModel.selectedIndex.value])
+            else -> TodoPage(tabs[viewModel.selectedIndex.value], false)
         }
     }
 

@@ -48,7 +48,7 @@ class NCPlayer : IPlayer {
 
             override fun buffering(mediaPlayer: MediaPlayer?, newCache: Float) {
                 super.buffering(mediaPlayer, newCache)
-                println("----${mCurSongBean?.name}----buffering")
+//                println("----${mCurSongBean?.name}----buffering")
 
             }
 

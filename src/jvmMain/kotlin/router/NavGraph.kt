@@ -66,13 +66,8 @@ fun NavGraph() {
         scene(RouterUrls.MY_COLLECT) {
             TodoPage("我的收藏")
         }
-        scene(RouterUrls.MY_CREATE_SONG_SHEET) {
-            TodoPage("创建的歌单")
-        }
-        scene(RouterUrls.MY_COLLECT_SONG_SHEET) {
-            TodoPage("收藏的歌单")
-        }
-        scene(RouterUrls.PLAY_LIST_DETAIL) {backStackEntry ->
+
+        scene("${RouterUrls.PLAY_LIST_DETAIL}") {backStackEntry ->
             val simplePlayListInfo = backStackEntry.query<String>("simplePlayListInfo")
             val simplePlayListItem = Gson().fromJson(simplePlayListInfo, SimplePlayListItem::class.java)
             PlayListDetailPage(simplePlayListItem)

@@ -9,10 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import ui.common.theme.AppColorsProvider
+import ui.main.cpn.CommonTitleBar
 
 @Composable
-fun TodoPage(tag: String) {
+fun TodoPage(tag: String, showTitle: Boolean = true) {
     Column {
+        if (showTitle) {
+            CommonTitleBar(tag, true)
+        }
         Box(Modifier.fillMaxSize().background(AppColorsProvider.current.pure),
             contentAlignment = Alignment.Center
         ) {

@@ -34,11 +34,6 @@ object RouterUrls {
     // 我的收藏
     const val MY_COLLECT = "myCollect"
 
-    // 创建的歌单
-    const val MY_CREATE_SONG_SHEET = "myCreateSongSheet"
-
-    // 收藏的歌单
-    const val MY_COLLECT_SONG_SHEET = "myCollectSongSheet"
 
     // 歌单详情
     const val PLAY_LIST_DETAIL = "playListDetail"

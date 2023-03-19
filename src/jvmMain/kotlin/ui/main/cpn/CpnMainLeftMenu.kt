@@ -56,42 +56,45 @@ fun CpnMainLeftMenu() {
         CpnUserInfo()
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CpnMenuItem("image/ic_my_music.webp", "发现音乐") {
+                while (navigator.canGoBack) {
+                    navigator.popBackStack()
+                }
                 navigator.navigate(RouterUrls.DISCOVERY, NavOptions(launchSingleTop = true))
             }
             CpnMenuItem("image/ic_podcast.webp", "播客") {
-                navigator.navigate(RouterUrls.PODCAST)
+                navigator.navigate(RouterUrls.PODCAST, NavOptions(launchSingleTop = true))
             }
             CpnMenuItem("image/ic_fm.webp", "私人FM") {
-                navigator.navigate(RouterUrls.PERSONAL_FM)
+                navigator.navigate(RouterUrls.PERSONAL_FM, NavOptions(launchSingleTop = true))
             }
             CpnMenuItem("image/ic_video.webp", "视频") {
-                navigator.navigate(RouterUrls.VIDEO)
+                navigator.navigate(RouterUrls.VIDEO, NavOptions(launchSingleTop = true))
             }
             CpnMenuItem("image/ic_follows.webp", "关注") {
-                navigator.navigate(RouterUrls.FOLLOW)
+                navigator.navigate(RouterUrls.FOLLOW, NavOptions(launchSingleTop = true))
             }
             CpnMyMusicTitle()
             viewModel.favoritePlayList?.let {
                 CpnSongSheetItem("image/ic_like.webp", it)
             }
             CpnMenuItem("image/ic_download.webp", "下载管理") {
-                navigator.navigate(RouterUrls.DOWNLOAD_MANAGER)
+                navigator.navigate(RouterUrls.DOWNLOAD_MANAGER, NavOptions(launchSingleTop = true))
 
             }
             CpnMenuItem("image/ic_recent_play_list.webp", "最近播放") {
-                navigator.navigate(RouterUrls.RECENT_PLAYLIST)
+                navigator.navigate(RouterUrls.RECENT_PLAYLIST, NavOptions(launchSingleTop = true))
 
             }
             CpnMenuItem("image/ic_cloud.webp", "我的音乐云盘") {
-                navigator.navigate(RouterUrls.MY_CLOUD_DISK)
+                navigator.navigate(RouterUrls.MY_CLOUD_DISK, NavOptions(launchSingleTop = true))
 
             }
             CpnMenuItem("image/ic_podcast.webp", "我的播客") {
-                navigator.navigate(RouterUrls.MY_PODCAST)
+                navigator.navigate(RouterUrls.MY_PODCAST, NavOptions(launchSingleTop = true))
 
             }
             CpnMenuItem("image/ic_collect.webp", "我的收藏") {
-                navigator.navigate(RouterUrls.MY_COLLECT)
+                navigator.navigate(RouterUrls.MY_COLLECT, NavOptions(launchSingleTop = true))
 
             }
 

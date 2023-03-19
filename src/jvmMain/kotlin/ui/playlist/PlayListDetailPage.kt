@@ -24,7 +24,7 @@ import ui.common.CommonTabLayout
 import ui.common.CommonTabLayoutStyle
 import ui.common.ExpandableText
 import ui.common.theme.AppColorsProvider
-import ui.main.cpn.CommonTopBar
+import ui.main.cpn.CommonTitleBar
 import ui.playlist.cpn.*
 import util.StringUtil
 import util.TimeUtil
@@ -66,7 +66,7 @@ fun PlayListDetailPage(simplePlayListItem: SimplePlayListItem) {
     val commentViewState = commentViewModel.flow?.collectAsState()
 
     Column {
-        CommonTopBar("歌单详情", showBackButton = true)
+        CommonTitleBar("歌单详情", showBackButton = true)
 
         Box {
             LazyColumn(state = lazyListState) {

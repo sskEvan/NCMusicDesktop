@@ -94,10 +94,10 @@ object MusicPlayController : IPlayerListener {
 //            println("songList $index --> ${item.name}")
 //        }
 //        println("---------------------------------------")
-
-        realSongList.forEachIndexed { index, item ->
-            println("pagerSongList $index --> ${item.name}")
-        }
+//
+//        realSongList.forEachIndexed { index, item ->
+//            println("pagerSongList $index --> ${item.name}")
+//        }
     }
 
     private fun innerPlay(songBean: SongBean) {
