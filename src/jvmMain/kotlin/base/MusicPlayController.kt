@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import base.player.*
 import model.SongBean
+import ui.common.toast.ToastManager
 import util.StringUtil
 import java.util.*
 
@@ -136,8 +137,13 @@ object MusicPlayController : IPlayerListener {
             PlayerStatus.COMPLETED -> {
                 autoPlayNext()
             }
-            PlayerStatus.ERROR -> {
-                autoPlayNext()
+            is PlayerStatus.ERROR -> {
+                println("PlayerStatus.ERROR->${status.errorMsg}")
+                if (status.errorCode != PlayerErrorCode.ERROR_ENV_INVALID) {
+                    autoPlayNext()
+                } else {
+                    ToastManager.showToast(status.errorMsg, ToastManager.LENGTH_LONG)
+                }
             }
             PlayerStatus.STOPPED -> {
                 totalDuringStr = "00:00"

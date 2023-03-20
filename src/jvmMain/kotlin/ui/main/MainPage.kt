@@ -3,6 +3,7 @@ package ui.main
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import ui.common.toast.Toast
 import ui.main.cpn.CpnMusicPlayBottomBar
 import ui.main.cpn.CpnMainLeftMenu
 import ui.main.cpn.CpnMainMusicPlayDrawer
@@ -23,9 +24,11 @@ fun MainPage() {
             }
             CpnMainMusicPlayDrawer()
             CpnCurrentPlayListSheet()
+            Toast()
         }
 
         CpnMusicPlayBottomBar()
     }
+
 
 }

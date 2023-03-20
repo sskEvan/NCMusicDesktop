@@ -31,7 +31,6 @@ import ui.common.AsyncImage
 import ui.common.theme.AppColorsProvider
 import ui.login.QrcodeLoginDialog
 import base.BaseViewModel
-import moe.tlaster.precompose.navigation.PopUpTo
 import ui.common.onClick
 
 /**
@@ -87,7 +86,6 @@ fun CpnMainLeftMenu() {
             }
             CpnMenuItem("image/ic_cloud.webp", "我的音乐云盘") {
                 navigator.navigate(RouterUrls.MY_CLOUD_DISK, NavOptions(launchSingleTop = true))
-
             }
             CpnMenuItem("image/ic_podcast.webp", "我的播客") {
                 navigator.navigate(RouterUrls.MY_PODCAST, NavOptions(launchSingleTop = true))

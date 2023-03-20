@@ -14,6 +14,8 @@ interface IPlayer {
     fun stop()
     fun seekTo(position: Float)
 
+    fun envAvailable() = false
+
     fun addListener(listener: IPlayerListener)
     fun removeListener(listener: IPlayerListener)
 }
