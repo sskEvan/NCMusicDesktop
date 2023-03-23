@@ -1,5 +1,6 @@
 package util
 
+import base.AppConfig
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.MultiFormatWriter
@@ -34,11 +35,14 @@ object QrcodeUtil {
                 qrcodeStr,
                 BarcodeFormat.QR_CODE, width, height, qrParam
             )
-            val  file = File(System.getProperty("user.dir") + File.separator + "cache" + File.separator + "qrcode.png")
+
+//            val  file = File(System.getProperty("user.dir") + File.separator + "cache" + File.separator + "qrcode.png")
+
+            val file = File(AppConfig.cacheRootDir + File.separator + "cache" + File.separator + "qrcode.png")
             if (!file.parentFile.exists()) {
                 file.parentFile.mkdirs()
             }
-            val path =  file.toPath()
+            val path = file.toPath()
             MatrixToImageWriter.writeToPath(bitMatrix, "png", path)
             return file
         } catch (e: WriterException) {

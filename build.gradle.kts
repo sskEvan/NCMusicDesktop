@@ -49,11 +49,50 @@ kotlin {
 
 compose.desktop {
     application {
+        javaHome = "/Users/anmin83/Library/Java/JavaVirtualMachines/corretto-17.0.6/Contents/Home"
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "NCMusicDesktop"
             packageVersion = "1.0.0"
+//            includeAllModules = true
+            modules("java.instrument", "java.sql", "jdk.unsupported")
+
+            macOS {
+                // a version for all macOS distributables
+                packageVersion = "1.0.0"
+                // a version only for the dmg package
+                dmgPackageVersion = "1.0.0"
+                // a version only for the pkg package
+                pkgPackageVersion = "1.0.0"
+                // 显示在菜单栏、“关于”菜单项、停靠栏等中的应用程序名称
+                dockName = "NCMusicDesktop"
+
+                // a build version for all macOS distributables
+                packageBuildVersion = "1.0.0"
+                // a build version only for the dmg package
+                dmgPackageBuildVersion = "1.0.0"
+                // a build version only for the pkg package
+                pkgPackageBuildVersion = "1.0.0"
+                // 设置图标
+                iconFile.set(project.file("launcher/icon.icns"))
+            }
+
+            windows {
+                // a version for all Windows distributables
+                packageVersion = "1.0.0"
+                // a version only for the msi package
+                msiPackageVersion = "1.0.0"
+                // a version only for the exe package
+                exePackageVersion = "1.0.0"
+                // 设置图标
+                iconFile.set(project.file("launcher/icon.ico"))
+            }
+        }
+
+        buildTypes.release.proguard {
+            obfuscate.set(false)
+            configurationFiles.from(project.file("proguard-rules.pro"))
         }
     }
 }

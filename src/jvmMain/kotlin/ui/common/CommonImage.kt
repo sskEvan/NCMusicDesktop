@@ -44,7 +44,7 @@ fun AsyncImage(
                 painter = it, contentDescription = imgUrl, modifier = modifier, contentScale = contentScale
             )
         })
-    } else if (imgUrl.startsWith("/")) {
+    } else if (imgUrl.startsWith("/") || imgUrl.contains(":\\")) {
         ImageAsyncImageFile(filePath = imgUrl, imageCallback = ImageCallback(placeHolderView = {
             placeHolderUrl?.let {
                 Image(

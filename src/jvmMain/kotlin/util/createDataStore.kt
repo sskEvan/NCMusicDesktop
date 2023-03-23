@@ -3,6 +3,7 @@ package util
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import base.AppConfig
 import kotlinx.atomicfu.locks.SynchronizedObject
 import kotlinx.atomicfu.locks.synchronized
 import java.io.File
@@ -20,7 +21,7 @@ fun getDataStore(): DataStore<Preferences> =
             dataStore
         } else {
             PreferenceDataStoreFactory.create {
-                File("${System.getProperty("user.home")}/$dataStoreFileName")
+                File("${AppConfig.cacheRootDir}/$dataStoreFileName")
             }.also { dataStore = it }
         }
     }

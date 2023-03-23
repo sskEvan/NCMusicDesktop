@@ -2,10 +2,10 @@ package router
 
 object RouterUrls {
     // 发现音乐
-    const val DISCOVERY = "DISCOVERY"
+    const val DISCOVERY = "discovery"
 
     // 播客
-    const val PODCAST = "recovery/podcast"
+    const val PODCAST = "podcast"
 
     // 私人fm
     const val PERSONAL_FM = "personalFm"
