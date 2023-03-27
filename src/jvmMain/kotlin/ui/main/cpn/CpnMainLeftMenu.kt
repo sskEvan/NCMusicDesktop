@@ -47,7 +47,7 @@ fun CpnMainLeftMenu() {
         }
     }
 
-    Column(modifier = Modifier.width(200.dp).background(AppColorsProvider.current.background)) {
+    Column(modifier = Modifier.width(200.dp).fillMaxHeight().background(AppColorsProvider.current.background)) {
         Spacer(
             modifier = Modifier.fillMaxWidth().height(AppConfig.topBarHeight)
                 .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor)

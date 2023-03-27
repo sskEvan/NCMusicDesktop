@@ -34,8 +34,10 @@ object RouterUrls {
     // 我的收藏
     const val MY_COLLECT = "myCollect"
 
-
     // 歌单详情
     const val PLAY_LIST_DETAIL = "playListDetail"
+
+    // 设置
+    const val SETTING = "setting"
 
 }

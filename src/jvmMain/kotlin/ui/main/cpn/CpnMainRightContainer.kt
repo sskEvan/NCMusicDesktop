@@ -3,6 +3,7 @@ package ui.main.cpn
 import androidx.compose.foundation.background
 import ui.common.onClick
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.onClick
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -20,6 +21,7 @@ import base.AppConfig
 import base.MusicPlayController
 import router.NCNavigatorManager
 import router.NavGraph
+import router.RouterUrls
 import ui.common.theme.AppColorsProvider
 
 /**
@@ -28,7 +30,10 @@ import ui.common.theme.AppColorsProvider
 @Composable
 fun CpnMainRightContainer() {
     Box(modifier = Modifier.fillMaxSize().background(color = AppColorsProvider.current.pure)) {
-        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp).background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor))
+        Spacer(
+            modifier = Modifier.fillMaxWidth().height(50.dp)
+                .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor)
+        )
         NavGraph()
         CpnRightTopActionButtons()
     }
@@ -45,7 +50,8 @@ fun CommonTitleBar(
 ) {
     Box(
         modifier = Modifier.padding(end = 320.dp).fillMaxWidth().height(AppConfig.topBarHeight)
-            .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor), contentAlignment = Alignment.CenterStart
+            .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor),
+        contentAlignment = Alignment.CenterStart
     ) {
         if (!MusicPlayController.showMusicPlayDrawer) {
             if (customerContent != null) {
@@ -57,14 +63,13 @@ fun CommonTitleBar(
 
                         Icon(
                             painterResource("image/ic_back.webp"),
-                            modifier = Modifier.padding(start = 20.dp).clip(RoundedCornerShape(50)).onClick  {
+                            modifier = Modifier.padding(start = 20.dp).clip(RoundedCornerShape(50)).onClick {
                                 navigator.popBackStack()
                             }.padding(4.dp).size(18.dp),
                             contentDescription = "返回上一页",
                             tint = AppColorsProvider.current.firstIcon
 
                         )
-
                     }
 
                     Text(
@@ -94,7 +99,9 @@ private fun BoxScope.CpnRightTopActionButtons() {
         Icon(
             painterResource("image/ic_setting.webp"),
             contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(24.dp).padding(3.dp),
+            modifier = Modifier.padding(end = 14.dp).size(24.dp).padding(3.dp).onClick {
+                NCNavigatorManager.navigator.navigate(RouterUrls.SETTING)
+            },
             tint = AppColorsProvider.current.firstIcon
         )
         Icon(
@@ -106,7 +113,7 @@ private fun BoxScope.CpnRightTopActionButtons() {
         Icon(
             painterResource("image/ic_theme.webp"),
             contentDescription = null,
-            modifier = Modifier.padding(end = 14.dp).size(24.dp).padding(3.dp).onClick  {
+            modifier = Modifier.padding(end = 14.dp).size(24.dp).padding(3.dp).onClick {
                 showPopupWindow.value = true
             },
             tint = AppColorsProvider.current.firstIcon

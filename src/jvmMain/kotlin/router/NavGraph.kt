@@ -12,6 +12,7 @@ import moe.tlaster.precompose.navigation.query
 import moe.tlaster.precompose.navigation.transition.NavTransition
 import ui.discovery.DiscoveryPage
 import ui.playlist.PlayListDetailPage
+import ui.setting.SettingPage
 import ui.todo.TodoPage
 
 
@@ -65,6 +66,9 @@ fun NavGraph() {
         }
         scene(RouterUrls.MY_COLLECT) {
             TodoPage("我的收藏")
+        }
+        scene(RouterUrls.SETTING) {
+            SettingPage()
         }
 
         scene("${RouterUrls.PLAY_LIST_DETAIL}") {backStackEntry ->

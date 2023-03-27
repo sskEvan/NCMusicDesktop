@@ -170,7 +170,7 @@ private fun CpnScanQrcode(modifier: Modifier, qrcodeSize: Dp) {
                 modifier = Modifier.size(qrcodeSize),
                 contentAlignment = Alignment.Center
             ) {
-                if (viewModel.qrcodeAuthStatus == null) {
+                if (viewModel.qrcodeAuthStatus == null || viewModel.qrcodeAuthStatus == 803) {
                     LoadingComponent()
                 } else {
                     NoSuccessComponent(modifier = Modifier.wrapContentSize(), message = "") {
@@ -222,6 +222,7 @@ class LoginViewModel : BaseViewModel() {
             println("----start checkQrcodeAuthStatus")
             var qrcodeAuthResult = NCRetrofitClient.getNCApi().checkQrcodeAuthStatus(qrcodeKeyResult.data.unikey)
             qrcodeAuthStatus = qrcodeAuthResult.code
+            println("----qrcodeAuthStatus = $qrcodeAuthStatus")
             while (mLastQrcodeAuthJob?.isActive != false) {
                 // 4s轮训一次登录授权状态
                 delay(4000)

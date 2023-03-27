@@ -67,7 +67,6 @@ compose.desktop {
                 pkgPackageVersion = "1.0.0"
                 // 显示在菜单栏、“关于”菜单项、停靠栏等中的应用程序名称
                 dockName = "NCMusicDesktop"
-
                 // a build version for all macOS distributables
                 packageBuildVersion = "1.0.0"
                 // a build version only for the dmg package

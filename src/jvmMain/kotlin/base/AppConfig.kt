@@ -12,6 +12,6 @@ object AppConfig {
     var fullScreen = false
 
     // 应用缓存目录
-    val cacheRootDir = System.getProperty("user.home") + File.separator + "Applications" + File.separator + "NCMusicDesktop"
+    val cacheRootDir = System.getProperty("user.home") + File.separator + "Library" + File.separator + "NCMusicDesktop"
 
 }
