@@ -87,7 +87,10 @@ private fun TabsPopupContent(showTabsPopup: MutableState<Boolean>) {
 
 @Composable
 private fun TabsPopupGroupTabsItem(
-    showTabsPopup: MutableState<Boolean>, viewModel: PlayListTabSelectedBarViewModel, category: String, tabs: List<PlayListTab>
+    showTabsPopup: MutableState<Boolean>,
+    viewModel: PlayListTabSelectedBarViewModel,
+    category: String,
+    tabs: List<PlayListTab>
 ) {
     Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(bottom = 10.dp)) {
         Text(
@@ -114,7 +117,7 @@ private fun PlayListTabToggle(showTabsPopup: MutableState<Boolean>) {
     val viewModel = viewModel { PlayListTabSelectedBarViewModel() }
 
     Row(
-        modifier = Modifier.padding(end = 20.dp).width(110.dp).height(30.dp).clip(RoundedCornerShape(50)).onClick  {
+        modifier = Modifier.padding(end = 20.dp).width(110.dp).height(30.dp).clip(RoundedCornerShape(50)).onClick {
             showTabsPopup.value = true
         }.border(BorderStroke(1.dp, color = AppColorsProvider.current.divider), RoundedCornerShape(50)),
         horizontalArrangement = Arrangement.Center,
@@ -143,37 +146,38 @@ private fun PlayListTabItem(
     tag: PlayListTab
 ) {
 
-    Box(modifier = modifier.clip(RoundedCornerShape(50)).onClick  {
-        viewModel.selectedTab = tag
-        showTabsPopup.value = false
-    }.let {
-        if (tag.name == viewModel.selectedTab?.name) {
-            it.background(AppColorsProvider.current.primary.copy(0.2f))
-        } else {
-            it
-        }.padding(horizontal = 6.dp, vertical = 3.dp)
-    }, contentAlignment = Alignment.Center
-    ) {
-        Row {
-            Text(
-                tag.name,
-                color = if (tag.name == viewModel.selectedTab?.name) AppColorsProvider.current.primary else AppColorsProvider.current.firstText,
-                fontSize = textSize,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            if (tag.hot) {
-                Icon(
-                    painterResource("image/ic_hot.webp"),
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 2.dp).size(14.dp),
-                    tint = AppColorsProvider.current.primary
+    Box(modifier = Modifier.fillMaxWidth().background(AppColorsProvider.current.pure)) {
+        Box(modifier = modifier.clip(RoundedCornerShape(50)).onClick {
+            viewModel.selectedTab = tag
+            showTabsPopup.value = false
+        }.let {
+            if (tag.name == viewModel.selectedTab?.name) {
+                it.background(AppColorsProvider.current.primary.copy(0.2f))
+            } else {
+                it
+            }.padding(horizontal = 6.dp, vertical = 3.dp)
+        }, contentAlignment = Alignment.Center
+        ) {
+            Row {
+                Text(
+                    tag.name,
+                    color = if (tag.name == viewModel.selectedTab?.name) AppColorsProvider.current.primary else AppColorsProvider.current.firstText,
+                    fontSize = textSize,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
+                if (tag.hot) {
+                    Icon(
+                        painterResource("image/ic_hot.webp"),
+                        contentDescription = null,
+                        modifier = Modifier.padding(start = 2.dp).size(14.dp),
+                        tint = AppColorsProvider.current.primary
+                    )
 
+                }
             }
         }
     }
-
 }
 
 @Composable
@@ -195,7 +199,7 @@ private fun HotPlayListTabItem(viewModel: PlayListTabSelectedBarViewModel, tag: 
         modifier = Modifier.height(30.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(modifier = Modifier.clip(RoundedCornerShape(50)).onClick  {
+        Box(modifier = Modifier.clip(RoundedCornerShape(50)).onClick {
             viewModel.selectedTab = tag
         }.let {
             if (tag.name == viewModel.selectedTab?.name) {
