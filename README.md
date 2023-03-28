@@ -26,7 +26,6 @@ class LyricResult(
 ```
 class CpnLyricViewModel : BaseViewModel() {
      fun getLyric(id: Long) = launchFlow {
-        curPlayPosition = 0
         NCRetrofitClient.getNCApi().getLyric(id)
     }
 }
@@ -38,11 +37,15 @@ interface NCApi {
 ```
 - View层
 ```
-ViewStateComponent(
-    key = "CpnLyric-${id}",
-    loadDataBlock = {viewModel.getLyric(id)}) {
+@Composable
+fun CpnLyric() {
+    ViewStateComponent(
+        key = "CpnLyric-${id}",
+        loadDataBlock = {viewModel.getLyric(id)}
+    ) {
         LyricList(it)
     }
+}
 ```
 ### 怎么播放音乐
 至于在Compose Desktop上怎么播放音乐呢，毕竟没有Android的MediaPlayer，在github上找了找，发现[succlz123](https://github.com/succlz123)大佬开源的Compose Multiplatform项目
