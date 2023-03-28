@@ -4,15 +4,16 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -53,55 +54,58 @@ fun CpnMainLeftMenu() {
                 .background(if (MusicPlayController.showMusicPlayDrawer) AppColorsProvider.current.pure else AppColorsProvider.current.topBarColor)
         )
         CpnUserInfo()
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            CpnMenuItem("image/ic_my_music.webp", "发现音乐") {
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CpnMenuItem(viewModel, "image/ic_my_music.webp", "发现音乐") {
                 while (navigator.canGoBack) {
                     navigator.popBackStack()
                 }
                 navigator.navigate(RouterUrls.DISCOVERY, NavOptions(launchSingleTop = true))
             }
-            CpnMenuItem("image/ic_podcast.webp", "播客") {
+            CpnMenuItem(viewModel, "image/ic_podcast.webp", "播客") {
                 navigator.navigate(RouterUrls.PODCAST, NavOptions(launchSingleTop = true))
             }
-            CpnMenuItem("image/ic_fm.webp", "私人FM") {
+            CpnMenuItem(viewModel, "image/ic_fm.webp", "私人FM") {
                 navigator.navigate(RouterUrls.PERSONAL_FM, NavOptions(launchSingleTop = true))
             }
-            CpnMenuItem("image/ic_video.webp", "视频") {
+            CpnMenuItem(viewModel, "image/ic_video.webp", "视频") {
                 navigator.navigate(RouterUrls.VIDEO, NavOptions(launchSingleTop = true))
             }
-            CpnMenuItem("image/ic_follows.webp", "关注") {
+            CpnMenuItem(viewModel, "image/ic_follows.webp", "关注") {
                 navigator.navigate(RouterUrls.FOLLOW, NavOptions(launchSingleTop = true))
             }
             CpnMyMusicTitle()
             viewModel.favoritePlayList?.let {
-                CpnSongSheetItem("image/ic_like.webp", it)
+                CpnSongSheetItem(viewModel, "image/ic_like.webp", it)
             }
-            CpnMenuItem("image/ic_download.webp", "下载管理") {
+            CpnMenuItem(viewModel, "image/ic_download.webp", "下载管理") {
                 navigator.navigate(RouterUrls.DOWNLOAD_MANAGER, NavOptions(launchSingleTop = true))
 
             }
-            CpnMenuItem("image/ic_recent_play_list.webp", "最近播放") {
+            CpnMenuItem(viewModel, "image/ic_recent_play_list.webp", "最近播放") {
                 navigator.navigate(RouterUrls.RECENT_PLAYLIST, NavOptions(launchSingleTop = true))
 
             }
-            CpnMenuItem("image/ic_cloud.webp", "我的音乐云盘") {
+            CpnMenuItem(viewModel, "image/ic_cloud.webp", "我的音乐云盘") {
                 navigator.navigate(RouterUrls.MY_CLOUD_DISK, NavOptions(launchSingleTop = true))
             }
-            CpnMenuItem("image/ic_podcast.webp", "我的播客") {
+            CpnMenuItem(viewModel, "image/ic_podcast.webp", "我的播客") {
                 navigator.navigate(RouterUrls.MY_PODCAST, NavOptions(launchSingleTop = true))
-
             }
-            CpnMenuItem("image/ic_collect.webp", "我的收藏") {
+            CpnMenuItem(viewModel, "image/ic_collect.webp", "我的收藏") {
                 navigator.navigate(RouterUrls.MY_COLLECT, NavOptions(launchSingleTop = true))
 
             }
-
             viewModel.selfCreatePlayList?.let {
                 CpnSongSheet("创建的歌单", it)
             }
             viewModel.collectPlayList?.let {
                 CpnSongSheet("收藏的歌单", it)
             }
+
+            LogoutButton()
         }
     }
 
@@ -113,7 +117,7 @@ private fun CpnUserInfo() {
     val loginResult = UserManager.getLoginResultFlow().collectAsState(null).value
 
     Row(
-        modifier = Modifier.fillMaxWidth().height(56.dp).onClick  {
+        modifier = Modifier.fillMaxWidth().height(56.dp).onClick {
             if (loginResult == null) {
                 showLoginDialog.value = true
             }
@@ -145,21 +149,42 @@ private fun CpnUserInfo() {
 }
 
 @Composable
-private fun CpnSongSheetItem(icon: String, playlistDetail: PlaylistDetail) {
-    CpnMenuItem(icon, playlistDetail.name) {
+private fun CpnSongSheetItem(viewModel: MainLeftMenuViewModel, icon: String, playlistDetail: PlaylistDetail) {
+    CpnMenuItem(viewModel, icon, playlistDetail.name, type = 1) {
         val url = "${RouterUrls.PLAY_LIST_DETAIL}?simplePlayListInfo=${Gson().toJson(playlistDetail.convertToSimple())}"
         println("navigate to PLAY_LIST_DETAIL, url=$url")
         NCNavigatorManager.navigator.navigate(url)
     }
 }
 
+/**
+ * type:菜单类型，0表普通，1表歌单
+ */
 @Composable
 private fun CpnMenuItem(
-    logoPath: String, title: String, markLogoPath: String? = null, onClick: (title: Any) -> Unit
+    viewModel: MainLeftMenuViewModel,
+    logoPath: String,
+    title: String,
+    markLogoPath: String? = null,
+    type: Int = 0,
+    onClick: (title: Any) -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(40.dp).onClick  {
+        modifier = Modifier.fillMaxWidth().height(40.dp).onClick {
+            if (type == 0) {
+                viewModel.selectedMenuTag = title
+                viewModel.selectedSongSheetTag = null
+            } else {
+                viewModel.selectedMenuTag = null
+                viewModel.selectedSongSheetTag = title
+            }
             onClick(title)
+        }.let {
+            if (viewModel.selectedMenuTag == title || viewModel.selectedSongSheetTag == title) it.background(
+                AppColorsProvider.current.pure
+            ) else {
+                it
+            }
         }.padding(horizontal = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -200,8 +225,9 @@ private fun ColumnScope.CpnSongSheet(title: String, list: List<PlaylistDetail>) 
     var expanded by remember { mutableStateOf(true) }
     val animValue = remember { Animatable(1f) }
     val scope = rememberCoroutineScope()
+    val viewModel: MainLeftMenuViewModel = viewModel { MainLeftMenuViewModel() }
     Row(
-        modifier = Modifier.onClick  {
+        modifier = Modifier.onClick {
             expanded = !expanded
             scope.launch {
                 animValue.animateTo(if (expanded) 1f else 0f)
@@ -229,17 +255,47 @@ private fun ColumnScope.CpnSongSheet(title: String, list: List<PlaylistDetail>) 
 
     Column(modifier = Modifier.fillMaxWidth().height((40f * animValue.value * list.size).dp)) {
         for (i in 0 until list.size) {
-            CpnSongSheetItem("image/ic_song_sheet.webp", list[i])
+            CpnSongSheetItem(viewModel, "image/ic_song_sheet.webp", list[i])
         }
 
     }
+}
 
+@Composable
+private fun LogoutButton() {
+    val loginResult = UserManager.getLoginResultFlow().collectAsState(null).value
+    if (loginResult != null) {
+        val scope = rememberCoroutineScope()
+        val viewModel = viewModel { MainLeftMenuViewModel() }
+        Button(modifier = Modifier.padding(top = 60.dp, bottom = 24.dp).width(160.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = AppColorsProvider.current.primary),
+            onClick = {
+                scope.launch {
+                    UserManager.saveLoginResult("")
+                    viewModel.favoritePlayList = null
+                    viewModel.selfCreatePlayList = null
+                    viewModel.collectPlayList = null
+                    if (viewModel.selectedSongSheetTag != null) {
+                        viewModel.selectedSongSheetTag = null
+                        viewModel.selectedMenuTag = "发现音乐"
+                        while (NCNavigatorManager.navigator.canGoBack) {
+                            NCNavigatorManager.navigator.popBackStack()
+                        }
+                        NCNavigatorManager.navigator.navigate(RouterUrls.DISCOVERY, NavOptions(launchSingleTop = true))
+                    }
+                }
+            }) {
+            Text("退出登陆", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+        }
+    }
 }
 
 class MainLeftMenuViewModel : BaseViewModel() {
     var favoritePlayList: PlaylistDetail? by mutableStateOf(null)
     var selfCreatePlayList: List<PlaylistDetail>? by mutableStateOf(null)
     var collectPlayList: List<PlaylistDetail>? by mutableStateOf(null)
+    var selectedMenuTag: String? by mutableStateOf("发现音乐")
+    var selectedSongSheetTag: String? by mutableStateOf(null)
 
     fun getUserPlayList(userId: Long) {
         launch(handleSuccessBlock = {

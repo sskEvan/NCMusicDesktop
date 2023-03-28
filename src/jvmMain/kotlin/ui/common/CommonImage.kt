@@ -27,7 +27,7 @@ fun AsyncImage(
                     painter = painterResource(placeHolderUrl),
                     contentDescription = imgUrl,
                     modifier = modifier,
-                    contentScale = ContentScale.Inside
+                    contentScale = contentScale
                 )
             }
         }, errorView = {
@@ -51,7 +51,7 @@ fun AsyncImage(
                     painter = painterResource(placeHolderUrl),
                     contentDescription = imgUrl,
                     modifier = modifier,
-                    contentScale = ContentScale.Inside
+                    contentScale = contentScale
                 )
             }
         }, errorView = {
@@ -75,7 +75,7 @@ fun AsyncImage(
                     painter = painterResource(placeHolderUrl),
                     contentDescription = imgUrl,
                     modifier = modifier,
-                    contentScale = ContentScale.Inside
+                    contentScale = contentScale
                 )
             }
         }, errorView = {

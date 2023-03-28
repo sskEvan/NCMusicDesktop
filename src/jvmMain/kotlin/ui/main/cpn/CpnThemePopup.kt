@@ -24,8 +24,6 @@ import ui.common.theme.color.light.*
 @Composable
 fun CpnThemePopup(showPopupWindow: MutableState<Boolean>) {
 
-    var lastSelectedThemeIndex = remember { 0 }
-
     val themeModels = remember {
         mutableStateListOf(
             mutableStateOf(ThemeModel("默认", THEME_DEFAULT, DefaultColorPalette.primary, true)),
@@ -84,4 +82,5 @@ fun CpnThemePopup(showPopupWindow: MutableState<Boolean>) {
 
 }
 
+private var lastSelectedThemeIndex = 0
 data class ThemeModel(val name: String, val themeType: Int, val color: Color, val selected: Boolean)

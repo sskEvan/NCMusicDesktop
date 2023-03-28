@@ -53,7 +53,7 @@ fun CpnLyric(modifier: Modifier) {
             customFailComponent = { _, loadDataBlock ->
                 ViewStateTip("加载歌词出错, 点击重试", loadDataBlock)
             },
-            customErrorComponent = {_, loadDataBlock ->
+            customErrorComponent = { _, loadDataBlock ->
                 ViewStateTip("加载歌词出错, 点击重试", loadDataBlock)
             }
         ) {
@@ -123,7 +123,7 @@ private fun ViewStateTip(tip: String, loadDataBlock: (() -> Unit)? = null) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .onClick  {
+            .onClick {
                 loadDataBlock?.invoke()
             },
         contentAlignment = Alignment.Center
@@ -195,6 +195,7 @@ private fun LyricItem(index: Int, lyricModel: LyricModel, viewModel: CpnLyricVie
 class CpnLyricViewModel : BaseViewModel(), IPlayerListener {
     var curLyricIndex by mutableStateOf(-1)
     val lyricModelList = mutableListOf<LyricModel>()
+    var curPlayPosition = 0
 
     init {
         MusicPlayController.mediaPlayer.addListener(this)
@@ -208,10 +209,11 @@ class CpnLyricViewModel : BaseViewModel(), IPlayerListener {
     fun getLyric(id: Long) = launchFlow(handleSuccessBlock = {
         lyricModelList.clear()
         lyricModelList.addAll(LyricUtil.parse(it))
-//        curLyricIndex = lyricModelList.indexOfFirst { lyricModel ->
-//            curPlayPosition < lyricModel.time
-//        } - 1
+        curLyricIndex = lyricModelList.indexOfFirst { lyricModel ->
+            curPlayPosition < lyricModel.time
+        } - 1
     }) {
+        curPlayPosition = 0
         NCRetrofitClient.getNCApi().getLyric(id)
     }
 
@@ -219,6 +221,7 @@ class CpnLyricViewModel : BaseViewModel(), IPlayerListener {
     }
 
     override fun onProgress(totalDuring: Int, currentPosition: Int, percentage: Float) {
+        curPlayPosition = currentPosition
         curLyricIndex = lyricModelList.indexOfFirst {
             currentPosition < it.time
         } - 1

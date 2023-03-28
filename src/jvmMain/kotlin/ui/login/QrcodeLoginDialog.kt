@@ -44,6 +44,16 @@ import java.io.File
  */
 @Composable
 fun QrcodeLoginDialog(show: MutableState<Boolean>) {
+    val viewModel: LoginViewModel = viewModel { LoginViewModel() }
+
+    LaunchedEffect(show.value) {
+        if (show.value) {
+            viewModel.qrcodeAuth()
+        } else {
+            viewModel.cancelLastJob()
+        }
+    }
+
     Dialog(
         onCloseRequest = { show.value = false }, visible = show.value,
         state = rememberDialogState(size = DpSize(400.dp, 480.dp)),
@@ -61,9 +71,14 @@ fun QrcodeLoginDialog(show: MutableState<Boolean>) {
 private fun QrcodeLoginDialogContent(show: MutableState<Boolean>) {
     val viewModel: LoginViewModel = viewModel { LoginViewModel() }
 
-    LaunchedEffect(Unit) {
-        viewModel.qrcodeAuth()
-    }
+//    LaunchedEffect(show.value) {
+//        if (show.value) {
+//            viewModel.qrcodeAuth()
+//        } else {
+//            viewModel.clear()
+//        }
+//    }
+
     LaunchedEffect(viewModel.qrcodeAuthStatus) {
         if (viewModel.qrcodeAuthStatus == 800) {  // 二维码过期，重走认证流程
             println("----二维码过期，重新生成")
@@ -199,7 +214,6 @@ class LoginViewModel : BaseViewModel() {
 
     fun qrcodeAuth() {
         mLastQrcodeAuthJob?.let {
-            println("----重新授权，取消上次任务")
             it.cancel()
         }
         qrcodeAuthStatus = null
@@ -256,4 +270,9 @@ class LoginViewModel : BaseViewModel() {
             getAccountInfoSuccess = false
         }
     }
+
+    fun cancelLastJob() {
+        mLastQrcodeAuthJob?.cancel()
+    }
+
 }
